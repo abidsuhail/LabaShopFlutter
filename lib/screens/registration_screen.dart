@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:labashop_flutter_app/colors/colors.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/user.dart';
+import 'package:labashop_flutter_app/model/userlist.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/login_screen_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/register_screen_vm.dart';
@@ -91,9 +92,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Scre
   }
 
   void startRegistrationProcess() {
-    RegisterScreenVm.getInstance().register(name: name,phone: mobile,email: email,password: password,listener: this,callback: ()
+    RegisterScreenVm.getInstance().register(name: name,phone: mobile,email: email,password: password,listener: this,callback: (UserData userData)
     {
-
+        //print(userList.users[0].authtoken);
+      UIHelper.showShortToast('success ${userData.authtoken}');
     });
   }
 

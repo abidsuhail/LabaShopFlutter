@@ -1,14 +1,14 @@
 class UrlProvider
 {
   static final String DOMAIN_LOCAL_DEBUG = "http://192.168.1.201/labashopping";
-  static final String DOMAIN_DEBUG = "http://thelabashopping.com";
-  static final String DOMAIN_RELEASE = "http://thelabashopping.com";
+  static final String DOMAIN_DEBUG = "http://globaxindia.com";
+  static final String DOMAIN_RELEASE = "http://globaxindia.com/app";
 
-  static final String DOMAIN_IMAGE_LOCAL_DEBUG = "http://thelabashopping.com/";
+  static final String DOMAIN_IMAGE_LOCAL_DEBUG = "http://globaxindia.com/";
 
-  static final String DOMAIN_IMAGE_DEBUG = "http://thelabashopping.com";
+  static final String DOMAIN_IMAGE_DEBUG = "http://globaxindia.com";
 
-  static final String DOMAIN_IMAGE_RELEASE = "http://thelabashopping.com";
+  static final String DOMAIN_IMAGE_RELEASE = "http://globaxindia.com";
 
   static final String REGISTER = "/api/public/registerUser";
   static final String AUTHENTICATE_USER = "/api/public/login";
@@ -61,7 +61,7 @@ class UrlProvider
 
   
 
-  static String getDomain() =>'http://thelabashopping.com';
+  static String getDomain() =>DOMAIN_RELEASE;
 
   static String getMarkAttUrl() {
     return getDomain() + MARK_ATT ;

@@ -15,10 +15,10 @@ class ResponseParser
     return _mInstance;
   }
   ResponseStatus getResponseStatus(String response) {
+    print('responseparser : $response');
     ResponseStatus returnValue = new ResponseStatus();
     try {
-      var jsonDecodedBody = jsonDecode(response);
-      var jsonMap = jsonDecodedBody as Map<String,dynamic>;
+      Map<String,dynamic> jsonMap = jsonDecode(response);
       returnValue.setError(jsonMap['error'] as int);
       if(jsonMap.containsKey('message'))
         returnValue.setMessage(jsonMap['message']);
@@ -26,8 +26,9 @@ class ResponseParser
         returnValue.setUser(jsonMap['user']);
       if(jsonMap.containsKey('data'))
         returnValue.setData(jsonMap['data']);
+
     } catch (e) {
-    print(e);
+    print('responseparser : $e');
     }
     return returnValue;
   }

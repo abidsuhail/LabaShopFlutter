@@ -20,20 +20,22 @@ class NetworkManager
   void post({String url,Map<String,String> params,Function callback}) async
   {
     try {
-      var response = await http.post(url, body: params);
-      if (response.statusCode == 200)
-      {
-        ResponseStatus responseStatus = _mParser.getResponseStatus(
-            response.body);
-        callback(responseStatus);
-      }
-      else {
-        print('Unknown Error Code : ${response.statusCode}');
-      }
+      var response = await http.post(url, body: params,headers: {
+        'Accept': 'application/json',});
+      print('networkmanager ${response.body}');
+      ResponseStatus responseStatus = _mParser.getResponseStatus(
+          response.body);
+      callback(responseStatus);
+      print('Response Code : ${response.statusCode}');
     }
     catch(e)
     {
       print(e);
+      ResponseStatus status = ResponseStatus();
+      status.setData("");
+      status.setMessage(e);
+      status.setError(1);
+      callback(status);
     }
   }
 }

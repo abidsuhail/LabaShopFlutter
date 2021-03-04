@@ -2,7 +2,7 @@ class ResponseStatus
 {
    int _error;
    String _message;
-   String _user;
+   Map<String,dynamic> _user;
    String _data;
 
 
@@ -22,11 +22,11 @@ class ResponseStatus
     this._message = message;
   }
 
-   String getUser() {
+   Map<String,dynamic> getUser() {
     return _user;
   }
 
-   void setUser(String user) {
+   void setUser(Map<String,dynamic> user) {
     this._user = user;
   }
 
