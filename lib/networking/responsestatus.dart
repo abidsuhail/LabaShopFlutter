@@ -3,7 +3,7 @@ class ResponseStatus
    int _error;
    String _message;
    Map<String,dynamic> _user;
-   String _data;
+   Map<String,dynamic> _data;
 
 
    int getError() {
@@ -30,11 +30,11 @@ class ResponseStatus
     this._user = user;
   }
 
-   String getData() {
+   Map<String,dynamic> getData() {
     return _data;
   }
 
-   void setData(String data) {
+   void setData(Map<String,dynamic> data) {
     this._data = data;
   }
 }

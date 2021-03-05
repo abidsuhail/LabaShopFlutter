@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:labashop_flutter_app/model/user.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
 
 
@@ -31,5 +32,10 @@ class ResponseParser
     print('responseparser : $e');
     }
     return returnValue;
+  }
+
+  UserData getUser(Map<String,dynamic> data)
+  {
+    return UserData.fromJson(data);
   }
 }

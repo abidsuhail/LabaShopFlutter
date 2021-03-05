@@ -29,74 +29,75 @@ class _RegistrationScreenState extends State<RegistrationScreen> implements Scre
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: progress,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Padding(
-                padding: EdgeInsets.all(30),
-                child: Image.asset('images/logo.png')),
-            Text(
-              'Customer Registration',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                LoginSignupTextField(
-                  hintTxt: 'Name',
-                  onChanged: (name) {
-                    this.name = name;
-                  },
-                ),
-                LoginSignupTextField(
-                  hintTxt: 'Mobile ',
-                  onChanged: (mobile) {
-                    this.mobile = mobile;
-                  },
-                ),
-                LoginSignupTextField(
-                  hintTxt: 'Email Address ',
-                  onChanged: (email) {
-                    this.email = email;
-                  },
-                ),
-                LoginSignupTextField(
-                  hintTxt: 'Password ',
-                  onChanged: (password) {
-                    this.password = password;
-                  },
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: FlatButton(
-                    padding: EdgeInsets.all(18),
-                    onPressed: () {
-                      //now login
-                      startRegistrationProcess();
+        child: Container(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                  padding: EdgeInsets.all(30),
+                  child: Image.asset('images/logo.png')),
+              Text(
+                'Customer Registration',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  LoginSignupTextField(
+                    hintTxt: 'Name',
+                    onChanged: (name) {
+                      this.name = name;
                     },
-                    child: Text('Register', style: TextStyle(color: Colors.white)),
-                    color: Color(AppColors.colorPrimary),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  LoginSignupTextField(
+                    hintTxt: 'Mobile ',
+                    onChanged: (mobile) {
+                      this.mobile = mobile;
+                    },
+                  ),
+                  LoginSignupTextField(
+                    hintTxt: 'Email Address ',
+                    onChanged: (email) {
+                      this.email = email;
+                    },
+                  ),
+                  LoginSignupTextField(
+                    hintTxt: 'Password ',
+                    onChanged: (password) {
+                      this.password = password;
+                    },
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: FlatButton(
+                      padding: EdgeInsets.all(18),
+                      onPressed: () {
+                        //now login
+                        startRegistrationProcess();
+                      },
+                      child: Text('Register', style: TextStyle(color: Colors.white)),
+                      color: Color(AppColors.colorPrimary),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  void startRegistrationProcess() {
-    RegisterScreenVm.getInstance().register(name: name,phone: mobile,email: email,password: password,listener: this,callback: (UserData userData)
-    {
-        //print(userList.users[0].authtoken);
-      UIHelper.showShortToast('success ${userData.authtoken}');
-    });
+  void startRegistrationProcess() async{
+    UserData userData = await RegisterScreenVm.getInstance().register(name: name,phone: mobile,email: email,password: password,listener: this);
+    UIHelper.showShortToast('success ${userData.authtoken}');
+
   }
 
   @override

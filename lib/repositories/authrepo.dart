@@ -15,21 +15,17 @@ class AuthRepo extends Repository
     return _mInstance;
   }
 
-  void authenticateUser({String username,String password,Function callback}) async{
+  Future<ResponseStatus> authenticateUser({String username,String password,Function callback}) async{
     String url = UrlProvider.getAuthenticateUserUrl();
     Map<String,String> params = {'username':username,'password':password};
-    networkManager.post(url: url,params:params,callback:(ResponseStatus responseStatus){
-      callback(responseStatus);
-    });
     print(url);
+    return networkManager.post(url: url,params:params);
   }
-  void registerUser({String name,String phone,String email,String password,Function callback}) async{
+  Future<ResponseStatus> registerUser({String name,String phone,String email,String password,Function callback}) async{
     String url = UrlProvider.getRegisterUrl();
     Map<String,String> params = {'name':name,'phone':phone,'email':email,'password':password};
-    networkManager.post(url: url,params:params,callback:(ResponseStatus responseStatus){
-      callback(responseStatus);
-    });
     print(url);
+    return networkManager.post(url: url,params:params);
   }
 
 }
