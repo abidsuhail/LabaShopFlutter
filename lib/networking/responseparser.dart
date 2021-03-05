@@ -34,8 +34,8 @@ class ResponseParser
     return returnValue;
   }
 
-  UserData getUser(Map<String,dynamic> data)
+  User getUser(Map<String,dynamic> data)
   {
-    return UserData.fromJson(data);
+    return User.fromJson(data);
   }
 }

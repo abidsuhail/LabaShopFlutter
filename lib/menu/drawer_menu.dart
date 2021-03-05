@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/screens/login_screen.dart';
+import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
 
 class DrawerMenu extends StatelessWidget {
@@ -52,8 +54,12 @@ class DrawerMenu extends StatelessWidget {
           title: Text("About Us"),
         ),
         ListTile(
-          onTap: (){
-
+          onTap: ()async {
+            if(await AppSharedPrefs.removeAllPrefs())
+              {
+                Navigator.pushReplacement(context, MaterialPageRoute(
+                    builder: (BuildContext context) => LoginScreen()));
+              }
           },
           title: Text("Logout"),
         )

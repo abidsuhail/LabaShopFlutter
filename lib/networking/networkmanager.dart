@@ -24,11 +24,19 @@ class NetworkManager
     try {
       var response = await http.post(url, body: params,headers: {
         'Accept': 'application/json',});
-      logger.d("networkmanager",response.body);
-      ResponseStatus responseStatus = _mParser.getResponseStatus(
-          response.body);
-      print('Response Code : ${response.statusCode}');
-      return responseStatus;
+      if(response.statusCode == 200) {
+        ResponseStatus responseStatus = _mParser.getResponseStatus(
+            response.body);
+        print('Response Code : ${response.statusCode}');
+        return responseStatus;
+      }
+      else{
+        ResponseStatus status = ResponseStatus();
+        status.setData(null);
+        status.setMessage('Server Error!!');
+        status.setError(1);
+        return status;
+      }
       //callback(responseStatus);
     }
     catch(e)
@@ -39,6 +47,7 @@ class NetworkManager
       status.setMessage(e);
       status.setError(1);
       callback(status);
+      return status;
     }
   }
 }

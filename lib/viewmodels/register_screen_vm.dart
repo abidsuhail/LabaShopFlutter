@@ -8,6 +8,7 @@ import 'package:labashop_flutter_app/networking/networkconstants.dart';
 import 'package:labashop_flutter_app/networking/responseparser.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
 import 'package:labashop_flutter_app/repositories/authrepo.dart';
+import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 
 class RegisterScreenVm
 {
@@ -24,13 +25,15 @@ class RegisterScreenVm
         return _mInstance;
     }
 
-    Future<UserData> register({String name,String phone,String email,String password,Function callback, @required ScreenCallback listener}) async{
+    Future<User> register({String name,String phone,String email,String password,Function callback, @required ScreenCallback listener}) async{
       listener.showProgress();
       ResponseStatus responseStatus = await authRepo.registerUser(name: name,phone: phone,email: email,password: password);
       listener.hideProgress();
       if(responseStatus!=null) {
         if (responseStatus.getError() == NetworkConstants.OK) {
-          return responseParser.getUser(responseStatus.getUser());
+          User user = responseParser.getUser(responseStatus.getUser());
+          AppSharedPrefs.saveAuthToken(user.authtoken);
+          return user;
         } else {
           //error = 1
           listener.onError(responseStatus.getMessage());

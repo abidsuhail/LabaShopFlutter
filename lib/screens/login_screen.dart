@@ -108,7 +108,7 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
   }
 
   void startLoginProcess() async{
-    UserData userData = await LoginScreenVm.getInstance().authenticateUser(username: username, password: password, listener: this);
+    User userData = await LoginScreenVm.getInstance().authenticateUser(username: username, password: password, listener: this);
     Logger().d('loginscreen',userData.authtoken);
   }
 

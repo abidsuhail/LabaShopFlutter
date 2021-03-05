@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/screens/home_screen.dart';
 import 'package:labashop_flutter_app/screens/login_screen.dart';
+import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,8 +14,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void _loadWidget() async {
     var _duration = Duration(seconds: 3);
-    Timer(_duration, (){
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => LoginScreen()));
+    Timer(_duration, ()async{
+
+      if(await AppSharedPrefs.getAuthToken()!='') {
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (BuildContext context) => HomeScreen()));
+
+        //TODO change start screen in each activity like startNewIntent
+      }
+      else{
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (BuildContext context) => LoginScreen()));
+      }
     });
   }
 

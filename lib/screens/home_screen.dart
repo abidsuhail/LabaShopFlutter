@@ -6,6 +6,10 @@ import 'package:labashop_flutter_app/widgets/laba_appbar.dart';
 
 class HomeScreen extends StatelessWidget implements ScreenCallback {
 
+  static startFreshScreen(BuildContext context)
+  {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

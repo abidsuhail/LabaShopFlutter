@@ -1,33 +1,4 @@
 class User {
-  int _error;
-  User _user;
-
-  User({int error, User user}) {
-    this._error = error;
-    this._user = user;
-  }
-
-  int get error => _error;
-  set error(int error) => _error = error;
-  User get user => _user;
-  set user(User user) => _user = user;
-
-  User.fromJson(Map<String, dynamic> json) {
-    _error = json['error'];
-    _user = json['user'] != null ? new User.fromJson(json['user']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['error'] = this._error;
-    if (this._user != null) {
-      data['user'] = this._user.toJson();
-    }
-    return data;
-  }
-}
-
-class UserData {
   int _userId;
   String _username;
   int _userRole;
@@ -36,7 +7,7 @@ class UserData {
   String _phone;
   String _authtoken;
 
-  UserData(
+  User(
       {int userId,
         String username,
         int userRole,
@@ -68,7 +39,7 @@ class UserData {
   String get authtoken => _authtoken;
   set authtoken(String authtoken) => _authtoken = authtoken;
 
-  UserData.fromJson(Map<String, dynamic> json) {
+  User.fromJson(Map<String, dynamic> json) {
     _userId = json['user_id'];
     _username = json['username'];
     _userRole = json['user_role'];
