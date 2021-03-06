@@ -1,20 +1,19 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/user.dart';
-import 'package:labashop_flutter_app/model/userlist.dart';
 import 'package:labashop_flutter_app/networking/networkconstants.dart';
-import 'package:labashop_flutter_app/networking/responseparser.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
 import 'package:labashop_flutter_app/repositories/authrepo.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
+import 'package:labashop_flutter_app/viewmodels/base/view_model.dart';
 
-class LoginScreenVm
+class LoginScreenVm extends ChangeNotifier with ViewModel
 {
     AuthRepo authRepo = AuthRepo.getInstance();
 
     static LoginScreenVm _mInstance;
-    ResponseParser responseParser = ResponseParser.getInstance();
     static LoginScreenVm getInstance()
     {
         if(_mInstance == null)
@@ -33,6 +32,7 @@ class LoginScreenVm
         if (responseStatus.getError() == NetworkConstants.OK) {
           User user = responseParser.getUser(responseStatus.getUser());
           AppSharedPrefs.saveAuthToken(user.authtoken);
+          AppSharedPrefs.saveUserEncodedJSON(jsonEncode(user));
           return user;
         } else {
           //error = 1

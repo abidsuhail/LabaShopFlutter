@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/colors/colors.dart';
+import 'package:labashop_flutter_app/listener/screen_callback.dart';
+import 'package:labashop_flutter_app/model/category.dart';
+import 'package:labashop_flutter_app/model/product.dart';
+import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:labashop_flutter_app/widgets/search_text_field.dart';
 
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatelessWidget implements ScreenCallback {
+
   @override
   Widget build(BuildContext context) {
+
+    getProductsOnHome();
     return Container(
       child: Container(
         child: Column(
@@ -35,5 +42,35 @@ class HomeContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void onError(String message) {
+
+  }
+
+  @override
+  void hideProgress() {
+
+  }
+
+  @override
+  void showProgress() {
+
+  }
+
+  void getProductsOnHome() async{
+    ProductList productList = await HomeScreenVm.getInstance().getProductsOnHome(listener: this);
+    CategoryList categoryList = await HomeScreenVm.getInstance().getCategories(listener: this);
+
+/*    for(Product product in productList.products)
+      {
+        print(product.productName);
+      }*/
+    for(Category product in categoryList.categories)
+    {
+      print(product.categoryName);
+    }
+
   }
 }

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/model/user.dart';
+import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
+import 'package:provider/provider.dart';
 
 class NavHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Provider.of<UserNotifier>(context).initUser();
     return UserAccountsDrawerHeader(
-      accountName: Text("Ashish Rawat"),
-      accountEmail: Text("ashishrawat2911@gmail.com"),
+      accountName: Text(Provider.of<UserNotifier>(context).user.name??""),
+      accountEmail: Text(Provider.of<UserNotifier>(context).user.email??""),
       currentAccountPicture: CircleAvatar(
         backgroundColor:
         Theme.of(context).platform == TargetPlatform.iOS
@@ -17,5 +21,16 @@ class NavHeader extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+//TODO make viewmodel as changenotifier
+class UserNotifier extends ChangeNotifier
+{
+  User user;
+  void initUser() async
+  {
+    user = await AppSharedPrefs.getUserFromDb();
+    notifyListeners();
   }
 }

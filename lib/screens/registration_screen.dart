@@ -25,6 +25,7 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> implements ScreenCallback {
   String name, mobile,email,password;
   bool progress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

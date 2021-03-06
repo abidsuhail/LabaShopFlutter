@@ -6,6 +6,7 @@ import 'package:labashop_flutter_app/networking/urlprovider.dart';
 class AuthRepo extends Repository
 {
   static AuthRepo _mInstance;
+
   static AuthRepo getInstance()
   {
     if(_mInstance==null)
