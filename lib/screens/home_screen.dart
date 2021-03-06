@@ -4,14 +4,22 @@ import 'package:labashop_flutter_app/menu/drawer_menu.dart';
 import 'package:labashop_flutter_app/widgets/home_content.dart';
 import 'package:labashop_flutter_app/widgets/laba_appbar.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget implements ScreenCallback {
+class HomeScreen extends StatefulWidget  {
 
   static startFreshScreen(BuildContext context)
   {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
   }
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
+  bool progress = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,12 +40,16 @@ class HomeScreen extends StatelessWidget implements ScreenCallback {
 
   @override
   void hideProgress() {
-
+    setState(() {
+      progress = false;
+    });
   }
 
   @override
   void showProgress() {
-
+    setState(() {
+      progress = true;
+    });
   }
 
   @override

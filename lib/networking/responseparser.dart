@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
-import 'package:labashop_flutter_app/model/userlist.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
 
 
