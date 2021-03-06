@@ -1,6 +1,9 @@
 import 'dart:convert';
 
+import 'package:labashop_flutter_app/model/category.dart';
+import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
+import 'package:labashop_flutter_app/model/userlist.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
 
 
@@ -22,11 +25,11 @@ class ResponseParser
       Map<String,dynamic> jsonMap = jsonDecode(response);
       returnValue.setError(jsonMap['error'] as int);
       if(jsonMap.containsKey('message'))
-        returnValue.setMessage(jsonMap['message']);
+        returnValue.setMessage(jsonEncode(jsonMap['message']));
       if(jsonMap.containsKey('user'))
-        returnValue.setUser(jsonMap['user']);
+        returnValue.setUser(jsonEncode(jsonMap['user']));
       if(jsonMap.containsKey('data'))
-        returnValue.setData(jsonMap['data']);
+        returnValue.setData(jsonEncode(jsonMap['data']));
 
     } catch (e) {
     print('responseparser : $e');
@@ -34,8 +37,16 @@ class ResponseParser
     return returnValue;
   }
 
-  User getUser(Map<String,dynamic> data)
+  User getUser(String data)
   {
-    return User.fromJson(data);
+    return User.fromJson(jsonDecode(data));
+  }
+  ProductList getProductList(String data)
+  {
+    return ProductList.fromJson(jsonDecode(data)['products']);
+  }
+  CategoryList getCategoryList(String data)
+  {
+    return CategoryList.fromJson(jsonDecode(data));
   }
 }

@@ -60,14 +60,14 @@ class HomeContent extends StatelessWidget implements ScreenCallback {
   }
 
   void getProductsOnHome() async{
-    ProductList productList = await HomeScreenVm.getInstance().getProductsOnHome(listener: this);
-    CategoryList categoryList = await HomeScreenVm.getInstance().getCategories(listener: this);
+    List<Product> productList = await HomeScreenVm.getInstance().getProductsOnHome(listener: this);
+    List<Category> categoryList = await HomeScreenVm.getInstance().getCategories(listener: this);
 
 /*    for(Product product in productList.products)
       {
         print(product.productName);
       }*/
-    for(Category product in categoryList.categories)
+    for(Category product in categoryList)
     {
       print(product.categoryName);
     }

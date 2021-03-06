@@ -28,14 +28,15 @@ class HomeScreenVm extends ChangeNotifier with ViewModel
         return _mInstance;
     }
 
-  Future<ProductList> getProductsOnHome({@required ScreenCallback listener}) async{
+  Future<List<Product>> getProductsOnHome({@required ScreenCallback listener}) async{
     listener.showProgress();
     ResponseStatus responseStatus = await productsRepo.getProductsOnHome();
     listener.hideProgress();
     if(responseStatus!=null) {
       if (responseStatus.getError() == NetworkConstants.OK) {
-        ProductList product = ProductList.fromJson(responseStatus.getData()['products']); //TODO CART KEY IS ALSO HERE
-        return product;
+        List<Product> products = responseParser.getProductList(responseStatus.getData()).products;
+        /*ProductList.fromJson(responseStatus.getData()['products']);*/ //TODO CART KEY IS ALSO HERE
+        return products;
       } else {
         //error = 1
         listener.onError(responseStatus.getMessage());
@@ -47,13 +48,13 @@ class HomeScreenVm extends ChangeNotifier with ViewModel
     }
   }
 
-    Future<CategoryList> getCategories({@required ScreenCallback listener}) async{
+    Future<List<Category>> getCategories({@required ScreenCallback listener}) async{
       listener.showProgress();
-      ResponseStatus responseStatus = await productsRepo.getProductsOnHome();
+      ResponseStatus responseStatus = await productsRepo.getCategories();
       listener.hideProgress();
       if(responseStatus!=null) {
         if (responseStatus.getError() == NetworkConstants.OK) {
-          CategoryList product = CategoryList.fromJson(responseStatus.getData()); //TODO CART KEY IS ALSO HERE
+          List<Category> product = responseParser.getCategoryList(responseStatus.getData()).categories;
           return product;
         } else {
           //error = 1
