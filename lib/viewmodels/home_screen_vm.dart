@@ -29,16 +29,17 @@ class HomeScreenVm extends ChangeNotifier with ViewModel
     if(responseStatus!=null) {
       if (responseStatus.getError() == NetworkConstants.OK) {
         List<Product> products = responseParser.getProductList(responseStatus.getData()).products;
-        /*ProductList.fromJson(responseStatus.getData()['products']);*/ //TODO CART KEY IS ALSO HERE
         return products;
       } else {
         //error = 1
         listener.onError(responseStatus.getMessage());
+        return null;
       }
     }
     else{
       //unknown error
       listener.onError('Unknown Error');
+      return null;
     }
   }
 

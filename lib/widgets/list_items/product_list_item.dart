@@ -41,6 +41,7 @@ class ProductListItem extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     constraints: new BoxConstraints(
                     maxWidth: MediaQuery.of(context).size.width - 84),
+
                     child: Flexible(
                       child: Text(UIHelper.getHtmlUnscapeString(product.productName),
                           softWrap: false,
@@ -49,7 +50,7 @@ class ProductListItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text('${product.price[0].size} ${product.price[0].unit}',textAlign: TextAlign.start,
+                Text('${product.price.isNotEmpty?product.price[0].size:'N/A'} ${product.price.isNotEmpty?product.price[0].unit:'N/A'}',textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Colors.grey
                 ),),
@@ -57,7 +58,8 @@ class ProductListItem extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Rs.${product.price[0].cost}',style: TextStyle(
+                      Text('Rs.${product.price.isNotEmpty?product.price[0].cost:'N/A'}',style: TextStyle(
+                        //TODO change N/A to number later
                           fontWeight: FontWeight.bold
                       )),
                       TextButton(

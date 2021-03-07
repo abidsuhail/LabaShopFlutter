@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/product.dart';
+import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:labashop_flutter_app/widgets/list_items/product_list_item.dart';
 
@@ -11,15 +13,15 @@ class ProductsPagingListAdapter extends StatefulWidget {
 }
 
 class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter> implements ScreenCallback{
-  static const _pageSize = 10;
-
+  static const _pageSize = 6;
+  static const int _progress_delay = 1500;
   final PagingController<int, Product> _pagingController =
   PagingController(firstPageKey: 1);
 
 
   @override
   void onError(String message) {
-
+    UIHelper.showShortToast(message);
   }
 
   @override
@@ -31,20 +33,23 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter> i
   }
 
   Future<void> _fetchPage(int pageKey) async {
-    print(' page key ${pageKey}');
     try {
       List<Product> newItems = await HomeScreenVm.getInstance().getProductsOnHome(listener: this,pageNo: pageKey,pageSize:_pageSize);
-
-      final isLastPage = newItems.length < _pageSize;
-      if (isLastPage) {
-        _pagingController.appendLastPage(newItems);
-      } else {
-        final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(newItems, nextPageKey);
-      }
+      final isLastPage = (newItems != null) ? (newItems.length < _pageSize || newItems.length == 0) : true; //check for null
+        if (isLastPage) {
+          Future.delayed(const Duration(milliseconds: _progress_delay), () {
+            _pagingController.appendLastPage(newItems);
+          });
+        } else {
+          final nextPageKey = pageKey + 1;
+          Future.delayed(const Duration(milliseconds: _progress_delay), () {
+            _pagingController.appendPage(newItems, nextPageKey);
+          });
+        }
     } catch (error) {
       _pagingController.error = error;
     }
+
   }
 
   @override
@@ -57,7 +62,8 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter> i
     physics: ScrollPhysics(),
     pagingController: _pagingController,
     builderDelegate: PagedChildBuilderDelegate<Product>(
-      itemBuilder: (context, item, index) => ProductListItem(
+      itemBuilder: (context, item, index) =>
+          ProductListItem(
         product: item,
       ),
     ),

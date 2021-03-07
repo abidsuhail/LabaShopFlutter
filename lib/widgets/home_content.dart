@@ -63,7 +63,7 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
               textAlign: TextAlign.start,
             ),
             CategoryListAdapter(categoryList: categoryList),
-             Flexible(child: ProductsPagingListAdapter())
+             ProductsPagingListAdapter()
           ],
         ),
       ),
