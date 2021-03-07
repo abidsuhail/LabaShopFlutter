@@ -31,17 +31,29 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: progress,
-      child: Container(
-        child: Column(
+      child: Scaffold(
+        appBar: AppBar(
+          flexibleSpace: FlexibleSpaceBar(
+            titlePadding: EdgeInsets.all(0),
+            title: Container(
+              alignment: AlignmentDirectional.bottomCenter,
+                margin: EdgeInsets.symmetric(horizontal: 7),
+                child: SearchTextField()),
+            centerTitle: true,
+          ),
+          elevation: 0,
+          toolbarHeight: 60,
+        ),
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: EdgeInsets.all(7),
-              height: 240,
+              height: 200,
               color: Color(AppColors.colorPrimary),
               child: Column(
                 children: [
-                  SearchTextField(),
+                 /* SearchTextField(),*/
                   SizedBox(
                     height: 8,
                   ),
@@ -65,7 +77,9 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
                 crossAxisCount: 2,
                 children: List.generate(
                     categoryList == null ? 0 : categoryList.length, (index) {
-                  return ProductCategoryListItem(categoryImage: categoryList[index].categoryImg,categoryName:categoryList[index].categoryName ,);
+                  return ProductCategoryListItem(
+                    categoryImage: categoryList[index].categoryImg,
+                    categoryName:categoryList[index].categoryName ,);
                 }),
               ),
             ),

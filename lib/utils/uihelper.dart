@@ -4,7 +4,7 @@ import 'package:html_unescape/html_unescape.dart';
 
 class UIHelper
 {
-  static HtmlUnescape htmlUnscape;
+  static HtmlUnescape _htmlUnscape;
   static void showShortToast(String message)
   {
     Fluttertoast.showToast(
@@ -18,9 +18,9 @@ class UIHelper
   }
   static String getHtmlUnscapeString(String text)
   {
-    if(htmlUnscape==null) {
-      htmlUnscape = new HtmlUnescape();
+    if(_htmlUnscape==null) {
+      _htmlUnscape = new HtmlUnescape();
     }
-    return htmlUnscape.convert(text);
+    return _htmlUnscape.convert(text);
   }
 }

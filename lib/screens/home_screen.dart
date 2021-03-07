@@ -19,6 +19,7 @@ class HomeScreen extends StatelessWidget implements ScreenCallback {
         child: DrawerMenu(),
       ),
       appBar: AppBar(
+        elevation: 0,
           title: LabaAppBar(),
           actions: [
             Padding(

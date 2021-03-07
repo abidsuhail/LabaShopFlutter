@@ -24,14 +24,14 @@ class BannersImageSlider extends StatelessWidget {
           return Builder(
             builder: (BuildContext context) {
               return Image.network(
-                '${e.bannerImg}',fit: BoxFit.fill,height: 230,);
+                '${e.bannerImg}',fit: BoxFit.fill,height: 200,);
             },
           );
         }).toList():bannersList.map((i) {
           return Builder(
             builder: (BuildContext context) {
               return Image.network(
-                '${i.bannerImg}',fit: BoxFit.fill,height: 230,);
+                '${i.bannerImg}',fit: BoxFit.fill,height: 200,);
             },
           );
         }).toList(),
