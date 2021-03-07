@@ -15,8 +15,8 @@ class ProductsRepo extends Repository
     return _mInstance;
   }
 
-  Future<ResponseStatus> getProductsOnHome() async{
-    String url = UrlProvider.getProductListHomeUrl(10, 1);
+  Future<ResponseStatus> getProductsOnHome({pageNo, int pageSize}) async{
+    String url = UrlProvider.getProductListHomeUrl(pageSize, pageNo);
     print(url);
     return networkManager.get(url: url);
   }

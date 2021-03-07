@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  infinite_scroll_pagination: 3.0.0
   carousel_slider: ^3.0.0
   html_unescape: ^1.0.2
   logger: ^0.9.4

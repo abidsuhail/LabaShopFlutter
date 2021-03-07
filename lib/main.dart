@@ -7,7 +7,7 @@ import 'package:labashop_flutter_app/screens/home_screen.dart';
 import 'package:labashop_flutter_app/screens/login_screen.dart';
 import 'package:labashop_flutter_app/screens/splash_screen.dart';
 import 'file:///E:/FlutterProjects/labashop_flutter_app/lib/widgets/home_content.dart';
-import 'package:labashop_flutter_app/widgets/laba_appbar.dart';
+import 'package:labashop_flutter_app/widgets/laba_appbars.dart';
 import 'package:labashop_flutter_app/widgets/search_text_field.dart';
 
 void main() {

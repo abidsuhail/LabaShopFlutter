@@ -22,9 +22,9 @@ class HomeScreenVm extends ChangeNotifier with ViewModel
         return _mInstance;
     }
 
-  Future<List<Product>> getProductsOnHome({@required ScreenCallback listener}) async{
+  Future<List<Product>> getProductsOnHome({@required ScreenCallback listener,@required pageNo, @required int pageSize}) async{
     listener.showProgress();
-    ResponseStatus responseStatus = await productsRepo.getProductsOnHome();
+    ResponseStatus responseStatus = await productsRepo.getProductsOnHome(pageNo:pageNo,pageSize:pageSize);
     listener.hideProgress();
     if(responseStatus!=null) {
       if (responseStatus.getError() == NetworkConstants.OK) {

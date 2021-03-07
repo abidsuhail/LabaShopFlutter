@@ -14,28 +14,26 @@ class BannersImageSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: CarouselSlider(
-        options: CarouselOptions(height:250,autoPlay: true,
-          autoPlayInterval: Duration(seconds: 7),
-          viewportFraction: 1.0,
-        ),
-        items: bannersList==null?dummyBanner.map((e){
-          return Builder(
-            builder: (BuildContext context) {
-              return Image.network(
-                '${e.bannerImg}',fit: BoxFit.fill,height: 200,);
-            },
-          );
-        }).toList():bannersList.map((i) {
-          return Builder(
-            builder: (BuildContext context) {
-              return Image.network(
-                '${i.bannerImg}',fit: BoxFit.fill,height: 200,);
-            },
-          );
-        }).toList(),
+    return CarouselSlider(
+      options: CarouselOptions(height:250,autoPlay: true,
+        autoPlayInterval: Duration(seconds: 7),
+        viewportFraction: 1.0,
       ),
+      items: bannersList==null?dummyBanner.map((e){
+        return Builder(
+          builder: (BuildContext context) {
+            return Image.network(
+              '${e.bannerImg}',fit: BoxFit.fill,height: 200,);
+          },
+        );
+      }).toList():bannersList.map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Image.network(
+              '${i.bannerImg}',fit: BoxFit.fill,height: 200,);
+          },
+        );
+      }).toList(),
     );
   }
 }
