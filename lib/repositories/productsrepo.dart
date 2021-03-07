@@ -25,4 +25,9 @@ class ProductsRepo extends Repository
     print(url);
     return networkManager.get(url: url);
   }
+  Future<ResponseStatus> getBanners() async{
+    String url = UrlProvider.getBannerListUrl();
+    print(url);
+    return networkManager.get(url: url);
+  }
 }

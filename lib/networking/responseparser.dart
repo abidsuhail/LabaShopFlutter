@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:labashop_flutter_app/model/banner.dart';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
@@ -47,5 +48,9 @@ class ResponseParser
   CategoryList getCategoryList(String data)
   {
     return CategoryList.fromJson(jsonDecode(data));
+  }
+  BannerList getBannersList(String data)
+  {
+    return BannerList.fromJson(jsonDecode(data));
   }
 }
