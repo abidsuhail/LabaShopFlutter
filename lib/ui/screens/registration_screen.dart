@@ -3,21 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/colors/colors.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/user.dart';
-import 'package:labashop_flutter_app/screens/registration_screen.dart';
+import 'package:labashop_flutter_app/ui/screens/home_screen.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
-import 'package:labashop_flutter_app/viewmodels/login_screen_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/register_screen_vm.dart';
 import 'package:labashop_flutter_app/widgets/login_signup_textfield.dart';
-import 'package:logger/logger.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-class LoginScreen extends StatefulWidget {
+class RegistrationScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _RegistrationScreenState createState() => _RegistrationScreenState();
+
+  static startScreen(BuildContext context)
+  {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>RegistrationScreen()));
+  }
 }
 
-class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
-  String username, password;
+class _RegistrationScreenState extends State<RegistrationScreen> implements ScreenCallback {
+  String name, mobile,email,password;
   bool progress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,20 +37,32 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
                   padding: EdgeInsets.all(30),
                   child: Image.asset('images/logo.png')),
               Text(
-                'Welcome to Laba Shopping',
+                'Customer Registration',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   LoginSignupTextField(
-                    hintTxt: 'Enter Username',
-                    onChanged: (username) {
-                      this.username = username;
+                    hintTxt: 'Name',
+                    onChanged: (name) {
+                      this.name = name;
                     },
                   ),
                   LoginSignupTextField(
-                    hintTxt: 'Enter Password',
+                    hintTxt: 'Mobile ',
+                    onChanged: (mobile) {
+                      this.mobile = mobile;
+                    },
+                  ),
+                  LoginSignupTextField(
+                    hintTxt: 'Email Address ',
+                    onChanged: (email) {
+                      this.email = email;
+                    },
+                  ),
+                  LoginSignupTextField(
+                    hintTxt: 'Password ',
                     onChanged: (password) {
                       this.password = password;
                     },
@@ -59,47 +76,16 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
                       padding: EdgeInsets.all(18),
                       onPressed: () {
                         //now login
-                        startLoginProcess();
+                        startRegistrationProcess();
                       },
-                      child: Text('Login', style: TextStyle(color: Colors.white)),
+                      child: Text('Register', style: TextStyle(color: Colors.white)),
                       color: Color(AppColors.colorPrimary),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      'Forgot Password?',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(color: Color(AppColors.colorPrimary)),
-                    ),
-                  )
                 ],
               ),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                Padding(
-                    padding: EdgeInsets.all(4),
-                    child: Text(
-                      'Dont have an account?',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    )),
-                GestureDetector(
-                  onTap: ()
-                  {
-                    RegistrationScreen.startScreen(context);
-                  },
-                  child: Text(
-                    'Create your profile',
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(AppColors.colorPrimary)),
-                  ),
-                )
-              ]),
             ],
           ),
         ),
@@ -107,9 +93,17 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
     );
   }
 
-  void startLoginProcess() async{
-    User userData = await LoginScreenVm.getInstance().authenticateUser(username: username, password: password, listener: this);
-    Logger().d('loginscreen',userData.authtoken);
+  void startRegistrationProcess() async{
+    User userData = await RegisterScreenVm.getInstance().register(name: name,phone: mobile,email: email,password: password,listener: this);
+    if(userData.authtoken!=null && userData.authtoken!='') {
+      UIHelper.showShortToast('success ${userData.authtoken}');
+      HomeScreen.startFreshScreen(context);
+    }
+    else
+      {
+        //TODO handle else case
+      }
+
   }
 
   @override

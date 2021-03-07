@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +23,23 @@ class BannersImageSlider extends StatelessWidget {
       items: bannersList==null?dummyBanner.map((e){
         return Builder(
           builder: (BuildContext context) {
-            return Image.network(
-              '${e.bannerImg}',fit: BoxFit.fill,height: 200,);
+            return CachedNetworkImage(
+              height: 100,
+              imageUrl:  e.bannerImg,
+              fit: BoxFit.fill,
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            );
           },
         );
       }).toList():bannersList.map((i) {
         return Builder(
           builder: (BuildContext context) {
-            return Image.network(
-              '${i.bannerImg}',fit: BoxFit.fill,height: 200,);
+            return CachedNetworkImage(
+              height: 100,
+              imageUrl:  i.bannerImg,
+              fit: BoxFit.fill,
+              errorWidget: (context, url, error) => Icon(Icons.error),
+            );
           },
         );
       }).toList(),

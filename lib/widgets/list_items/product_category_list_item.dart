@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
@@ -13,11 +14,11 @@ class ProductCategoryListItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                categoryImage,
-                fit: BoxFit.fill,
+              CachedNetworkImage(
                 height: 100,
                 width: 120,
+                imageUrl:  categoryImage,
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
               Container(
                 padding: EdgeInsets.all(8),

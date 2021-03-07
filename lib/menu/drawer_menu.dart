@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:labashop_flutter_app/screens/login_screen.dart';
+import 'package:labashop_flutter_app/ui/screens/login_screen.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
 import 'package:provider/provider.dart';
@@ -60,8 +60,7 @@ class DrawerMenu extends StatelessWidget {
             onTap: ()async {
               if(await AppSharedPrefs.removeAllPrefs())
                 {
-                  Navigator.pushReplacement(context, MaterialPageRoute(
-                      builder: (BuildContext context) => LoginScreen()));
+                  LoginScreen.startFreshScreen(context);
                 }
             },
             title: Text("Logout"),

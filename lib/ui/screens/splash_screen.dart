@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:labashop_flutter_app/screens/home_screen.dart';
-import 'package:labashop_flutter_app/screens/login_screen.dart';
+import 'package:labashop_flutter_app/ui/screens/home_screen.dart';
+import 'package:labashop_flutter_app/ui/screens/login_screen.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 
 class SplashScreen extends StatefulWidget {
