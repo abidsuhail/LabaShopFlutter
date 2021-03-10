@@ -115,16 +115,16 @@ class Price {
     return data;
   }
 }
-class Cart {
+class CartModel {
   String pid;
   String sid;
   String qty;
   String cost;
   String size;
 
-  Cart({this.pid, this.sid, this.qty, this.cost, this.size});
+  CartModel({this.pid, this.sid, this.qty, this.cost, this.size});
 
-  Cart.fromJson(Map<String, dynamic> json) {
+  CartModel.fromJson(Map<String, dynamic> json) {
     pid = json['pid'];
     sid = json['sid'];
     qty = json['qty'];

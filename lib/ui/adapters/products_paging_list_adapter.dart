@@ -8,6 +8,11 @@ import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:labashop_flutter_app/widgets/list_items/product_list_item.dart';
 
 class ProductsPagingListAdapter extends StatefulWidget {
+
+  Function cartCountCallback;
+
+  ProductsPagingListAdapter({this.cartCountCallback});
+
   @override
   _ProductsPagingListAdapterState createState() => _ProductsPagingListAdapterState();
 }
@@ -34,18 +39,23 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter> i
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      List<Product> newItems = await HomeScreenVm.getInstance().getProductsOnHome(listener: this,pageNo: pageKey,pageSize:_pageSize);
-      final isLastPage = (newItems != null) ? (newItems.length < _pageSize || newItems.length == 0) : true; //check for null
+      List<Product> products = await HomeScreenVm.getInstance().getProductsOnHome(listener: this,pageNo: pageKey,pageSize:_pageSize);
+
+      final isLastPage = (products != null) ? (products.length < _pageSize || products.length == 0) : true; //check for null
         if (isLastPage) {
           Future.delayed(const Duration(milliseconds: _progress_delay), () {
-            _pagingController.appendLastPage(newItems);
+            _pagingController.appendLastPage(products);
           });
         } else {
           final nextPageKey = pageKey + 1;
           Future.delayed(const Duration(milliseconds: _progress_delay), () {
-            _pagingController.appendPage(newItems, nextPageKey);
+            _pagingController.appendPage(products, nextPageKey);
           });
         }
+      /*if(products.length>0)
+      {
+        widget.cartCountCallback(products[0].itemCount);
+      }*/
     } catch (error) {
       _pagingController.error = error;
     }

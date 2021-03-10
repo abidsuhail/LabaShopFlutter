@@ -1,8 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:html_unescape/html_unescape.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labashop_flutter_app/colors/colors.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/banner.dart' as AppBanners;
@@ -12,14 +9,17 @@ import 'package:labashop_flutter_app/ui/adapters/category_list_adapter.dart';
 import 'package:labashop_flutter_app/ui/adapters/products_paging_list_adapter.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
-import 'package:labashop_flutter_app/widgets/list_items/product_category_list_item.dart';
-import 'package:labashop_flutter_app/widgets/search_text_field.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
 import 'banners_images_slider.dart';
 import 'laba_appbars.dart';
 
 class HomeContent extends StatefulWidget {
+
+  Function cartCountCallback;
+
+  HomeContent({this.cartCountCallback});
+
   @override
   _HomeContentState createState() => _HomeContentState();
 }
@@ -63,7 +63,7 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
               textAlign: TextAlign.start,
             ),
             CategoryListAdapter(categoryList: categoryList),
-             ProductsPagingListAdapter()
+             ProductsPagingListAdapter(cartCountCallback:widget.cartCountCallback)
           ],
         ),
       ),

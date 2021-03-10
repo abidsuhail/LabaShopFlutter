@@ -8,6 +8,7 @@ import 'package:labashop_flutter_app/utils/uihelper.dart';
 
 import '../add_to_cart_btn.dart';
 import '../product_qty_btn_counter.dart';
+import '../product_widgets.dart';
 
 class ProductListItem extends StatefulWidget {
   const ProductListItem({
@@ -23,11 +24,12 @@ class ProductListItem extends StatefulWidget {
 class _ProductListItemState extends State<ProductListItem> {
   int qty = 0;
   bool addToCartVisibility=true, qtyCounterVisibility=false,sizeVisibility=true;
-  String dropDownValue;
+  Price dropDownValue;
   @override
   Widget build(BuildContext context) {
+    Product product = widget.product;
     return Container(
-      height: 130,
+      height: 140,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -36,7 +38,7 @@ class _ProductListItemState extends State<ProductListItem> {
             child: CachedNetworkImage(
               height: 120,
               width: 120,
-              imageUrl: "${widget.product.productImg[0]}",
+              imageUrl: "${product.productImg[0]}",
               /*        placeholder: (context, url) => Padding(
                   padding: EdgeInsets.all(60),
                   child: CircularProgressIndicator()),*/
@@ -48,60 +50,26 @@ class _ProductListItemState extends State<ProductListItem> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Flexible(
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    constraints: new BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width - 84),
-                    child: Flexible(
-                      child: Text(
-                        UIHelper.getHtmlUnscapeString(
-                            widget.product.productName),
-                        softWrap: false,
-                        textAlign: TextAlign.start,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: widget.product.price.length==1,
-                  child: Text(
-                    '${widget.product.price.isNotEmpty ? widget.product.price[0].size : 'N/A'} ${widget.product.price.isNotEmpty ? widget.product.price[0].unit : 'N/A'}',
-                    textAlign: TextAlign.start,
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ),
-                Visibility(
-                  visible:widget.product.price.length>1 ,
-                  child: DropdownButton(
-                      value:widget.product.price[0],
-                      onChanged: (newValue) {
-                        setState(() {
-                            dropDownValue = newValue;
-                        });
-                        },
-                      items:widget.product.price.map<DropdownMenuItem<Price>>((Price value) {
-                    return DropdownMenuItem<Price>(
-                      value: value,
-                      child: Text(value.size),
-                    );
-                  }).toList()),
-                ),
+                ProductTitle(product: product),
+                ProductSize(product: product),
+                ProductMultiplePriceDropDown(product:product,dropDownValue:dropDownValue),
+                //ProductAddToCartRow
                 Expanded(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+
+                      //Product price
                       Text(
-                          'Rs.${widget.product.price.isNotEmpty ? widget.product.price[0].cost : 'N/A'}',
+                          'Rs.${product.price.isNotEmpty ? product.price[0].cost : 'N/A'}',
                           style: TextStyle(
                               //TODO change N/A to number later
                               fontWeight: FontWeight.bold)),
                       ProductQtyButtonCounter(
                         visibility: qtyCounterVisibility,
                         count: qty.toString(),
-                        onMinusPressed: () =>onMinusClicked(),
-                        onPlusPressed: () => onPlusClicked(),
+                        onMinusPressed: () =>onMinusClicked(product),
+                        onPlusPressed: () => onPlusClicked(product),
                       ),
                       AddToCartButton(
                         visibility: addToCartVisibility,
@@ -111,7 +79,7 @@ class _ProductListItemState extends State<ProductListItem> {
                             addToCartVisibility = false;
                             qtyCounterVisibility = true;
                           });
-                          addToCart(widget.product,qty);
+                          addToCart(product,qty);
 
                         },
                       )
@@ -133,7 +101,7 @@ class _ProductListItemState extends State<ProductListItem> {
   void addToCart(Product product, int qty) {
     //int qty=Integer.parseInt(txtQty.getText().toString()); //quantity
 /*    qty=qty+1;
-    double p=widget.product.price.isNotEmpty ? widget.product.price[0].cost : 0.0;
+    double p=product.price.isNotEmpty ? product.price[0].cost : 0.0;
     double c=qty*p;
     product.qty=qty;
     product.cost = c.toString();
@@ -209,7 +177,7 @@ class _ProductListItemState extends State<ProductListItem> {
     mPresenter.addToCart(sid, pid, qtyA, cost, sizeStr, "false");*/
   }
 
-  void onMinusClicked() {
+  void onMinusClicked(Product product) {
     setState(() {
       qty--;
       if(qty<=0)
@@ -223,14 +191,15 @@ class _ProductListItemState extends State<ProductListItem> {
         addToCartVisibility = false;
         qtyCounterVisibility = true;
       }
-      addToCart(widget.product,qty);
+      addToCart(product,qty);
     });
   }
 
-  void onPlusClicked() {
+  void onPlusClicked(Product product) {
     setState(() {
       qty++;
     });
-    addToCart(widget.product, qty);
+    addToCart(product, qty);
   }
 }
+

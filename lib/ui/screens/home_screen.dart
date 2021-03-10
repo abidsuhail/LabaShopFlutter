@@ -9,12 +9,21 @@ import 'package:labashop_flutter_app/widgets/laba_appbars.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget implements ScreenCallback {
+class HomeScreen extends StatefulWidget{
+
 
   static startFreshScreen(BuildContext context)
   {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
   }
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>  implements ScreenCallback  {
+  String cartCount='0';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,11 +37,16 @@ class HomeScreen extends StatelessWidget implements ScreenCallback {
           actions: [
             Container(
               margin: EdgeInsets.all(5),
-              child: CartBadge(count : '5'),
+              child: CartBadge(count : cartCount),
             )
           ]
       ),
-      body: HomeContent(),
+      body: HomeContent(cartCountCallback:(count){
+        //TODO add setState
+        setState(() {
+          cartCount = count;
+        });
+      }),
     );
   }
 

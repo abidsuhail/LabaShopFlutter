@@ -16,6 +16,7 @@ class _CartBadgeState extends State<CartBadge> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      showBadge: (widget.count==null || widget.count == '0')?false:true,
       borderSide: BorderSide(
           color: Colors.white
       ),

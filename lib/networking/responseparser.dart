@@ -53,4 +53,9 @@ class ResponseParser
   {
     return BannerList.fromJson(jsonDecode(data));
   }
+
+  CartModel getCart(String data) {
+
+    return CartModel.fromJson(jsonDecode(data));
+  }
 }
