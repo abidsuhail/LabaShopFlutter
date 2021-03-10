@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/widgets/search_text_field.dart';
 

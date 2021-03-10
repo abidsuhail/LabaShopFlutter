@@ -1,6 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/colors/colors.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/menu/drawer_menu.dart';
+import 'package:labashop_flutter_app/widgets/cart_badge.dart';
 import 'package:labashop_flutter_app/widgets/home_content.dart';
 import 'package:labashop_flutter_app/widgets/laba_appbars.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
@@ -15,16 +18,18 @@ class HomeScreen extends StatelessWidget implements ScreenCallback {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
+        drawer: Drawer(
         child: DrawerMenu(),
       ),
       appBar: AppBar(
-        elevation: 0,
+          elevation: 0,
+          brightness: Brightness.dark,
           title: LabaAppBar(),
           actions: [
-            Padding(
-                padding: EdgeInsets.all(10),
-                child: Image.asset('images/ic_cart.png',height: 25,width: 25,))
+            Container(
+              margin: EdgeInsets.all(5),
+              child: CartBadge(count : '5'),
+            )
           ]
       ),
       body: HomeContent(),
@@ -46,3 +51,4 @@ class HomeScreen extends StatelessWidget implements ScreenCallback {
     print(message);
   }
 }
+

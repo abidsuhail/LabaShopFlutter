@@ -16,6 +16,7 @@ class Product {
   String subMenu;
   int subCategoryId;
   String subCategoryName;
+  String size;
   List<Price> price;
 
   Product(
@@ -37,6 +38,8 @@ class Product {
         this.subCategoryId,
         this.subCategoryName,
         this.price});
+
+
 
   Product.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -63,6 +66,7 @@ class Product {
       });
     }
   }
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

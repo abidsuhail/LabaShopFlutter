@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  badges: ^1.2.0
   cached_network_image: ^2.5.0
   infinite_scroll_pagination: 3.0.0
   carousel_slider: ^3.0.0
