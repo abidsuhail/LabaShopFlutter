@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,11 @@ class AppSharedPrefs extends ChangeNotifier
   static void saveCartJSON(String cartJson) async
   {
     (await getInstance()).setString(CART_JSON, cartJson);
+  }
+  static Future<CartModel> getCartModel() async
+  {
+    String cartJsonStr = (await getInstance()).get(CART_JSON);
+    return CartModel.fromJson(jsonDecode(cartJsonStr));
   }
   static void saveUserEncodedJSON(String userJsonEncoded) async
   {

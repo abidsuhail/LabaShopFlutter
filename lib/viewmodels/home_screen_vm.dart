@@ -16,6 +16,7 @@ class HomeScreenVm extends ChangeNotifier with ViewModel
 {
     ProductsRepo productsRepo = ProductsRepo.getInstance();
     static HomeScreenVm _mInstance;
+    String cartCount='0';
     static HomeScreenVm getInstance()
     {
         if(_mInstance == null)
@@ -84,4 +85,38 @@ class HomeScreenVm extends ChangeNotifier with ViewModel
         listener.onError('Unknown Error');
       }
     }
+    Future<String> addToCart(String sid,String pid,String qty,String cost,String size,String single,{@required ScreenCallback listener}) async{
+      listener.showProgress();
+      Map<String, String> params = new Map<String,String>();
+      params['sid'] = sid;
+      params['pid'] = pid;
+      params['qty'] = qty;
+      params['cost'] = cost;
+      params['size'] = size;
+      params['single'] = single;
+      ResponseStatus responseStatus = await productsRepo.addToCart(params);
+      listener.hideProgress();
+      if(responseStatus!=null) {
+        if (responseStatus.getError() == NetworkConstants.OK) {
+          return responseStatus.getMessage();
+        } else {
+          //error = 1
+          listener.onError(responseStatus.getMessage());
+        }
+      }
+      else{
+        //unknown error
+        listener.onError('Unknown Error');
+      }
+    }
+
+    setCartCount(String count)
+    {
+      cartCount = count;
+      notifyListeners();
+
+    }
+
+
+
 }

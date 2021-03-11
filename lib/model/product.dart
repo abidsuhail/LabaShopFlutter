@@ -1,3 +1,5 @@
+import 'dart:core';
+
 class Product {
   int productId;
   int itemCount;
@@ -116,20 +118,20 @@ class Price {
   }
 }
 class CartModel {
-  String pid;
-  String sid;
-  String qty;
-  String cost;
-  String size;
+  String pid='';
+  String sid='';
+  String qty='';
+  String cost='';
+  String size='';
 
   CartModel({this.pid, this.sid, this.qty, this.cost, this.size});
 
   CartModel.fromJson(Map<String, dynamic> json) {
-    pid = json['pid'];
-    sid = json['sid'];
-    qty = json['qty'];
-    cost = json['cost'];
-    size = json['size'];
+    pid = json['pid']??'';
+    sid = json['sid']??'';
+    qty = json['qty']??'';
+    cost = json['cost']??'';
+    size = json['size']??'';
   }
 
   Map<String, dynamic> toJson() {
@@ -140,6 +142,26 @@ class CartModel {
     data['cost'] = this.cost;
     data['size'] = this.size;
     return data;
+  }
+
+  List<String> getPidArray(){
+    return this.pid.split(",");
+  }
+
+  List<String> getSidArray(){
+    return this.sid.split(",");
+  }
+
+ List<String> getQtyArray(){
+    return this.qty.split(",");
+  }
+
+  List<String> getCostArray(){
+    return this.cost.split(",");
+  }
+
+ List<String> getSizeArray(){
+    return this.size.split(",");
   }
 }
 

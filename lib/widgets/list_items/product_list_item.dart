@@ -1,33 +1,44 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:labashop_flutter_app/colors/colors.dart';
+import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/product.dart';
+import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
+import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
+import 'package:provider/provider.dart';
 
-import '../add_to_cart_btn.dart';
 import '../product_qty_btn_counter.dart';
 import '../product_widgets.dart';
 
-class ProductListItem extends StatefulWidget {
+class ProductListItem extends StatefulWidget{
   const ProductListItem({
     @required this.product,
+    @required this.cartModel,
+    @required this.products,
   });
 
   final Product product;
+  final CartModel cartModel;
+  final List<Product> products;
 
   @override
   _ProductListItemState createState() => _ProductListItemState();
 }
 
-class _ProductListItemState extends State<ProductListItem> {
+class _ProductListItemState extends State<ProductListItem>  implements ScreenCallback {
   int qty = 0;
   bool addToCartVisibility=true, qtyCounterVisibility=false,sizeVisibility=true;
   Price dropDownValue;
+  CartModel cartModel;
+  List<Product> products;
   @override
   Widget build(BuildContext context) {
     Product product = widget.product;
+    cartModel = widget.cartModel;
+    products = widget.products;
     return Container(
       height: 140,
       child: Row(
@@ -68,8 +79,8 @@ class _ProductListItemState extends State<ProductListItem> {
                       ProductQtyButtonCounter(
                         visibility: qtyCounterVisibility,
                         count: qty.toString(),
-                        onMinusPressed: () =>onMinusClicked(product),
-                        onPlusPressed: () => onPlusClicked(product),
+                        onMinusPressed: () =>onMinusClicked(product,context),
+                        onPlusPressed: () => onPlusClicked(product,context),
                       ),
                       AddToCartButton(
                         visibility: addToCartVisibility,
@@ -79,7 +90,7 @@ class _ProductListItemState extends State<ProductListItem> {
                             addToCartVisibility = false;
                             qtyCounterVisibility = true;
                           });
-                          addToCart(product,qty);
+                          addToCart(product,qty,context);
 
                         },
                       )
@@ -98,37 +109,42 @@ class _ProductListItemState extends State<ProductListItem> {
     );
   }
 
-  void addToCart(Product product, int qty) {
+  void addToCart(Product product, int qty, BuildContext context) async{
+    //TODO ADD THESE LOGICS TO HOMESCREEN VIEW MODEL
+    cartModel = await AppSharedPrefs.getCartModel();
     //int qty=Integer.parseInt(txtQty.getText().toString()); //quantity
-/*    qty=qty+1;
-    double p=product.price.isNotEmpty ? product.price[0].cost : 0.0;
+    qty=qty+1;
+    double p=product.price.isNotEmpty ? double.parse(product.price[0].cost) : 0.0;
     double c=qty*p;
     product.qty=qty;
     product.cost = c.toString();
-    String size=product.price.length>1 ? spinUnit.getSelectedItem().toString() :txtUnit.getText().toString();
+    String size=product.price.length>1 ? dropDownValue :product.price[0].size;
 
     product.qty=qty;
     product.size=size;
 
-    if (updateAdapter)
+    /*if (updateAdapter)
       productListAdapter.notifyDataSetChanged();
     String sessionId = ((UserRepositoryImpl) uRepository).getAuthToken();
     if (sessionId == null || sessionId.equalsIgnoreCase("")) {
       sessionId = MainApp.getInstance().getAndroidId();
-    }
+    }*/
+
+    //TODO CHANGE SESSION ID TO == AUTHTOKEN
+
     String sid = "";
     String pid = "";
     String qtyA = "";
     String cost = "";
     String sizeStr = "";
-    String[] pidArr = cartModel.getPidArray();
-    String[] qtyArr = cartModel.getQtyArray();
-    String[] costArr = cartModel.getCostArray();
-    String[] sizeArr = cartModel.getSizeArray();
+    List<String> pidArr = cartModel.getPidArray();
+    List<String> qtyArr = cartModel.getQtyArray();
+    List<String> costArr = cartModel.getCostArray();
+    List<String> sizeArr = cartModel.getSizeArray();
     int itemCount = 0;
     for (int j = 0; j < pidArr.length; j++) {
       if (!isCartProductIdExistInList(pidArr[j])) {
-        sid = sid + sessionId + ",";
+        sid = sid + "asjdyas89sdasd7a98sd8uauios" + ",";
         pid = pid + pidArr[j] + ",";
         qtyA = qtyA + qtyArr[j] + ",";
         cost = cost + costArr[j] + ",";
@@ -136,48 +152,62 @@ class _ProductListItemState extends State<ProductListItem> {
         itemCount++;
       }
     }
-    for (int i = 0; i < products.size(); i++) {
-      Product p = products.get(i);
+    for (int i = 0; i < products.length; i++) {
+      Product p = products[i];
       if (p!=null)
-        if (p.getQty() > 0) {
-          sid = sid + sessionId + ",";
-          pid = pid + p.getProduct_id() + ",";
-          qtyA = qtyA + p.getQty() + ",";
-          sizeStr = sizeStr + p.getSize() + ",";
-          cost = cost + Float.parseFloat(p.getCost().
-          replace("SAR", "").
-          replace(" ", "")) + ",";
+        if (p.qty > 0) {
+          sid = sid + 'asjdyas89sdasd7a98sd8uauios' + ",";
+          pid = pid + p.productId.toString() + ",";
+          qtyA = qtyA + p.qty.toString() + ",";
+          sizeStr = sizeStr + p.size + ",";
+          cost = cost + double.parse(p.cost.
+          replaceAll("SAR", "").
+          replaceAll(" ", "")).toString() + ",";
           itemCount++;
         }
     }
-    if (getActivity() != null) {
-      HomeActivity home = (HomeActivity) getActivity();
-      home.mCartItemCount = itemCount;
-      home.setupBadge();
-    }
-    if (sid.length() > 0)
-      sid = sid.substring(0, sid.length() - 1);
-    if (pid.length() > 0)
-      pid = pid.substring(0, pid.length() - 1);
-    if (qtyA.length() > 0)
-      qtyA = qtyA.substring(0, qtyA.length() - 1);
-    if (cost.length() > 0)
-      cost = cost.substring(0, cost.length() - 1);
-    if (sizeStr.length() > 0)
-      sizeStr = sizeStr.substring(0, sizeStr.length() - 1);
-    cartModel.setPid(pid);
-    cartModel.setQty(qtyA);
-    cartModel.setSid(sid);
-    cartModel.setCost(cost);
-    cartModel.setSize(sizeStr);
-    AppSharedPref.getInstance().putPref(AppSharedPref.CART_JSON, new Gson().toJson(cartModel));
-    if (pid.equalsIgnoreCase(""))
-      sid = sessionId;
-    mPresenter.setRepository(mRepository);
-    mPresenter.addToCart(sid, pid, qtyA, cost, sizeStr, "false");*/
+      Provider.of<HomeScreenVm>(context,listen: false).setCartCount(itemCount.toString());
+      print('itemcount ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt $itemCount');
+    if (sid.length > 0)
+      sid = sid.substring(0, sid.length - 1);
+    if (pid.length > 0)
+      pid = pid.substring(0, pid.length - 1);
+    if (qtyA.length > 0)
+      qtyA = qtyA.substring(0, qtyA.length - 1);
+    if (cost.length > 0)
+      cost = cost.substring(0, cost.length - 1);
+    if (sizeStr.length > 0)
+      sizeStr = sizeStr.substring(0, sizeStr.length - 1);
+    cartModel.pid=(pid);
+    cartModel.qty=(qtyA);
+    cartModel.sid=(sid);
+    cartModel.cost=(cost);
+    cartModel.size=(sizeStr);
+    //AppSharedPref.getInstance().putPref(AppSharedPref.CART_JSON, new Gson().toJson(cartModel));
+    AppSharedPrefs.saveCartJSON(jsonEncode(cartModel));
+    if (pid=="")
+      sid = 'sessionId';
+   // mPresenter.addToCart(sid, pid, qtyA, cost, sizeStr, "false");
+    String msg = await Provider.of<HomeScreenVm>(context,listen: false).addToCart(sid, pid, qtyA, cost, size, false.toString(), listener: this);
+    UIHelper.showShortToast(msg);
   }
 
-  void onMinusClicked(Product product) {
+
+  bool isCartProductIdExistInList(String productId) {
+    bool flag = false;
+    if (productId=="") {
+      flag = true;
+    } else {
+      for (int i = 0; i < products.length; i++) {
+        if (products[i].productId.toString() == productId) {
+          flag = true;
+          break;
+        }
+      }
+    }
+    return flag;
+  }
+  void onMinusClicked(Product product, BuildContext context) {
     setState(() {
       qty--;
       if(qty<=0)
@@ -191,15 +221,31 @@ class _ProductListItemState extends State<ProductListItem> {
         addToCartVisibility = false;
         qtyCounterVisibility = true;
       }
-      addToCart(product,qty);
+      addToCart(product,qty,context);
     });
   }
 
-  void onPlusClicked(Product product) {
+
+  @override
+  void onError(String message) {
+
+  }
+
+  void onPlusClicked(Product product, BuildContext context) {
     setState(() {
       qty++;
     });
-    addToCart(product, qty);
+    addToCart(product, qty,context);
+  }
+
+  @override
+  void showProgress() {
+
+  }
+
+  @override
+  void hideProgress() {
+
   }
 }
 

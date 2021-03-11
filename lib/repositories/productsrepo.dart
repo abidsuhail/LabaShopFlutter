@@ -20,6 +20,11 @@ class ProductsRepo extends Repository
     print(url);
     return networkManager.get(url: url);
   }
+  Future<ResponseStatus> addToCart(Map<String,String> params) async{
+    String url = UrlProvider.getAddToCartUrl();
+    print(url);
+    return networkManager.post(url: url,params: params);
+  }
   Future<ResponseStatus> getCategories() async{
     String url = UrlProvider.getCategoryListUrl();
     print(url);
