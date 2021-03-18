@@ -64,16 +64,14 @@ class UrlProvider
   
 
   static String getDomain() =>DOMAIN_RELEASE;
+  static String getSessionId() => AppSharedPrefs.getSyncAuthToken();
 
   static String getMarkAttUrl() {
     return getDomain() + MARK_ATT ;
   }
 
   //TODO GET AUTH TOKEN FROM DB
-  static String getAuthToken() {
-    /*UserRepositoryImpl userRepository = new UserRepositoryImpl();*/
-    return "";
-  }
+  static String getAuthToken() =>AppSharedPrefs.getSyncAuthToken();
 
   static String getAuthenticateUserUrl() {
     return getDomain() + AUTHENTICATE_USER ;
@@ -241,5 +239,4 @@ class UrlProvider
 
   static String getCountry() =>'IND';
 
-  static String getSessionId() =>'asjdyas89sdasd7a98sd8uauios';
 }

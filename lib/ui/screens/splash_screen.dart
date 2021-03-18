@@ -17,10 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(_duration, ()async{
 
       if(await AppSharedPrefs.getAuthToken()!='') {
-        Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (BuildContext context) => HomeScreen()));
-
-        //TODO change start screen in each activity like startNewIntent
+        if(await AppSharedPrefs.initSynchronousAuthToken()) {
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (BuildContext context) => HomeScreen()));
+        }
       }
       else{
         Navigator.pushReplacement(context, MaterialPageRoute(

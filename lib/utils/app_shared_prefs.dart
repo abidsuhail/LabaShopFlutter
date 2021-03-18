@@ -5,11 +5,23 @@ import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AppSharedPrefs extends ChangeNotifier
+class AppSharedPrefs
 {
   static const String AUTH_TOKEN = 'authtoken';
   static const String CART_JSON = 'cart_json';
   static const String USER_JSON = 'user_json_encoded';
+  static const String SYNC_AUTH_TOKEN = 'synchonous_auth_token';
+  static String syncAuthToken;
+  static Future<bool> initSynchronousAuthToken()async
+  {
+      if(syncAuthToken==null)
+        {
+          syncAuthToken = await AppSharedPrefs.getAuthToken();
+        }
+      return syncAuthToken!=null;
+  }
+  static String getSyncAuthToken()=>syncAuthToken;
+
   static Future<SharedPreferences> getInstance() async => await SharedPreferences.getInstance();
 
   static void saveAuthToken(String authToken) async

@@ -10,7 +10,6 @@ import 'package:labashop_flutter_app/ui/adapters/products_paging_list_adapter.da
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
-import 'package:provider/provider.dart';
 
 import 'banners_images_slider.dart';
 import 'laba_appbars.dart';
@@ -30,7 +29,6 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
 
   @override
   Widget build(BuildContext context) {
-
     return ModalProgressHUD(
       inAsyncCall: progress,
       child: Scaffold(
@@ -47,7 +45,8 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
               padding: EdgeInsets.all(7),
               height: 200,
               color: Color(AppColors.colorPrimary),
-              child:BannersImageSlider(bannersList: bannersList, dummyBanner: dummyBanner),
+              child: BannersImageSlider(
+                  bannersList: bannersList, dummyBanner: dummyBanner),
             ),
             SizedBox(
               height: 5,
@@ -61,7 +60,7 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
               textAlign: TextAlign.start,
             ),
             CategoryListAdapter(categoryList: categoryList),
-             ProductsPagingListAdapter()
+            ProductsPagingListAdapter()
           ],
         ),
       ),
@@ -70,26 +69,26 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
 
   List<Category> categoryList;
   List<Product> productsList;
-  List<AppBanners.Banner> bannersList,dummyBanner;
+  List<AppBanners.Banner> bannersList, dummyBanner;
 
   bool progress = false;
 
   void getProductsOnHome() async {
-    dummyBanner  = [];
-    dummyBanner.add(AppBanners.Banner(bannerId:0,bannerImg:"www.google.com",bannerLink:""));
+    dummyBanner = [];
+    dummyBanner.add(AppBanners.Banner(
+        bannerId: 0, bannerImg: "www.google.com", bannerLink: ""));
 
-    List<AppBanners.Banner> bannersList = await HomeScreenVm.getInstance().getBanners(listener: this);
+    List<AppBanners.Banner> bannersList =
+        await HomeScreenVm.getInstance().getBanners(listener: this);
     setState(() {
       this.bannersList = bannersList;
     });
 
-
-    List<Category> categoryList = await HomeScreenVm.getInstance().getCategories(listener: this);
+    List<Category> categoryList =
+        await HomeScreenVm.getInstance().getCategories(listener: this);
     setState(() {
       this.categoryList = categoryList;
     });
-
-
   }
 
   @override
@@ -110,15 +109,4 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
   void onError(String message) {
     UIHelper.showShortToast(message);
   }
-
-
 }
-
-
-
-
-
-
-
-
-

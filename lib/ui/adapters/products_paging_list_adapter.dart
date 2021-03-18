@@ -10,18 +10,19 @@ import 'package:labashop_flutter_app/widgets/list_items/product_list_item.dart';
 import 'package:provider/provider.dart';
 
 class ProductsPagingListAdapter extends StatefulWidget {
-
   @override
-  _ProductsPagingListAdapterState createState() => _ProductsPagingListAdapterState();
+  _ProductsPagingListAdapterState createState() =>
+      _ProductsPagingListAdapterState();
 }
 
-class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter> implements ScreenCallback{
+class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
+    implements ScreenCallback {
   static const _pageSize = 6;
   static const int _progress_delay = 1000;
   final PagingController<int, Product> _pagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1, invisibleItemsThreshold: 1);
   HomeScreenVm vm;
-  bool firstTime=true;
+  bool firstTime = true;
   CartModel cartModel;
   List<Product> products;
 
@@ -32,73 +33,66 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter> i
 
   @override
   void initState() {
-     vm = HomeScreenVm.getInstance();
+    vm = HomeScreenVm.getInstance();
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
     super.initState();
   }
 
-  List<Product> allProducts = new List();
-  Future<void> _fetchPage(int pageKey) async
-  {
+  List<Product> allProducts = [];
+  Future<void> _fetchPage(int pageKey) async {
     try {
-      products = await vm.getProductsOnHome(listener: this,pageNo: pageKey,pageSize:_pageSize);
+      products = await vm.getProductsOnHome(
+          listener: this, pageNo: pageKey, pageSize: _pageSize);
       allProducts.addAll(products);
-      if(products.length>0 && firstTime) {
+      if (products.length > 0 && firstTime) {
         firstTime = false;
-        Provider.of<HomeScreenVm>(context, listen: false).setCartCount(
-            products[0].itemCount.toString());
+        Provider.of<HomeScreenVm>(context, listen: false)
+            .setCartCount(products[0].itemCount.toString());
       }
-      final isLastPage = (products != null) ? (products.length < _pageSize || products.length == 0) : true; //check for null
-        if (isLastPage) {
-          Future.delayed(const Duration(milliseconds: _progress_delay), () {
-            _pagingController.appendLastPage(products);
-          });
-        } else {
-          final nextPageKey = pageKey + 1;
-          Future.delayed(const Duration(milliseconds: _progress_delay), () {
-            _pagingController.appendPage(products, nextPageKey);
-          });
-        }
+      final isLastPage = (products != null)
+          ? (products.length < _pageSize || products.length == 0)
+          : true; //check for null
+      if (isLastPage) {
+        Future.delayed(const Duration(milliseconds: _progress_delay), () {
+          _pagingController.appendLastPage(products);
+        });
+      } else {
+        final nextPageKey = pageKey + 1;
+        Future.delayed(const Duration(milliseconds: _progress_delay), () {
+          _pagingController.appendPage(products, nextPageKey);
+        });
+      }
     } catch (error) {
       _pagingController.error = error;
     }
-
   }
 
   @override
   Widget build(BuildContext context) =>
       // Don't worry about displaying progress or error indicators on screen; the
-  // package takes care of that. If you want to customize them, use the
-  // [PagedChildBuilderDelegate] properties.
-  PagedListView<int, Product>(
-    shrinkWrap: true,
-    physics: ScrollPhysics(),
-    pagingController: _pagingController,
-    builderDelegate: PagedChildBuilderDelegate<Product>(
-      itemBuilder: (context, item, index) =>
-          ProductListItem(
-            product: item,
-            cartModel: cartModel,
-            products : allProducts
-      ),
-    ),
-  );
+      // package takes care of that. If you want to customize them, use the
+      // [PagedChildBuilderDelegate] properties.
+      PagedListView<int, Product>(
+        shrinkWrap: true,
+        physics: ScrollPhysics(),
+        pagingController: _pagingController,
+        builderDelegate: PagedChildBuilderDelegate<Product>(
+          itemBuilder: (context, item, index) => ProductListItem(
+              product: item, cartModel: cartModel, products: allProducts),
+        ),
+      );
 
   @override
   void dispose() {
-    _pagingController.dispose();
+    if (_pagingController != null) _pagingController.dispose();
     super.dispose();
   }
 
   @override
-  void showProgress() {
-
-  }
+  void showProgress() {}
 
   @override
-  void hideProgress() {
-
-  }
+  void hideProgress() {}
 }

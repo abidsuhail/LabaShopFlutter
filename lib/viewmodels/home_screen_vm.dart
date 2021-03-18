@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/banner.dart' as AppBanners;
@@ -12,27 +13,32 @@ import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 
 import 'base/view_model.dart';
 
-class HomeScreenVm extends ChangeNotifier with ViewModel
-{
-    ProductsRepo productsRepo = ProductsRepo.getInstance();
-    static HomeScreenVm _mInstance;
-    String cartCount='0';
-    static HomeScreenVm getInstance()
-    {
-        if(_mInstance == null)
-          {
-            _mInstance = new HomeScreenVm();
-          }
-        return _mInstance;
-    }
+class HomeScreenVm extends ChangeNotifier with ViewModel {
+  CartModel cartModel;
 
-  Future<List<Product>> getProductsOnHome({@required ScreenCallback listener,@required pageNo, @required int pageSize}) async{
+  ProductsRepo productsRepo = ProductsRepo.getInstance();
+  static HomeScreenVm _mInstance;
+  String cartCount = '0';
+  List<Product> products = [];
+  static HomeScreenVm getInstance() {
+    if (_mInstance == null) {
+      _mInstance = new HomeScreenVm();
+    }
+    return _mInstance;
+  }
+
+  Future<List<Product>> getProductsOnHome(
+      {@required ScreenCallback listener,
+      @required pageNo,
+      @required int pageSize}) async {
     listener.showProgress();
-    ResponseStatus responseStatus = await productsRepo.getProductsOnHome(pageNo:pageNo,pageSize:pageSize);
+    ResponseStatus responseStatus = await productsRepo.getProductsOnHome(
+        pageNo: pageNo, pageSize: pageSize);
     listener.hideProgress();
-    if(responseStatus!=null) {
+    if (responseStatus != null) {
       if (responseStatus.getError() == NetworkConstants.OK) {
-        List<Product> products = responseParser.getProductList(responseStatus.getData()).products;
+        List<Product> products =
+            responseParser.getProductList(responseStatus.getData()).products;
         CartModel cartModel = responseParser.getCart(responseStatus.getData());
         AppSharedPrefs.saveCartJSON(jsonEncode(cartModel));
         return products;
@@ -41,82 +47,149 @@ class HomeScreenVm extends ChangeNotifier with ViewModel
         listener.onError(responseStatus.getMessage());
         return null;
       }
-    }
-    else{
+    } else {
       //unknown error
       listener.onError('Unknown Error');
       return null;
     }
   }
 
-    Future<List<Category>> getCategories({@required ScreenCallback listener}) async{
-      listener.showProgress();
-      ResponseStatus responseStatus = await productsRepo.getCategories();
-      listener.hideProgress();
-      if(responseStatus!=null) {
-        if (responseStatus.getError() == NetworkConstants.OK) {
-          List<Category> product = responseParser.getCategoryList(responseStatus.getData()).categories;
-          return product;
-        } else {
-          //error = 1
-          listener.onError(responseStatus.getMessage());
+  Future<List<Category>> getCategories(
+      {@required ScreenCallback listener}) async {
+    listener.showProgress();
+    ResponseStatus responseStatus = await productsRepo.getCategories();
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        List<Category> product =
+            responseParser.getCategoryList(responseStatus.getData()).categories;
+        return product;
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
+
+  Future<List<AppBanners.Banner>> getBanners(
+      {@required ScreenCallback listener}) async {
+    listener.showProgress();
+    ResponseStatus responseStatus = await productsRepo.getBanners();
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        List<AppBanners.Banner> product =
+            responseParser.getBannersList(responseStatus.getData()).banners;
+        return product;
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
+
+  Future<String> addToCart(Product product, int qty, String single,
+      Price dropDownValue, List<Product> products,
+      {@required ScreenCallback listener}) async {
+    this.products = products;
+    cartModel = await AppSharedPrefs.getCartModel();
+    double p =
+        product.price.isNotEmpty ? double.parse(product.price[0].cost) : 0.0;
+    double c = qty * p;
+    product.qty = qty;
+    product.cost = c.toString();
+    String size =
+        product.price.length > 1 ? dropDownValue.size : product.price[0].size;
+    product.qty = qty;
+    product.size = size;
+    String sessionId = AppSharedPrefs.getSyncAuthToken();
+    if (sessionId == null || sessionId == '') {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      sessionId = androidInfo.androidId;
+    }
+
+    String sid = '';
+    String pid = '';
+    String qtyA = '';
+    String cost = '';
+    String sizeStr = '';
+    List<String> pidArr = cartModel.getPidArray();
+    List<String> qtyArr = cartModel.getQtyArray();
+    List<String> costArr = cartModel.getCostArray();
+    List<String> sizeArr = cartModel.getSizeArray();
+    int itemCount = 0;
+
+    for (int j = 0; j < pidArr.length; j++) {
+      if (!_isCartProductIdExistInList(pidArr[j])) {
+        sid = sid + sessionId + ',';
+        pid = pid + pidArr[j] + ',';
+        qtyA = qtyA + qtyArr[j] + ',';
+        cost = cost + costArr[j] + ',';
+        sizeStr = sizeStr + sizeArr[j] + ',';
+        itemCount++; //cart count
+      }
+    }
+    for (int i = 0; i < products.length; i++) {
+      Product p = products[i];
+      if (p != null) if (p.qty > 0) {
+        try {
+          sid = sid + sessionId + ',';
+          pid = pid + p.productId.toString() + ',';
+          qtyA = qtyA + p.qty.toString() + ',';
+          sizeStr = sizeStr + p.size + ',';
+          cost = cost +
+              double.parse(p.cost.replaceAll('SAR', '').replaceAll(' ', ''))
+                  .toString() +
+              ',';
+          itemCount++;
+        } catch (e) {
+          print(e);
         }
       }
-      else{
-        //unknown error
-        listener.onError('Unknown Error');
-      }
     }
-    Future<List<AppBanners.Banner>> getBanners({@required ScreenCallback listener}) async{
-      listener.showProgress();
-      ResponseStatus responseStatus = await productsRepo.getBanners();
-      listener.hideProgress();
-      if(responseStatus!=null) {
-        if (responseStatus.getError() == NetworkConstants.OK) {
-          List<AppBanners.Banner> product = responseParser.getBannersList(responseStatus.getData()).banners;
-          return product;
-        } else {
-          //error = 1
-          listener.onError(responseStatus.getMessage());
+    setCartCount(itemCount.toString());
+    if (sid.length > 0) sid = sid.substring(0, sid.length - 1);
+    if (pid.length > 0) pid = pid.substring(0, pid.length - 1);
+    if (qtyA.length > 0) qtyA = qtyA.substring(0, qtyA.length - 1);
+    if (cost.length > 0) cost = cost.substring(0, cost.length - 1);
+    if (sizeStr.length > 0) sizeStr = sizeStr.substring(0, sizeStr.length - 1);
+    cartModel.pid = (pid);
+    cartModel.qty = (qtyA);
+    cartModel.sid = (sid);
+    cartModel.cost = (cost);
+    cartModel.size = (sizeStr);
+    //AppSharedPref.getInstance().putPref(AppSharedPref.CART_JSON, new Gson().toJson(cartModel));
+    AppSharedPrefs.saveCartJSON(jsonEncode(cartModel));
+    if (pid == '') sid = 'sessionId';
+    return productsRepo.addToCart(
+        sid, pid, qtyA.toString(), cost, sizeStr, single,
+        listener: listener);
+  }
+
+  bool _isCartProductIdExistInList(String productId) {
+    bool flag = false;
+    if (productId == "") {
+      flag = true;
+    } else {
+      for (int i = 0; i < products.length; i++) {
+        if (products[i].productId.toString() == productId) {
+          flag = true;
+          break;
         }
       }
-      else{
-        //unknown error
-        listener.onError('Unknown Error');
-      }
     }
-    Future<String> addToCart(String sid,String pid,String qty,String cost,String size,String single,{@required ScreenCallback listener}) async{
-      listener.showProgress();
-      Map<String, String> params = new Map<String,String>();
-      params['sid'] = sid;
-      params['pid'] = pid;
-      params['qty'] = qty;
-      params['cost'] = cost;
-      params['size'] = size;
-      params['single'] = single;
-      ResponseStatus responseStatus = await productsRepo.addToCart(params);
-      listener.hideProgress();
-      if(responseStatus!=null) {
-        if (responseStatus.getError() == NetworkConstants.OK) {
-          return responseStatus.getMessage();
-        } else {
-          //error = 1
-          listener.onError(responseStatus.getMessage());
-        }
-      }
-      else{
-        //unknown error
-        listener.onError('Unknown Error');
-      }
-    }
+    return flag;
+  }
 
-    setCartCount(String count)
-    {
-      cartCount = count;
-      notifyListeners();
-
-    }
-
-
-
+  setCartCount(String count) {
+    cartCount = count;
+    notifyListeners();
+  }
 }

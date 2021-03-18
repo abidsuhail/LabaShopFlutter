@@ -23,25 +23,23 @@ class Product {
 
   Product(
       {this.productId,
-        this.itemCount,
-        this.qty,
-        this.cost,
-        this.sessionId,
-        this.productName,
-        this.productImg,
-        this.productBrand,
-        this.productShortDesc,
-        this.productManufacturer,
-        this.sellPrice,
-        this.productCountry,
-        this.categoryId,
-        this.categoryName,
-        this.subMenu,
-        this.subCategoryId,
-        this.subCategoryName,
-        this.price});
-
-
+      this.itemCount,
+      this.qty,
+      this.cost,
+      this.sessionId,
+      this.productName,
+      this.productImg,
+      this.productBrand,
+      this.productShortDesc,
+      this.productManufacturer,
+      this.sellPrice,
+      this.productCountry,
+      this.categoryId,
+      this.categoryName,
+      this.subMenu,
+      this.subCategoryId,
+      this.subCategoryName,
+      this.price});
 
   Product.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
@@ -68,7 +66,6 @@ class Product {
       });
     }
   }
-
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -117,21 +114,22 @@ class Price {
     return data;
   }
 }
+
 class CartModel {
-  String pid='';
-  String sid='';
-  String qty='';
-  String cost='';
-  String size='';
+  String pid = '';
+  String sid = '';
+  String qty = '';
+  String cost = '';
+  String size = '';
 
   CartModel({this.pid, this.sid, this.qty, this.cost, this.size});
 
   CartModel.fromJson(Map<String, dynamic> json) {
-    pid = json['pid']??'';
-    sid = json['sid']??'';
-    qty = json['qty']??'';
-    cost = json['cost']??'';
-    size = json['size']??'';
+    pid = json['pid'] ?? '';
+    sid = json['sid'] ?? '';
+    qty = json['qty'] ?? '';
+    cost = json['cost'] ?? '';
+    size = json['size'] ?? '';
   }
 
   Map<String, dynamic> toJson() {
@@ -144,34 +142,33 @@ class CartModel {
     return data;
   }
 
-  List<String> getPidArray(){
+  List<String> getPidArray() {
     return this.pid.split(",");
   }
 
-  List<String> getSidArray(){
+  List<String> getSidArray() {
     return this.sid.split(",");
   }
 
- List<String> getQtyArray(){
+  List<String> getQtyArray() {
     return this.qty.split(",");
   }
 
-  List<String> getCostArray(){
+  List<String> getCostArray() {
     return this.cost.split(",");
   }
 
- List<String> getSizeArray(){
+  List<String> getSizeArray() {
     return this.size.split(",");
   }
 }
 
-class ProductList
-{
+class ProductList {
   final List<Product> products;
   ProductList({this.products});
   factory ProductList.fromJson(List<dynamic> parsedJson) {
-
-    List<Product> products = parsedJson.map((i)=>Product.fromJson(i)).toList();
+    List<Product> products =
+        parsedJson.map((i) => Product.fromJson(i)).toList();
     return new ProductList(
       products: products,
     );

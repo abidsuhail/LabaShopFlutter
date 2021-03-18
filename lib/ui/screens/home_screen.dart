@@ -18,37 +18,33 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
-
   @override
   Widget build(BuildContext context) {
-    return  MultiProvider(
+    return MultiProvider(
         providers: [
           ChangeNotifierProvider<HomeScreenVm>(
             create: (context) => HomeScreenVm(),
           ),
         ],
-      child:Builder(
-        builder:(context)=> Scaffold(
-              drawer: Drawer(
-                child: DrawerMenu(),
-              ),
-              appBar: AppBar(
-                  elevation: 0,
-                  brightness: Brightness.dark,
-                  title: LabaAppBar(),
-                  actions: [
-                    Container(
-                      margin: EdgeInsets.all(5),
-                      child: CartBadge(
-                          count: Provider
-                              .of<HomeScreenVm>(context)
-                              .cartCount),
-                    )
-                  ]),
-              body: HomeContent(),
+        child: Builder(
+          builder: (context) => Scaffold(
+            drawer: Drawer(
+              child: DrawerMenu(),
             ),
-      )
-    );
+            appBar: AppBar(
+                elevation: 0,
+                brightness: Brightness.dark,
+                title: LabaAppBar(),
+                actions: [
+                  Container(
+                    margin: EdgeInsets.all(5),
+                    child: CartBadge(
+                        count: Provider.of<HomeScreenVm>(context).cartCount),
+                  )
+                ]),
+            body: HomeContent(),
+          ),
+        ));
   }
 
   @override

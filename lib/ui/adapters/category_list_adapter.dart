@@ -15,11 +15,12 @@ class CategoryListAdapter extends StatelessWidget {
       physics: ScrollPhysics(),
       shrinkWrap: true,
       crossAxisCount: 2,
-      children: List.generate(
-          categoryList == null ? 0 : categoryList.length, (index) {
+      children: List.generate(categoryList == null ? 0 : categoryList.length,
+          (index) {
         return ProductCategoryListItem(
           categoryImage: categoryList[index].categoryImg,
-          categoryName:categoryList[index].categoryName ,);
+          categoryName: categoryList[index].categoryName,
+        );
       }),
     );
   }
