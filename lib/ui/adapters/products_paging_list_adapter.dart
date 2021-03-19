@@ -80,7 +80,10 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<Product>(
           itemBuilder: (context, item, index) => ProductListItem(
-              product: item, cartModel: cartModel, products: allProducts),
+              product: item,
+              cartModel: cartModel,
+              products: allProducts,
+              pos: index),
         ),
       );
 

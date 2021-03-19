@@ -95,8 +95,12 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
   }
 
   Future<String> addToCart(Product product, int qty, String single,
-      Price dropDownValue, List<Product> products,
+      Price dropDownValue, List<Product> products, int pos,
       {@required ScreenCallback listener}) async {
+    String size =
+        product.price.length > 1 ? dropDownValue.size : product.price[0].size;
+    products[pos].qty = qty;
+    products[pos].size = size;
     this.products = products;
     cartModel = await AppSharedPrefs.getCartModel();
     double p =
@@ -104,8 +108,7 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
     double c = qty * p;
     product.qty = qty;
     product.cost = c.toString();
-    String size =
-        product.price.length > 1 ? dropDownValue.size : product.price[0].size;
+
     product.qty = qty;
     product.size = size;
     String sessionId = AppSharedPrefs.getSyncAuthToken();
@@ -124,9 +127,11 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
     List<String> qtyArr = cartModel.getQtyArray();
     List<String> costArr = cartModel.getCostArray();
     List<String> sizeArr = cartModel.getSizeArray();
+    print('----------------> $pidArr $qtyArr $costArr $sizeArr');
     int itemCount = 0;
-
     for (int j = 0; j < pidArr.length; j++) {
+      print(
+          '_isCartProductIdExistInList(pidArr[j]) ${_isCartProductIdExistInList(pidArr[j])}');
       if (!_isCartProductIdExistInList(pidArr[j])) {
         sid = sid + sessionId + ',';
         pid = pid + pidArr[j] + ',';
@@ -148,13 +153,14 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
               double.parse(p.cost.replaceAll('SAR', '').replaceAll(' ', ''))
                   .toString() +
               ',';
-          itemCount++;
+          itemCount++; //cart count
         } catch (e) {
-          print(e);
+          print('exception caught : $e');
         }
       }
     }
     setCartCount(itemCount.toString());
+    print('pid id $pid');
     if (sid.length > 0) sid = sid.substring(0, sid.length - 1);
     if (pid.length > 0) pid = pid.substring(0, pid.length - 1);
     if (qtyA.length > 0) qtyA = qtyA.substring(0, qtyA.length - 1);
@@ -167,19 +173,19 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
     cartModel.size = (sizeStr);
     //AppSharedPref.getInstance().putPref(AppSharedPref.CART_JSON, new Gson().toJson(cartModel));
     AppSharedPrefs.saveCartJSON(jsonEncode(cartModel));
-    if (pid == '') sid = 'sessionId';
+    if (pid == '') sid = sessionId;
     return productsRepo.addToCart(
-        sid, pid, qtyA.toString(), cost, sizeStr, single,
+        sid, pid, qtyA, cost, sizeStr, false.toString(),
         listener: listener);
   }
 
   bool _isCartProductIdExistInList(String productId) {
     bool flag = false;
-    if (productId == "") {
+    if (productId == '') {
       flag = true;
     } else {
-      for (int i = 0; i < products.length; i++) {
-        if (products[i].productId.toString() == productId) {
+      for (int i = 0; i < this.products.length; i++) {
+        if (this.products[i].productId.toString() == productId) {
           flag = true;
           break;
         }

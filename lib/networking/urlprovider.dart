@@ -1,7 +1,6 @@
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 
-class UrlProvider
-{
+class UrlProvider {
   static final String DOMAIN_LOCAL_DEBUG = "http://192.168.1.201/labashopping";
   static final String DOMAIN_DEBUG = "http://thelabashopping.com";
   static final String DOMAIN_RELEASE = "http://thelabashopping.com";
@@ -25,9 +24,9 @@ class UrlProvider
   static final String GET_PRODUCTS_BY_CAT = "/api/public/getProductsByCategory";
   static final String ADD_PRODUCT_TO_CART = "/api/public/addToCart";
   static final String GET_CART = "/api/public/getCart";
-  static final String ADD_PRODUCT_TO_WISHLIST = "/api/public/addProductToWishlist";
+  static final String ADD_PRODUCT_TO_WISHLIST =
+      "/api/public/addProductToWishlist";
   static final String GET_WISHLIST = "/api/public/getWishlist";
-
 
   static final String GET_EVENTS = "/api/public/getEvents";
   static final String GET_TODAYS_DEAL = "/api/public/getTodaysDeal";
@@ -38,7 +37,8 @@ class UrlProvider
   static final String GET_BOOTHS = "/api/public/getBooths";
   static final String VOTE_BOOTH = "/api/public/postVote";
   static final String GET_KEYWORDS = "/api/public/getKeywords";
-  static final String GET_PRODUCTS_BY_KEYWORDS = "/api/public/getProductsByKeywords";
+  static final String GET_PRODUCTS_BY_KEYWORDS =
+      "/api/public/getProductsByKeywords";
   static final String GET_NOTIFICATION = "/api/public/getNotifications";
   static final String UPDATE_EMAIL = "/api/public/updateEmail";
   static final String UPDATE_ACCOUNT = "/api/public/updateAccount";
@@ -50,7 +50,6 @@ class UrlProvider
   static final String MARK_ATT = "/api/public/markAttendance";
   static final String UPDATE_FCM_TOKEN = "/api/public/updateFcmToken";
 
-
   static final String GET_ADDRESS = "/api/public/getAddress";
   static final String ADD_ADDRESS = "/api/public/addAddress";
   static final String DELETE_ADDRESS = "/api/public/deleteAddress";
@@ -61,37 +60,34 @@ class UrlProvider
   static final String GET_ORDER_ID = "/api/public/getOrderId";
   static final String CANCEL_ORDER = "/api/public/cancelOrder";
 
-  
-
-  static String getDomain() =>DOMAIN_RELEASE;
+  static String getDomain() => DOMAIN_RELEASE;
   static String getSessionId() => AppSharedPrefs.getSyncAuthToken();
 
   static String getMarkAttUrl() {
-    return getDomain() + MARK_ATT ;
+    return getDomain() + MARK_ATT;
   }
 
   //TODO GET AUTH TOKEN FROM DB
-  static String getAuthToken() =>AppSharedPrefs.getSyncAuthToken();
+  static String getAuthToken() => AppSharedPrefs.getSyncAuthToken();
 
   static String getAuthenticateUserUrl() {
-    return getDomain() + AUTHENTICATE_USER ;
+    return getDomain() + AUTHENTICATE_USER;
   }
 
   static String getRegisterUrl() {
-    return getDomain() + REGISTER ;
+    return getDomain() + REGISTER;
   }
 
-
   static String createOrderUrl() {
-    return getDomain() + CREATE_ORDER ;
+    return getDomain() + CREATE_ORDER;
   }
 
   static String getCityUrl() {
-    return getDomain() + GET_CITY ;
+    return getDomain() + GET_CITY;
   }
 
   static String getKeywordsUrl() {
-    return getDomain() + GET_KEYWORDS ;
+    return getDomain() + GET_KEYWORDS;
   }
 
   static String getVerifyOTPUrl() {
@@ -99,63 +95,89 @@ class UrlProvider
   }
 
   static String getCategoryListUrl() {
-    return getDomain() + GET_CATEGORY+"/"+getCountry();
+    return getDomain() + GET_CATEGORY + "/" + getCountry();
   }
 
-  static String getProductListHomeUrl(int pageSize,int pageNo) {
-    return getDomain() + GET_PRODUCT_HOME+"/"+getCountry()+"/"+getSessionId()+"/"+pageSize.toString()+"/"+pageNo.toString();
+  static String getProductListHomeUrl(int pageSize, int pageNo) {
+    return getDomain() +
+        GET_PRODUCT_HOME +
+        "/" +
+        getCountry() +
+        "/" +
+        getSessionId() +
+        "/" +
+        pageSize.toString() +
+        "/" +
+        pageNo.toString();
   }
 
   static String getBannerListUrl() {
-    return getDomain() + GET_BANNERS+"/"+getCountry();
+    return getDomain() + GET_BANNERS + "/" + getCountry();
   }
 
-
   static String getOrdersUrl() {
-    return getDomain() + GET_ORDERS+"/"+getAuthToken();
+    return getDomain() + GET_ORDERS + "/" + getAuthToken();
   }
 
   static String getOrderDetailsUrl(String orderId) {
-    return getDomain() + GET_ORDERS+"/"+getAuthToken()+"/"+orderId;
+    return getDomain() + GET_ORDERS + "/" + getAuthToken() + "/" + orderId;
   }
 
   static String getAddToCartUrl() {
-    return getDomain() + ADD_PRODUCT_TO_CART ;
+    return getDomain() + ADD_PRODUCT_TO_CART;
   }
 
   static String getAddToWishListUrl() {
-    return getDomain() + ADD_PRODUCT_TO_WISHLIST ;
+    return getDomain() + ADD_PRODUCT_TO_WISHLIST;
   }
 
-
   static String getBrandsUrl() {
-    return getDomain() + GET_BRANDS + "/"+getAuthToken();
+    return getDomain() + GET_BRANDS + "/" + getAuthToken();
   }
 
   static String getProductsByBrandUrl(String brandId) {
-    return getDomain() + GET_PRODUCTS_BY_BRANDS+"/"+getAuthToken() + "/"+brandId;
+    return getDomain() +
+        GET_PRODUCTS_BY_BRANDS +
+        "/" +
+        getAuthToken() +
+        "/" +
+        brandId;
   }
 
   static String orderIdUrl(String amount) {
-    return getDomain() + GET_ORDER_ID+"/"+getAuthToken() + "/"+amount;
+    return getDomain() + GET_ORDER_ID + "/" + getAuthToken() + "/" + amount;
   }
 
   static String getProductsByKeywordsUrl(String keyword) {
-    return getDomain() + GET_PRODUCTS_BY_KEYWORDS + "/"+getSessionId()+"/" /*URLEncoder.encode(keyword)*/; //TODO do stuffs
+    return getDomain() +
+        GET_PRODUCTS_BY_KEYWORDS +
+        "/" +
+        getSessionId() +
+        "/" /*URLEncoder.encode(keyword)*/; //TODO do stuffs
   }
 
-
-  static String getProductsByCatUrl(String catId,String subCatId,int pageSize,int pageNo) {
-    return getDomain() + GET_PRODUCTS_BY_CAT+"/"+catId + "/"+subCatId+"/"+getSessionId()+"/"+pageSize.toString()+"/"+pageNo.toString();
+  static String getProductsByCatUrl(
+      String catId, String subCatId, int pageSize, int pageNo) {
+    return getDomain() +
+        GET_PRODUCTS_BY_CAT +
+        "/" +
+        catId +
+        "/" +
+        subCatId +
+        "/" +
+        getSessionId() +
+        "/" +
+        pageSize.toString() +
+        "/" +
+        pageNo.toString();
   }
 
   static String getCartUrl() {
-
-    return getDomain() + GET_CART+"/"+getSessionId();
+    return getDomain() + GET_CART + "/" + getSessionId();
   }
 
   static String getAddressUrl() {
-    return getDomain() + GET_ADDRESS+"/"+getAuthToken();
+    return getDomain() + GET_ADDRESS + "/" + getAuthToken();
   }
 
   static String addAddressUrl() {
@@ -163,39 +185,39 @@ class UrlProvider
   }
 
   static String getNotificationUrl() {
-    return getDomain() + GET_NOTIFICATION+"/"+getAuthToken();
+    return getDomain() + GET_NOTIFICATION + "/" + getAuthToken();
   }
 
   static String getWishListUrl() {
-    return getDomain() + GET_WISHLIST+"/"+getAuthToken();
+    return getDomain() + GET_WISHLIST + "/" + getAuthToken();
   }
 
   static String getBoothListUrl() {
-    return getDomain() + GET_BOOTHS+"/"+getAuthToken();
+    return getDomain() + GET_BOOTHS + "/" + getAuthToken();
   }
 
   static String getConfirmBookingUrl() {
-    return getDomain() + CONFIRM_BOOKING ;
+    return getDomain() + CONFIRM_BOOKING;
   }
 
   static String getVerifyVendorUrl() {
-    return getDomain() + VERIFY_VENDOR ;
+    return getDomain() + VERIFY_VENDOR;
   }
 
   static String voteForBoothUrl() {
-    return getDomain() + VOTE_BOOTH ;
+    return getDomain() + VOTE_BOOTH;
   }
 
   static String getEventsUrl() {
-    return getDomain() + GET_EVENTS + "/"+getAuthToken();
+    return getDomain() + GET_EVENTS + "/" + getAuthToken();
   }
 
   static String getTodaysDealUrl() {
-    return getDomain() + GET_TODAYS_DEAL+"/"+getAuthToken() ;
+    return getDomain() + GET_TODAYS_DEAL + "/" + getAuthToken();
   }
 
   static String getBokkingListUrl() {
-    return getDomain() + GET_BOOKING_LIST+"/"+getAuthToken();
+    return getDomain() + GET_BOOKING_LIST + "/" + getAuthToken();
   }
 
   static String getDeleteCartUrl() {
@@ -203,40 +225,40 @@ class UrlProvider
   }
 
   static String getUpdateEmailUrl() {
-    return getDomain() + UPDATE_EMAIL ;
+    return getDomain() + UPDATE_EMAIL;
   }
 
   static String getUpdateAccountUrl() {
-    return getDomain() + UPDATE_ACCOUNT ;
+    return getDomain() + UPDATE_ACCOUNT;
   }
 
   static String getUpdateAddressUrl() {
-    return getDomain() + UPDATE_ADDRESS ;
+    return getDomain() + UPDATE_ADDRESS;
   }
 
   static String getUpdateFcmTokenUrl() {
-    return getDomain() + UPDATE_FCM_TOKEN ;
+    return getDomain() + UPDATE_FCM_TOKEN;
   }
 
   static String getUpdatePasswordUrl() {
-    return getDomain() + UPDATE_PASSWORD ;
+    return getDomain() + UPDATE_PASSWORD;
   }
 
   static String getUpdateMemberPicUrl() {
-    return getDomain() + UPDATE_MEMBER_PIC ;
+    return getDomain() + UPDATE_MEMBER_PIC;
   }
 
   static String getUpdateMobileUrl() {
-    return getDomain() + UPDATE_MOBILE ;
+    return getDomain() + UPDATE_MOBILE;
   }
 
   static String getForgotPasswordUrl() {
-    return getDomain() + FORGOT_PASSWORD ;
+    return getDomain() + FORGOT_PASSWORD;
   }
+
   static String getCancelOrderUrl() {
-    return getDomain() + CANCEL_ORDER ;
+    return getDomain() + CANCEL_ORDER;
   }
 
-  static String getCountry() =>'IND';
-
+  static String getCountry() => 'IND';
 }

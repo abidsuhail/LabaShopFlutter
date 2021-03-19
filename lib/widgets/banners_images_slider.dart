@@ -16,33 +16,37 @@ class BannersImageSlider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider(
-      options: CarouselOptions(height:250,autoPlay: true,
-        autoPlayInterval: Duration(seconds: 7),
+      options: CarouselOptions(
+        height: 250,
+        autoPlay: true,
+        autoPlayInterval: Duration(seconds: 5),
         viewportFraction: 1.0,
       ),
-      items: bannersList==null?dummyBanner.map((e){
-        return Builder(
-          builder: (BuildContext context) {
-            return CachedNetworkImage(
-              height: 100,
-              imageUrl:  e.bannerImg,
-              fit: BoxFit.fill,
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            );
-          },
-        );
-      }).toList():bannersList.map((i) {
-        return Builder(
-          builder: (BuildContext context) {
-            return CachedNetworkImage(
-              height: 100,
-              imageUrl:  i.bannerImg,
-              fit: BoxFit.fill,
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            );
-          },
-        );
-      }).toList(),
+      items: bannersList == null
+          ? dummyBanner.map((e) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return CachedNetworkImage(
+                    height: 100,
+                    imageUrl: e.bannerImg,
+                    fit: BoxFit.fill,
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  );
+                },
+              );
+            }).toList()
+          : bannersList.map((i) {
+              return Builder(
+                builder: (BuildContext context) {
+                  return CachedNetworkImage(
+                    height: 100,
+                    imageUrl: i.bannerImg,
+                    fit: BoxFit.fill,
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  );
+                },
+              );
+            }).toList(),
     );
   }
 }

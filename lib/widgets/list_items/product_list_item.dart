@@ -19,11 +19,13 @@ class ProductListItem extends StatefulWidget {
     @required this.product,
     @required this.cartModel,
     @required this.products,
+    @required this.pos,
   });
 
   final Product product;
   final CartModel cartModel;
   final List<Product> products;
+  final int pos;
 
   @override
   _ProductListItemState createState() => _ProductListItemState();
@@ -104,7 +106,7 @@ class _ProductListItemState extends State<ProductListItem>
                             qtyCounterVisibility = true;
                             qty = qty + 1;
                           });
-                          addToCart(product, qty, context, true);
+                          addToCart(product, qty, context, true, widget.pos);
                         },
                       )
                     ],
@@ -122,11 +124,12 @@ class _ProductListItemState extends State<ProductListItem>
     );
   }
 
-  void addToCart(
-      Product product, int qty, BuildContext context, bool single) async {
+  void addToCart(Product product, int qty, BuildContext context, bool single,
+      int pos) async {
+    // UIHelper.showShortToast(product.productName);
     String msg = await Provider.of<HomeScreenVm>(context, listen: false)
-        .addToCart(
-            product, qty, single.toString(), selecteddropDownPrice, products,
+        .addToCart(product, qty, single.toString(), selecteddropDownPrice,
+            products, pos,
             listener: this);
     UIHelper.showShortToast(msg);
   }
@@ -135,7 +138,7 @@ class _ProductListItemState extends State<ProductListItem>
     setState(() {
       qty = qty - 1;
       if (qty <= 0) {
-        // qty = 0;
+        qty = 0;
         addToCartVisibility = true;
         qtyCounterVisibility = false;
       } else {
@@ -143,8 +146,10 @@ class _ProductListItemState extends State<ProductListItem>
         qtyCounterVisibility = true;
       }
       //product.qty = qty;
-      addToCart(product, qty, context, single);
     });
+    print('-----------------quantity is $qty');
+    print('-----------------product id is ${product.productId}');
+    addToCart(product, qty, context, single, widget.pos);
   }
 
   @override
@@ -153,7 +158,9 @@ class _ProductListItemState extends State<ProductListItem>
   void onPlusClicked(Product product, BuildContext context, bool single) {
     setState(() {
       qty = qty + 1;
-      addToCart(product, qty, context, single);
+      print('-----------------quantity is $qty');
+      print('-----------------product id is ${product.productId}');
+      addToCart(product, qty, context, single, widget.pos);
     });
   }
 

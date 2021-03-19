@@ -35,6 +35,8 @@ class ProductsRepo extends Repository {
     params['size'] = size;
     params['single'] = single;
 
+    print(
+        '-------------------(sid = $sid) (pid = $pid) (qty = $qty) (cost = $cost) (size = $size) (single = $single)---------------');
     ResponseStatus responseStatus =
         await networkManager.post(url: url, params: params);
     listener.hideProgress();
