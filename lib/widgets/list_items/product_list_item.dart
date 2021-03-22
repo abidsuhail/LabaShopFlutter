@@ -46,6 +46,10 @@ class _ProductListItemState extends State<ProductListItem>
   void initState() {
     super.initState();
     product = widget.product;
+    String size = product.price.length > 1
+        ? selecteddropDownPrice.size
+        : product.price[0].size;
+    product.size = size;
     cartModel = widget.cartModel;
     products = widget.products;
     qty = product.qty;
@@ -160,8 +164,8 @@ class _ProductListItemState extends State<ProductListItem>
       qty = qty + 1;
       print('-----------------quantity is $qty');
       print('-----------------product id is ${product.productId}');
-      addToCart(product, qty, context, single, widget.pos);
     });
+    addToCart(product, qty, context, single, widget.pos);
   }
 
   @override

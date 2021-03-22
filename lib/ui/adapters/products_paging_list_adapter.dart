@@ -19,6 +19,7 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
     implements ScreenCallback {
   static const _pageSize = 6;
   static const int _progress_delay = 1000;
+  List<Product> allProducts = [];
   final PagingController<int, Product> _pagingController =
       PagingController(firstPageKey: 1, invisibleItemsThreshold: 1);
   HomeScreenVm vm;
@@ -40,12 +41,12 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
     super.initState();
   }
 
-  List<Product> allProducts = [];
   Future<void> _fetchPage(int pageKey) async {
     try {
       products = await vm.getProductsOnHome(
           listener: this, pageNo: pageKey, pageSize: _pageSize);
       allProducts.addAll(products);
+
       if (products.length > 0 && firstTime) {
         firstTime = false;
         Provider.of<HomeScreenVm>(context, listen: false)
@@ -74,6 +75,7 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
       // Don't worry about displaying progress or error indicators on screen; the
       // package takes care of that. If you want to customize them, use the
       // [PagedChildBuilderDelegate] properties.
+
       PagedListView<int, Product>(
         shrinkWrap: true,
         physics: ScrollPhysics(),
@@ -89,7 +91,10 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
 
   @override
   void dispose() {
-    if (_pagingController != null) _pagingController.dispose();
+    if (_pagingController != null) {
+      _pagingController.dispose();
+      firstTime = true;
+    }
     super.dispose();
   }
 

@@ -10,6 +10,7 @@ import 'package:labashop_flutter_app/networking/networkconstants.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
 import 'package:labashop_flutter_app/repositories/productsrepo.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
+import 'package:labashop_flutter_app/utils/uihelper.dart';
 
 import 'base/view_model.dart';
 
@@ -31,67 +32,18 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
       {@required ScreenCallback listener,
       @required pageNo,
       @required int pageSize}) async {
-    listener.showProgress();
-    ResponseStatus responseStatus = await productsRepo.getProductsOnHome(
-        pageNo: pageNo, pageSize: pageSize);
-    listener.hideProgress();
-    if (responseStatus != null) {
-      if (responseStatus.getError() == NetworkConstants.OK) {
-        List<Product> products =
-            responseParser.getProductList(responseStatus.getData()).products;
-        CartModel cartModel = responseParser.getCart(responseStatus.getData());
-        AppSharedPrefs.saveCartJSON(jsonEncode(cartModel));
-        return products;
-      } else {
-        //error = 1
-        listener.onError(responseStatus.getMessage());
-        return null;
-      }
-    } else {
-      //unknown error
-      listener.onError('Unknown Error');
-      return null;
-    }
+    return productsRepo.getProductsOnHome(
+        pageNo: pageNo, pageSize: pageSize, listener: listener);
   }
 
   Future<List<Category>> getCategories(
       {@required ScreenCallback listener}) async {
-    listener.showProgress();
-    ResponseStatus responseStatus = await productsRepo.getCategories();
-    listener.hideProgress();
-    if (responseStatus != null) {
-      if (responseStatus.getError() == NetworkConstants.OK) {
-        List<Category> product =
-            responseParser.getCategoryList(responseStatus.getData()).categories;
-        return product;
-      } else {
-        //error = 1
-        listener.onError(responseStatus.getMessage());
-      }
-    } else {
-      //unknown error
-      listener.onError('Unknown Error');
-    }
+    return await productsRepo.getCategories(listener: listener);
   }
 
   Future<List<AppBanners.Banner>> getBanners(
       {@required ScreenCallback listener}) async {
-    listener.showProgress();
-    ResponseStatus responseStatus = await productsRepo.getBanners();
-    listener.hideProgress();
-    if (responseStatus != null) {
-      if (responseStatus.getError() == NetworkConstants.OK) {
-        List<AppBanners.Banner> product =
-            responseParser.getBannersList(responseStatus.getData()).banners;
-        return product;
-      } else {
-        //error = 1
-        listener.onError(responseStatus.getMessage());
-      }
-    } else {
-      //unknown error
-      listener.onError('Unknown Error');
-    }
+    return productsRepo.getBanners(listener: listener);
   }
 
   Future<String> addToCart(Product product, int qty, String single,
@@ -107,7 +59,7 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
         product.price.isNotEmpty ? double.parse(product.price[0].cost) : 0.0;
     double c = qty * p;
     product.qty = qty;
-    product.cost = c.toString();
+    product.cost = c.round().toString();
 
     product.qty = qty;
     product.size = size;
@@ -127,11 +79,9 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
     List<String> qtyArr = cartModel.getQtyArray();
     List<String> costArr = cartModel.getCostArray();
     List<String> sizeArr = cartModel.getSizeArray();
-    print('----------------> $pidArr $qtyArr $costArr $sizeArr');
+    print('A----------------> $pidArr $qtyArr $costArr $sizeArr');
     int itemCount = 0;
     for (int j = 0; j < pidArr.length; j++) {
-      print(
-          '_isCartProductIdExistInList(pidArr[j]) ${_isCartProductIdExistInList(pidArr[j])}');
       if (!_isCartProductIdExistInList(pidArr[j])) {
         sid = sid + sessionId + ',';
         pid = pid + pidArr[j] + ',';
@@ -141,9 +91,39 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
         itemCount++; //cart count
       }
     }
-    for (int i = 0; i < products.length; i++) {
-      Product p = products[i];
+    print('B----------------> $sid $pid $qtyA $cost $sizeStr');
+
+    for (Product p in products) {
+      print('product qty -------> ${p.qty}');
       if (p != null) if (p.qty > 0) {
+        print(
+            'inside loop : sid = $sid pid = $pid qtyA = $qtyA cost = $cost sizeStr = $sizeStr p.qty = ${p.qty}');
+
+        print('product size ${p.size}');
+        sid = sid + sessionId + ',';
+        pid = pid + p.productId.toString() + ',';
+        qtyA = qtyA + p.qty.toString() + ',';
+        try {
+          sizeStr = sizeStr + p.size + ',';
+
+          cost = cost +
+              double.parse(p.cost.replaceAll('SAR', '').replaceAll(' ', ''))
+                  .toString() +
+              ',';
+          itemCount++; //cart count
+          print(
+              'end loop : sid = $sid pid = $pid qtyA = $qtyA cost = $cost sizeStr = $sizeStr p.qty = ${p.qty}');
+        } catch (e) {
+          UIHelper.showShortToast(e.toString());
+          print('exception caught : $e');
+        }
+      }
+    }
+    /* for (int i = 0; i < products.length; i++) {
+      Product p = products[i];
+      print('product qty -------> ${p.qty}');
+      if (p != null) if (p.qty > 0) {
+        print('inside loop : $sid $pid $qtyA $cost $sizeStr ${p.qty}');
         try {
           sid = sid + sessionId + ',';
           pid = pid + p.productId.toString() + ',';
@@ -155,10 +135,11 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
               ',';
           itemCount++; //cart count
         } catch (e) {
+          UIHelper.showShortToast(e.toString());
           print('exception caught : $e');
         }
       }
-    }
+    } */
     setCartCount(itemCount.toString());
     print('pid id $pid');
     if (sid.length > 0) sid = sid.substring(0, sid.length - 1);

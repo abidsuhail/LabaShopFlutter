@@ -60,7 +60,7 @@ class Product {
     subCategoryId = json['sub_category_id'];
     subCategoryName = json['sub_category_name'];
     if (json['price'] != null) {
-      price = new List<Price>();
+      price = [];
       json['price'].forEach((v) {
         price.add(new Price.fromJson(v));
       });
