@@ -38,7 +38,7 @@ class _HomeContentFragmentState extends State<HomeContentFragment>
           children: [
             Container(
               padding: EdgeInsets.all(7),
-              height: 200,
+              height: 180,
               color: Color(AppColors.colorPrimary),
               child: BannersImageSlider(
                   bannersList: bannersList, dummyBanner: dummyBanner),

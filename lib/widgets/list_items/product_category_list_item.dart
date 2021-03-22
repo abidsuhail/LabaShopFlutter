@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 
 class ProductCategoryListItem extends StatelessWidget {
-  final String categoryImage,categoryName;
-  ProductCategoryListItem({this.categoryName,this.categoryImage});
+  final String categoryImage, categoryName;
+  ProductCategoryListItem({this.categoryName, this.categoryImage});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -15,8 +15,8 @@ class ProductCategoryListItem extends StatelessWidget {
             children: [
               CachedNetworkImage(
                 height: 100,
-                width: 120,
-                imageUrl:  categoryImage,
+                width: 150,
+                imageUrl: categoryImage,
                 errorWidget: (context, url, error) => Icon(Icons.error),
               ),
               Container(

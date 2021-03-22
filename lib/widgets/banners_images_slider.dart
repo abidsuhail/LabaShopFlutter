@@ -17,7 +17,7 @@ class BannersImageSlider extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider(
       options: CarouselOptions(
-        height: 250,
+        height: 230,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 5),
         viewportFraction: 1.0,

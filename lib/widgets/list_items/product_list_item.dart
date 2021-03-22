@@ -19,11 +19,13 @@ class ProductListItem extends StatefulWidget {
     @required this.product,
     @required this.products,
     @required this.pos,
+    @required this.isCart,
   });
 
   final Product product;
   final List<Product> products;
   final int pos;
+  final bool isCart;
 
   @override
   _ProductListItemState createState() => _ProductListItemState();
@@ -113,10 +115,15 @@ class _ProductListItemState extends State<ProductListItem>
                     ],
                   ),
                 ),
-                Container(
-                    color: Colors.black,
-                    height: 1,
-                    child: SizedBox(width: double.infinity))
+                // Divider(height: 1)
+
+                Visibility(
+                  visible: !widget.isCart,
+                  child: Container(
+                      color: Colors.black,
+                      height: 1,
+                      child: SizedBox(width: double.infinity)),
+                )
               ],
             ),
           )
@@ -148,8 +155,6 @@ class _ProductListItemState extends State<ProductListItem>
       }
       //product.qty = qty;
     });
-    print('-----------------quantity is $qty');
-    print('-----------------product id is ${product.productId}');
     addToCart(product, qty, context, single, widget.pos);
   }
 
@@ -159,8 +164,6 @@ class _ProductListItemState extends State<ProductListItem>
   void onPlusClicked(Product product, BuildContext context, bool single) {
     setState(() {
       qty = qty + 1;
-      print('-----------------quantity is $qty');
-      print('-----------------product id is ${product.productId}');
     });
     addToCart(product, qty, context, single, widget.pos);
   }
