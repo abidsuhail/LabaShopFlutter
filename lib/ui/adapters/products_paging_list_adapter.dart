@@ -81,11 +81,8 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
         physics: ScrollPhysics(),
         pagingController: _pagingController,
         builderDelegate: PagedChildBuilderDelegate<Product>(
-          itemBuilder: (context, item, index) => ProductListItem(
-              product: item,
-              cartModel: cartModel,
-              products: allProducts,
-              pos: index),
+          itemBuilder: (context, item, index) =>
+              ProductListItem(product: item, products: allProducts, pos: index),
         ),
       );
 

@@ -17,13 +17,11 @@ import '../product_widgets.dart';
 class ProductListItem extends StatefulWidget {
   const ProductListItem({
     @required this.product,
-    @required this.cartModel,
     @required this.products,
     @required this.pos,
   });
 
   final Product product;
-  final CartModel cartModel;
   final List<Product> products;
   final int pos;
 
@@ -50,7 +48,6 @@ class _ProductListItemState extends State<ProductListItem>
         ? selecteddropDownPrice.size
         : product.price[0].size;
     product.size = size;
-    cartModel = widget.cartModel;
     products = widget.products;
     qty = product.qty;
   }

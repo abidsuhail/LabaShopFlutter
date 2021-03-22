@@ -1,67 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/ui/screens/home_screen.dart';
 import 'package:labashop_flutter_app/ui/screens/login_screen.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
 import 'package:provider/provider.dart';
 
 class DrawerMenu extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context)=>UserNotifier(),
+      create: (context) => UserNotifier(),
       child: ListView(
-        padding: const EdgeInsets.all(0.0),  //to make transparent status bar
+        padding: const EdgeInsets.all(0.0), //to make transparent status bar
         children: <Widget>[
           NavHeader(),
           ListTile(
-            onTap: (){
-
+            onTap: () {
+              Provider.of<FragmentNotifier>(context, listen: false)
+                  .setFargment(FragmentNotifier.HOME_FRAGMENT);
+              Navigator.pop(context);
             },
             title: Text("Home"),
           ),
           ListTile(
-            onTap: (){
-
-            },
+            onTap: () {},
             title: Text("Shop By Category"),
           ),
           ListTile(
-            onTap: (){
-
-            },
+            onTap: () {},
             title: Text("Your Orders"),
           ),
           ListTile(
-            onTap: (){
-
-            },
+            onTap: () {},
             title: Text("Wishlist"),
           ),
           ListTile(
-            onTap: (){
-
-            },
+            onTap: () {},
             title: Text("Your Account"),
           ),
           ListTile(
-            onTap: (){
-
-            },
+            onTap: () {},
             title: Text("Contact Us"),
           ),
           ListTile(
-            onTap: (){
-
-            },
+            onTap: () {},
             title: Text("About Us"),
           ),
           ListTile(
-            onTap: ()async {
-              if(await AppSharedPrefs.removeAllPrefs())
-                {
-                  LoginScreen.startFreshScreen(context);
-                }
+            onTap: () async {
+              if (await AppSharedPrefs.removeAllPrefs()) {
+                LoginScreen.startFreshScreen(context);
+              }
             },
             title: Text("Logout"),
           )

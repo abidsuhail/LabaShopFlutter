@@ -11,15 +11,16 @@ import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 
-import 'banners_images_slider.dart';
-import 'laba_appbars.dart';
+import '../../widgets/banners_images_slider.dart';
+import '../../widgets/laba_appbars.dart';
 
-class HomeContent extends StatefulWidget {
+class HomeContentFragment extends StatefulWidget {
   @override
-  _HomeContentState createState() => _HomeContentState();
+  _HomeContentFragmentState createState() => _HomeContentFragmentState();
 }
 
-class _HomeContentState extends State<HomeContent> implements ScreenCallback {
+class _HomeContentFragmentState extends State<HomeContentFragment>
+    implements ScreenCallback {
   @override
   void initState() {
     super.initState();
@@ -30,14 +31,8 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
   @override
   Widget build(BuildContext context) {
     return ModalProgressHUD(
-      inAsyncCall: progress,
-      child: Scaffold(
-        appBar: AppBar(
-          flexibleSpace: LabaSearchAppBar(),
-          elevation: 0,
-          toolbarHeight: 65,
-        ),
-        body: ListView(
+        inAsyncCall: progress,
+        child: ListView(
           shrinkWrap: true,
           physics: ScrollPhysics(),
           children: [
@@ -62,9 +57,7 @@ class _HomeContentState extends State<HomeContent> implements ScreenCallback {
             CategoryListAdapter(categoryList: categoryList),
             ProductsPagingListAdapter()
           ],
-        ),
-      ),
-    );
+        ));
   }
 
   List<Category> categoryList;
