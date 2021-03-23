@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/ui/adapters/products_by_cat_paging_list_adapter.dart';
+import 'package:labashop_flutter_app/utils/uihelper.dart';
 
 class ShowProductsByCatFragment extends StatefulWidget {
   static const ID = 'ShowProductsByCatFragment';
@@ -16,8 +17,39 @@ class _ShowProductsByCatFragmentState extends State<ShowProductsByCatFragment>
     implements ScreenCallback {
   @override
   Widget build(BuildContext context) {
-    return ProductsByCatPagingListAdapter(
-      category: widget.category,
+    return ListView(
+      children: [
+        Container(
+          padding: EdgeInsets.all(10),
+          child: Text(
+            UIHelper.getHtmlUnscapeString(widget.category.categoryName),
+            style: TextStyle(
+              fontSize: 21,
+            ),
+            textAlign: TextAlign.start,
+          ),
+        ),
+        Container(
+          height: 50,
+          child: ListView.builder(
+            itemCount: widget.category.subCat.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (BuildContext context, int index) {
+              return Card(
+                  child: Container(
+                padding: EdgeInsets.all(10),
+                child: Center(
+                  child: Text(UIHelper.getHtmlUnscapeString(
+                      widget.category.subCat[index].subCategoryName)),
+                ),
+              ));
+            },
+          ),
+        ),
+        ProductsByCatPagingListAdapter(
+          category: widget.category,
+        ),
+      ],
     );
   }
 

@@ -46,10 +46,9 @@ class _ProductListItemState extends State<ProductListItem>
   void initState() {
     super.initState();
     product = widget.product;
-    String size = product.price.length > 1
-        ? selecteddropDownPrice.size
-        : product.price[0].size;
-    product.size = size;
+    product.size = product.price[0].size;
+    selecteddropDownPrice =
+        product.price[0]; //default size on add to cart click
     products = widget.products;
     qty = product.qty;
   }
@@ -81,7 +80,14 @@ class _ProductListItemState extends State<ProductListItem>
                 ProductTitle(product: product),
                 ProductSize(product: product),
                 ProductMultiplePriceDropDown(
-                    product: product, dropDownValue: selecteddropDownPrice),
+                  product: product,
+                  dropDownValue: selecteddropDownPrice,
+                  onSizeSelectCallback: (updatedDropDownPrice) {
+                    setState(() {
+                      selecteddropDownPrice = updatedDropDownPrice;
+                    });
+                  },
+                ),
                 //ProductAddToCartRow
                 Expanded(
                   child: Row(
@@ -92,6 +98,7 @@ class _ProductListItemState extends State<ProductListItem>
                           'Rs.${product.price.isNotEmpty ? product.price[0].cost : 'N/A'}',
                           style: TextStyle(
                               //TODO change N/A to number later
+                              //TODO FOR CART LIST,get property cart product size
                               fontWeight: FontWeight.bold)),
                       ProductQtyButtonCounter(
                         visibility: qtyCounterVisibility || product.qty > 0,
@@ -118,7 +125,7 @@ class _ProductListItemState extends State<ProductListItem>
                 // Divider(height: 1)
 
                 Visibility(
-                  visible: !widget.isCart,
+                  visible: widget != null ? !widget.isCart : false,
                   child: Container(
                       color: Colors.black,
                       height: 1,

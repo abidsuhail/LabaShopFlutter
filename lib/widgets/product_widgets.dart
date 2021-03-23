@@ -82,9 +82,12 @@ class ProductTitle extends StatelessWidget {
 class ProductMultiplePriceDropDown extends StatefulWidget {
   Product product;
   Price dropDownValue;
+  Function onSizeSelectCallback;
 
   ProductMultiplePriceDropDown(
-      {@required this.product, @required this.dropDownValue});
+      {@required this.product,
+      @required this.dropDownValue,
+      @required this.onSizeSelectCallback});
 
   @override
   _ProductMultiplePriceDropDownState createState() =>
@@ -103,6 +106,7 @@ class _ProductMultiplePriceDropDownState
           value: widget.dropDownValue ??
               (widget.product.price.isNotEmpty ? widget.product.price[0] : ''),
           onChanged: (newValue) {
+            widget.onSizeSelectCallback(newValue);
             setState(() {
               widget.dropDownValue = newValue;
             });

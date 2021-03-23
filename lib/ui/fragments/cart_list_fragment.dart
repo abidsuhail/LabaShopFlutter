@@ -72,6 +72,7 @@ class _CartListFragmentState extends State<CartListFragment>
                       rightTxt: 'CHECKOUT',
                     );
                   }
+                  //dropdown slected will response from product.getProductSize
                   return ProductListItem(
                     product: product,
                     pos: index,

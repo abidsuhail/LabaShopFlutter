@@ -13,6 +13,7 @@ class Product {
   String productManufacturer;
   String sellPrice;
   String productCountry;
+  String cartProductSize; //only applicable in cart list
   int categoryId;
   String categoryName;
   String subMenu;
@@ -33,6 +34,7 @@ class Product {
       this.productShortDesc,
       this.productManufacturer,
       this.sellPrice,
+      this.cartProductSize,
       this.productCountry,
       this.categoryId,
       this.categoryName,
@@ -44,6 +46,7 @@ class Product {
   Product.fromJson(Map<String, dynamic> json) {
     productId = json['product_id'];
     itemCount = json['item_count'];
+    cartProductSize = json['product_size'];
     qty = json['qty'];
     cost = json['cost'];
     sessionId = json['sessionId'];
@@ -72,6 +75,7 @@ class Product {
     data['product_id'] = this.productId;
     data['item_count'] = this.itemCount;
     data['qty'] = this.qty;
+    data['product_size'] = this.cartProductSize;
     data['cost'] = this.cost;
     data['sessionId'] = this.sessionId;
     data['product_name'] = this.productName;
