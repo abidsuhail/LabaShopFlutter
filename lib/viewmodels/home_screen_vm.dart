@@ -79,7 +79,6 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
     List<String> qtyArr = cartModel.getQtyArray();
     List<String> costArr = cartModel.getCostArray();
     List<String> sizeArr = cartModel.getSizeArray();
-    print('A----------------> $pidArr $qtyArr $costArr $sizeArr');
     int itemCount = 0;
     for (int j = 0; j < pidArr.length; j++) {
       if (!_isCartProductIdExistInList(pidArr[j])) {
@@ -91,28 +90,20 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
         itemCount++; //cart count
       }
     }
-    print('B----------------> $sid $pid $qtyA $cost $sizeStr');
 
     for (Product p in products) {
-      print('product qty -------> ${p.qty}');
       if (p != null) if (p.qty > 0) {
-        print(
-            'inside loop : sid = $sid pid = $pid qtyA = $qtyA cost = $cost sizeStr = $sizeStr p.qty = ${p.qty}');
-
-        print('product size ${p.size}');
-        sid = sid + sessionId + ',';
-        pid = pid + p.productId.toString() + ',';
-        qtyA = qtyA + p.qty.toString() + ',';
         try {
+          sid = sid + sessionId + ',';
+          pid = pid + p.productId.toString() + ',';
+          qtyA = qtyA + p.qty.toString() + ',';
           sizeStr = sizeStr + p.size + ',';
-
           cost = cost +
               double.parse(p.cost.replaceAll('SAR', '').replaceAll(' ', ''))
                   .toString() +
               ',';
           itemCount++; //cart count
-          print(
-              'end loop : sid = $sid pid = $pid qtyA = $qtyA cost = $cost sizeStr = $sizeStr p.qty = ${p.qty}');
+
         } catch (e) {
           UIHelper.showShortToast(e.toString());
           print('exception caught : $e');

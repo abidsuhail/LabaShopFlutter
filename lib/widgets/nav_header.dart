@@ -8,11 +8,10 @@ class NavHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<UserNotifier>(context).initUser();
     return UserAccountsDrawerHeader(
-      accountName: Text(Provider.of<UserNotifier>(context).user.name??""),
-      accountEmail: Text(Provider.of<UserNotifier>(context).user.email??""),
+      accountName: Text(Provider.of<UserNotifier>(context).user.name ?? ""),
+      accountEmail: Text(Provider.of<UserNotifier>(context).user.email ?? ""),
       currentAccountPicture: CircleAvatar(
-        backgroundColor:
-        Theme.of(context).platform == TargetPlatform.iOS
+        backgroundColor: Theme.of(context).platform == TargetPlatform.iOS
             ? Colors.blue
             : Colors.white,
         child: Text(
@@ -25,11 +24,9 @@ class NavHeader extends StatelessWidget {
 }
 
 //TODO make viewmodel as changenotifier
-class UserNotifier extends ChangeNotifier
-{
-  User user;
-  void initUser() async
-  {
+class UserNotifier extends ChangeNotifier {
+  User user = User(name: '', email: '');
+  void initUser() async {
     user = await AppSharedPrefs.getUserFromDb();
     notifyListeners();
   }

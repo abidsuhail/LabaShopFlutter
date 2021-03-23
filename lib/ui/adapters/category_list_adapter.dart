@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/model/category.dart';
-import 'package:labashop_flutter_app/widgets/list_items/product_category_list_item.dart';
+import 'package:labashop_flutter_app/widgets/list_items/category_list_item.dart';
 
 class CategoryListAdapter extends StatelessWidget {
   const CategoryListAdapter({

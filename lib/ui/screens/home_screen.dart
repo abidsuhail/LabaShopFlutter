@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/menu/drawer_menu.dart';
 import 'package:labashop_flutter_app/ui/fragments/cart_list_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/shop_by_category_fragment.dart';
 import 'package:labashop_flutter_app/viewmodels/cart_list_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/shop_by_category_fragment_vm.dart';
 import 'package:labashop_flutter_app/widgets/cart_badge.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
 import 'package:labashop_flutter_app/widgets/laba_appbars.dart';
@@ -32,6 +34,9 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
           ),
           ChangeNotifierProvider<FragmentNotifier>(
             create: (context) => FragmentNotifier(),
+          ),
+          ChangeNotifierProvider<ShopByCategoryFragmentVm>(
+            create: (context) => ShopByCategoryFragmentVm(),
           )
         ],
         child: Builder(
@@ -73,13 +78,13 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
   void onError(String message) {
     print(message);
   }
-
-  Widget getFragment(int fragmentId) {}
 }
 
 class FragmentNotifier extends ChangeNotifier {
   static const HOME_FRAGMENT = 1;
   static const CART_LIST_FRAGMENT = 2;
+  static const SHOP_BY_CATEGORY_FRAGMENT = 3;
+
   Widget selectedFragment;
   FragmentNotifier() {
     selectedFragment = HomeContentFragment();
@@ -91,6 +96,9 @@ class FragmentNotifier extends ChangeNotifier {
         break;
       case CART_LIST_FRAGMENT:
         selectedFragment = CartListFragment();
+        break;
+      case SHOP_BY_CATEGORY_FRAGMENT:
+        selectedFragment = ShopByCategoryFragment();
         break;
     }
     notifyListeners();

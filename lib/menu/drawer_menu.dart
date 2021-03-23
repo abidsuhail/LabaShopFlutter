@@ -23,7 +23,11 @@ class DrawerMenu extends StatelessWidget {
             title: Text("Home"),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Provider.of<FragmentNotifier>(context, listen: false)
+                  .setFargment(FragmentNotifier.SHOP_BY_CATEGORY_FRAGMENT);
+              Navigator.pop(context);
+            },
             title: Text("Shop By Category"),
           ),
           ListTile(

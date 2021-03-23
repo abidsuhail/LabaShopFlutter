@@ -51,14 +51,16 @@ class _CartListFragmentState extends State<CartListFragment>
                   );
                 },
                 itemCount: productSnap.data != null
-                    ? productSnap.data.length + 1
+                    ? (productSnap.data.length + 1)
                     : 0, //increment list size to view checkout row
                 itemBuilder: (context, index) {
                   Product product;
                   if (index < productSnap.data.length) {
                     //checking if last row,because i had increment +1 in list size
                     product = productSnap.data[index];
-                    total = total + double.parse(product.cost);
+                    total = total +
+                        double.parse(product
+                            .cost); //TODO:add this when we get list,not here
                   }
                   if (index == productSnap.data.length) {
                     //checking last
