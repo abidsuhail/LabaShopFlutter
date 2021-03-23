@@ -34,11 +34,11 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
           ChangeNotifierProvider<FragmentNotifier>(
             create: (context) => FragmentNotifier(),
           ),
-          ChangeNotifierProvider<ShopByCategoryFragmentVm>(
-            create: (context) => ShopByCategoryFragmentVm(),
+          ChangeNotifierProvider<ShowProductsByCatFragmentVm>(
+            create: (context) => ShowProductsByCatFragmentVm(),
           ),
-          ChangeNotifierProvider<ProductsByCategoryFragmentVm>(
-            create: (context) => ProductsByCategoryFragmentVm(),
+          ChangeNotifierProvider<ShowCategoriesFragmentVm>(
+            create: (context) => ShowCategoriesFragmentVm(),
           )
         ],
         child: Builder(

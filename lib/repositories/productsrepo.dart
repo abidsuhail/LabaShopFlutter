@@ -142,8 +142,11 @@ class ProductsRepo extends Repository {
   }
 
   Future<List<Product>> getProductsByCategory(
-      String catId, String subCatId, String pageSize, String pageNo,
-      {ScreenCallback listener}) async {
+      {String catId,
+      String subCatId,
+      String pageSize,
+      String pageNo,
+      ScreenCallback listener}) async {
     listener.showProgress();
     String url = UrlProvider.getProductsByCatUrl(
         catId: catId, subCatId: subCatId, pageSize: pageSize, pageNo: pageNo);

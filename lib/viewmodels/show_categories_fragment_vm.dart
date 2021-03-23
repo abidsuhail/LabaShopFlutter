@@ -6,12 +6,12 @@ import 'package:labashop_flutter_app/repositories/productsrepo.dart';
 
 import 'base/view_model.dart';
 
-class ShopByCategoryFragmentVm extends ChangeNotifier with ViewModel {
+class ShowCategoriesFragmentVm extends ChangeNotifier with ViewModel {
   ProductsRepo productsRepo = ProductsRepo.getInstance();
-  static ShopByCategoryFragmentVm _mInstance;
-  static ShopByCategoryFragmentVm getInstance() {
+  static ShowCategoriesFragmentVm _mInstance;
+  static ShowCategoriesFragmentVm getInstance() {
     if (_mInstance == null) {
-      _mInstance = new ShopByCategoryFragmentVm();
+      _mInstance = new ShowCategoriesFragmentVm();
     }
     return _mInstance;
   }
@@ -25,7 +25,10 @@ class ShopByCategoryFragmentVm extends ChangeNotifier with ViewModel {
       String catId, String subCatId, String pageSize, String pageNo,
       {@required ScreenCallback listener}) async {
     return await productsRepo.getProductsByCategory(
-        catId, subCatId, pageSize, pageNo,
+        catId: catId,
+        subCatId: subCatId,
+        pageSize: pageSize,
+        pageNo: pageNo,
         listener: listener);
   }
 }

@@ -7,28 +7,31 @@ class CartEndCheckoutRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        CartEndCheckoutContainer(
-          txt: leftTxt,
-          txtColor: Colors.white,
-          decoration: BoxDecoration(
-            color: Color(AppColors.colorPrimary),
-          ),
-        ),
-        CartEndCheckoutContainer(
-          txt: rightTxt,
-          txtColor: Color(AppColors.colorPrimary),
-          decoration: BoxDecoration(
-              border: Border.all(
-            color: Color(
-              AppColors.colorPrimary,
+    return Container(
+      margin: EdgeInsets.only(top: 5, bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CartEndCheckoutContainer(
+            txt: leftTxt,
+            txtColor: Colors.white,
+            decoration: BoxDecoration(
+              color: Color(AppColors.colorPrimary),
             ),
-          )),
-        ),
-      ],
+          ),
+          CartEndCheckoutContainer(
+            txt: rightTxt,
+            txtColor: Color(AppColors.colorPrimary),
+            decoration: BoxDecoration(
+                border: Border.all(
+              color: Color(
+                AppColors.colorPrimary,
+              ),
+            )),
+          ),
+        ],
+      ),
     );
   }
 }

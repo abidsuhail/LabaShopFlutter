@@ -7,9 +7,12 @@ import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/ui/adapters/category_list_adapter.dart';
 import 'package:labashop_flutter_app/ui/adapters/products_paging_list_adapter.dart';
+import 'package:labashop_flutter_app/ui/fragments/show_products_by_cat_fragment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/banners_images_slider.dart';
 import '../../widgets/laba_appbars.dart';
@@ -56,7 +59,14 @@ class _HomeContentFragmentState extends State<HomeContentFragment>
               ),
               textAlign: TextAlign.start,
             ),
-            CategoryListAdapter(categoryList: categoryList),
+            CategoryListAdapter(
+              categoryList: categoryList,
+              onCatClick: (clickedCategory) {
+                Provider.of<FragmentNotifier>(context, listen: false)
+                    .setFargment(ShowProductsByCatFragment.ID,
+                        object: clickedCategory);
+              },
+            ),
             ProductsPagingListAdapter()
           ],
         ));

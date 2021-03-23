@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/ui/adapters/category_list_adapter.dart';
+import 'package:labashop_flutter_app/ui/fragments/show_products_by_cat_fragment.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/viewmodels/show_categories_fragment_vm.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +16,10 @@ class ShowCategoriesFragment extends StatefulWidget {
 
 class _ShowCategoriesFragmentState extends State<ShowCategoriesFragment>
     implements ScreenCallback {
-  ShopByCategoryFragmentVm vm;
+  ShowCategoriesFragmentVm vm;
   @override
   Widget build(BuildContext context) {
-    vm = Provider.of<ShopByCategoryFragmentVm>(context);
+    vm = Provider.of<ShowCategoriesFragmentVm>(context);
     return FutureBuilder<List<Category>>(
       initialData: [],
       builder: (context, productSnap) {
@@ -45,7 +47,9 @@ class _ShowCategoriesFragmentState extends State<ShowCategoriesFragment>
             CategoryListAdapter(
               categoryList: productSnap.data,
               onCatClick: (clickedCategory) {
-                //TODO:send this cat to next screen
+                Provider.of<FragmentNotifier>(context, listen: false)
+                    .setFargment(ShowProductsByCatFragment.ID,
+                        object: clickedCategory);
               },
             ),
           ],
