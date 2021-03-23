@@ -20,12 +20,14 @@ class ProductListItem extends StatefulWidget {
     @required this.products,
     @required this.pos,
     @required this.isCart,
+    @required this.updateTotalCallback,
   });
 
   final Product product;
   final List<Product> products;
   final int pos;
   final bool isCart;
+  final Function updateTotalCallback;
 
   @override
   _ProductListItemState createState() => _ProductListItemState();
@@ -41,7 +43,8 @@ class _ProductListItemState extends State<ProductListItem>
   CartModel cartModel;
   List<Product> products;
   Product product;
-
+  String updatedCost;
+  double total = 0;
   @override
   void initState() {
     super.initState();
@@ -51,6 +54,16 @@ class _ProductListItemState extends State<ProductListItem>
         product.price[0]; //default size on add to cart click
     products = widget.products;
     qty = product.qty;
+    if (product.price.isNotEmpty) {
+      if (widget.isCart) {
+        updatedCost =
+            (double.parse(product.price[0].cost) * qty).toStringAsFixed(2);
+      } else {
+        updatedCost = product.price[0].cost;
+      }
+    } else {
+      updatedCost = '0'; //TODO CHANGE LATER
+    }
   }
 
   @override
@@ -95,7 +108,7 @@ class _ProductListItemState extends State<ProductListItem>
                     children: [
                       //Product price
                       Text(
-                          'Rs.${product.price.isNotEmpty ? product.price[0].cost : 'N/A'}',
+                          'Rs.${product.price.isNotEmpty ? updatedCost : 'N/A'}',
                           style: TextStyle(
                               //TODO change N/A to number later
                               //TODO FOR CART LIST,get property cart product size
@@ -115,6 +128,7 @@ class _ProductListItemState extends State<ProductListItem>
                             addToCartVisibility = false;
                             qtyCounterVisibility = true;
                             qty = qty + 1;
+                            updateCostLabel(qty);
                           });
                           addToCart(product, qty, context, true, widget.pos);
                         },
@@ -150,19 +164,32 @@ class _ProductListItemState extends State<ProductListItem>
   }
 
   void onMinusClicked(Product product, BuildContext context, bool single) {
+    int newQty;
+
     setState(() {
       qty = qty - 1;
       if (qty <= 0) {
         qty = 0;
+        newQty = 1;
         addToCartVisibility = true;
         qtyCounterVisibility = false;
       } else {
+        newQty = qty;
         addToCartVisibility = false;
         qtyCounterVisibility = true;
       }
+      updateCostLabel(newQty);
       //product.qty = qty;
     });
     addToCart(product, qty, context, single, widget.pos);
+  }
+
+  void updateCostLabel(int newQty) {
+    if (product.price.isNotEmpty && widget.isCart) {
+      updatedCost =
+          (double.parse(product.price[0].cost) * int.parse(newQty.toString()))
+              .toStringAsFixed(2);
+    }
   }
 
   @override
@@ -171,6 +198,7 @@ class _ProductListItemState extends State<ProductListItem>
   void onPlusClicked(Product product, BuildContext context, bool single) {
     setState(() {
       qty = qty + 1;
+      updateCostLabel(qty);
     });
     addToCart(product, qty, context, single, widget.pos);
   }
