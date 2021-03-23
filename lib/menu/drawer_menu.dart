@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
 import 'package:labashop_flutter_app/ui/screens/home_screen.dart';
 import 'package:labashop_flutter_app/ui/screens/login_screen.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +20,7 @@ class DrawerMenu extends StatelessWidget {
           ListTile(
             onTap: () {
               Provider.of<FragmentNotifier>(context, listen: false)
-                  .setFargment(FragmentNotifier.HOME_FRAGMENT);
+                  .setFargment(HomeContentFragment.ID);
               Navigator.pop(context);
             },
             title: Text("Home"),
@@ -25,7 +28,7 @@ class DrawerMenu extends StatelessWidget {
           ListTile(
             onTap: () {
               Provider.of<FragmentNotifier>(context, listen: false)
-                  .setFargment(FragmentNotifier.SHOP_BY_CATEGORY_FRAGMENT);
+                  .setFargment(ShowCategoriesFragment.ID);
               Navigator.pop(context);
             },
             title: Text("Shop By Category"),

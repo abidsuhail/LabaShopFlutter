@@ -140,4 +140,28 @@ class ProductsRepo extends Repository {
       listener.onError('Unknown Error');
     }
   }
+
+  Future<List<Product>> getProductsByCategory(
+      String catId, String subCatId, String pageSize, String pageNo,
+      {ScreenCallback listener}) async {
+    listener.showProgress();
+    String url = UrlProvider.getProductsByCatUrl(
+        catId: catId, subCatId: subCatId, pageSize: pageSize, pageNo: pageNo);
+    print(url);
+    ResponseStatus responseStatus = await networkManager.get(url: url);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        List<Product> product =
+            responseParser.getProductList(responseStatus.getData()).products;
+        return product;
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
 }

@@ -157,7 +157,7 @@ class UrlProvider {
   }
 
   static String getProductsByCatUrl(
-      String catId, String subCatId, int pageSize, int pageNo) {
+      {String catId, String subCatId, String pageSize, String pageNo}) {
     return getDomain() +
         GET_PRODUCTS_BY_CAT +
         "/" +
@@ -167,9 +167,9 @@ class UrlProvider {
         "/" +
         getSessionId() +
         "/" +
-        pageSize.toString() +
+        pageSize +
         "/" +
-        pageNo.toString();
+        pageNo;
   }
 
   static String getCartUrl() {

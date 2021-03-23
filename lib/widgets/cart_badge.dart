@@ -1,7 +1,9 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/colors/colors.dart';
+import 'package:labashop_flutter_app/ui/fragments/cart_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/screens/home_screen.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:provider/provider.dart';
 
 class CartBadge extends StatefulWidget {
@@ -18,9 +20,8 @@ class _CartBadgeState extends State<CartBadge> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //TODO:open cart list fragment
         Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(FragmentNotifier.CART_LIST_FRAGMENT);
+            .setFargment(CartListFragment.ID);
       },
       child: Badge(
         showBadge: (widget.count == null || widget.count == '0') ? false : true,

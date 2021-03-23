@@ -15,6 +15,8 @@ import '../../widgets/banners_images_slider.dart';
 import '../../widgets/laba_appbars.dart';
 
 class HomeContentFragment extends StatefulWidget {
+  static const ID = 'HomeContentFragment';
+
   @override
   _HomeContentFragmentState createState() => _HomeContentFragmentState();
 }

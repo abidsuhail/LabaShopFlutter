@@ -8,6 +8,8 @@ import 'package:labashop_flutter_app/widgets/list_items/product_list_item.dart';
 import 'package:provider/provider.dart';
 
 class CartListFragment extends StatefulWidget {
+  static const ID = 'CartListFragment';
+
   @override
   _CartListFragmentState createState() => _CartListFragmentState();
 }
@@ -36,11 +38,12 @@ class _CartListFragmentState extends State<CartListFragment>
           ),
         ),
         FutureBuilder<List<Product>>(
+          initialData: [],
           builder: (context, productSnap) {
-            if (productSnap.connectionState == ConnectionState.none &&
-                productSnap.hasData == null) {
+            if (!productSnap.hasData || productSnap.data.isEmpty) {
               //print('project snapshot data is: ${projectSnap.data}');
-              return Container();
+              return Expanded(
+                  child: Center(child: CircularProgressIndicator()));
             }
             return Expanded(
               child: ListView.separated(
