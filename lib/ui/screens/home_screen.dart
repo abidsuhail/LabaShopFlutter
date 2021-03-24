@@ -5,6 +5,7 @@ import 'package:labashop_flutter_app/viewmodels/cart_list_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/viewmodels/products_by_category_fragment_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/select_delivery_option_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/show_categories_fragment_vm.dart';
 import 'package:labashop_flutter_app/widgets/cart_badge.dart';
 import 'package:labashop_flutter_app/widgets/laba_appbars.dart';
@@ -39,6 +40,9 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
           ),
           ChangeNotifierProvider<ShowCategoriesFragmentVm>(
             create: (context) => ShowCategoriesFragmentVm(),
+          ),
+          ChangeNotifierProvider<SelectDeliveryOptionFragmentVm>(
+            create: (context) => SelectDeliveryOptionFragmentVm(),
           )
         ],
         child: Builder(

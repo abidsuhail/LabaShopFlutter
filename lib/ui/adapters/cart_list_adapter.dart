@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/product.dart';
+import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragment.dart';
 import 'package:labashop_flutter_app/viewmodels/cart_list_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/widgets/cart_list_end_checkout_row.dart';
+import 'package:provider/provider.dart';
 
 import '../../widgets/list_items/product_list_item.dart';
 
@@ -37,6 +40,7 @@ class _CartListAdapterState extends State<CartListAdapter>
       builder: (context, productSnap) {
         if (!productSnap.hasData || productSnap.data.isEmpty) {
           //print('project snapshot data is: ${projectSnap.data}');
+          //TODO CART LIST SHOWING PROGRESS WHEN NO DATA:FIX IT
           return Expanded(child: Center(child: CircularProgressIndicator()));
         }
         return Expanded(
@@ -61,9 +65,15 @@ class _CartListAdapterState extends State<CartListAdapter>
               }
               if (index == productSnap.data.length) {
                 //checking last
-                return CartEndCheckoutRow(
-                  leftTxt: 'Rs.${total.toStringAsFixed(2)}',
-                  rightTxt: 'CHECKOUT',
+                return GestureDetector(
+                  onTap: () {
+                    Provider.of<FragmentNotifier>(context, listen: false)
+                        .setFargment(SelectDeliveryOptionFragment.ID);
+                  },
+                  child: CartEndCheckoutRow(
+                    leftTxt: 'Rs.${total.toStringAsFixed(2)}',
+                    rightTxt: 'CHECKOUT',
+                  ),
                 );
               }
               //dropdown slected will response from product.getProductSize

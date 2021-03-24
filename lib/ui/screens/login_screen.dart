@@ -6,6 +6,7 @@ import 'package:labashop_flutter_app/model/user.dart';
 import 'package:labashop_flutter_app/ui/screens/registration_screen.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/login_screen_vm.dart';
+import 'package:labashop_flutter_app/widgets/login_btn.dart';
 import 'package:labashop_flutter_app/widgets/login_signup_textfield.dart';
 import 'package:logger/logger.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
@@ -14,9 +15,9 @@ class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 
-  static startFreshScreen(BuildContext context)
-  {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+  static startFreshScreen(BuildContext context) {
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LoginScreen()));
   }
 }
 
@@ -58,19 +59,11 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
                   SizedBox(
                     height: 8,
                   ),
-                  Container(
-                    margin: EdgeInsets.all(10),
-                    child: FlatButton(
-                      padding: EdgeInsets.all(18),
-                      onPressed: () {
-                        //now login
-                        startLoginProcess();
-                      },
-                      child: Text('Login', style: TextStyle(color: Colors.white)),
-                      color: Color(AppColors.colorPrimary),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                    ),
+                  LoginButton(
+                    text: 'Login',
+                    onPressed: () {
+                      startLoginProcess();
+                    },
                   ),
                   Padding(
                     padding: EdgeInsets.all(5),
@@ -82,9 +75,7 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
                   )
                 ],
               ),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Padding(
                     padding: EdgeInsets.all(4),
                     child: Text(
@@ -92,8 +83,7 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
                       style: TextStyle(fontWeight: FontWeight.bold),
                     )),
                 GestureDetector(
-                  onTap: ()
-                  {
+                  onTap: () {
                     RegistrationScreen.startScreen(context);
                   },
                   child: Text(
@@ -112,9 +102,10 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
     );
   }
 
-  void startLoginProcess() async{
-    User userData = await LoginScreenVm.getInstance().authenticateUser(username: username, password: password, listener: this);
-    Logger().d('loginscreen',userData.authtoken);
+  void startLoginProcess() async {
+    User userData = await LoginScreenVm.getInstance().authenticateUser(
+        username: username, password: password, listener: this);
+    Logger().d('loginscreen', userData.authtoken);
   }
 
   @override
@@ -135,5 +126,4 @@ class _LoginScreenState extends State<LoginScreen> implements ScreenCallback {
       progress = false;
     });
   }
-
 }

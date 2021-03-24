@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/banner.dart';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/product.dart';
@@ -51,5 +52,9 @@ class ResponseParser {
 
   CartModel getCart(String data) {
     return CartModel.fromJson(jsonDecode(data)['cart']);
+  }
+
+  List<Address> getAddress(String data) {
+    return AddressList.fromJson(jsonDecode(data)).address;
   }
 }
