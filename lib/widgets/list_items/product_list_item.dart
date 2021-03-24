@@ -20,14 +20,14 @@ class ProductListItem extends StatefulWidget {
     @required this.products,
     @required this.pos,
     @required this.isCart,
-    @required this.updateTotalCallback,
+    @required this.triggerOnUpdateQtyCallback,
   });
 
   final Product product;
   final List<Product> products;
   final int pos;
   final bool isCart;
-  final Function updateTotalCallback;
+  final Function triggerOnUpdateQtyCallback;
 
   @override
   _ProductListItemState createState() => _ProductListItemState();
@@ -66,8 +66,16 @@ class _ProductListItemState extends State<ProductListItem>
     }
   }
 
+  Text textWidget;
+
   @override
   Widget build(BuildContext context) {
+    textWidget = Text('Rs.${product.price.isNotEmpty ? updatedCost : 'N/A'}',
+        style: TextStyle(
+            //TODO change N/A to number later
+            //TODO FOR CART LIST,get property cart product size
+            fontWeight: FontWeight.bold));
+
     return Container(
       height: 140,
       child: Row(
@@ -107,12 +115,7 @@ class _ProductListItemState extends State<ProductListItem>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       //Product price
-                      Text(
-                          'Rs.${product.price.isNotEmpty ? updatedCost : 'N/A'}',
-                          style: TextStyle(
-                              //TODO change N/A to number later
-                              //TODO FOR CART LIST,get property cart product size
-                              fontWeight: FontWeight.bold)),
+                      textWidget,
                       ProductQtyButtonCounter(
                         visibility: qtyCounterVisibility || product.qty > 0,
                         count: qty.toString(),
@@ -189,6 +192,7 @@ class _ProductListItemState extends State<ProductListItem>
       updatedCost =
           (double.parse(product.price[0].cost) * int.parse(newQty.toString()))
               .toStringAsFixed(2);
+      widget.triggerOnUpdateQtyCallback();
     }
   }
 

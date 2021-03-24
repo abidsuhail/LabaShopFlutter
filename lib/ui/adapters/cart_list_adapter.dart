@@ -21,6 +21,14 @@ class _CartListAdapterState extends State<CartListAdapter>
     implements ScreenCallback {
   double total = 0;
 
+  Future<List<Product>> productsVm;
+
+  @override
+  void initState() {
+    productsVm = widget.vm.getCartList(listener: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     total = 0;
@@ -47,12 +55,14 @@ class _CartListAdapterState extends State<CartListAdapter>
               if (index < productSnap.data.length) {
                 //checking if last row,because i had increment +1 in list size
                 product = productSnap.data[index];
-                //TODO:add this when we get list,not here
+                total = total + double.parse(product.cost);
+                //using product.cost for cartlist,its the final cost
+                //with price*quantity
               }
               if (index == productSnap.data.length) {
                 //checking last
                 return CartEndCheckoutRow(
-                  leftTxt: 'Rs.${total.toString()}',
+                  leftTxt: 'Rs.${total.toStringAsFixed(2)}',
                   rightTxt: 'CHECKOUT',
                 );
               }
@@ -62,13 +72,17 @@ class _CartListAdapterState extends State<CartListAdapter>
                 pos: index,
                 products: productSnap.data,
                 isCart: true,
-                updateTotalCallback: (qty, cost) {},
+                triggerOnUpdateQtyCallback: () {
+                  setState(() {
+                    //for refreshing
+                  });
+                },
               );
             },
           ),
         );
       },
-      future: widget.vm.getCartList(listener: this),
+      future: productsVm,
     );
   }
 
