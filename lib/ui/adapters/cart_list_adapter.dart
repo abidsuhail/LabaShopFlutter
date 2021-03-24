@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragment.dart';
-import 'package:labashop_flutter_app/viewmodels/cart_list_vm.dart';
+import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
+import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/widgets/cart_list_end_checkout_row.dart';
 import 'package:provider/provider.dart';
@@ -60,11 +61,14 @@ class _CartListAdapterState extends State<CartListAdapter>
                 //checking if last row,because i had increment +1 in list size
                 product = productSnap.data[index];
                 total = total + double.parse(product.cost);
+                print('-----------------$total----------------------------');
                 //using product.cost for cartlist,its the final cost
                 //with price*quantity
               }
               if (index == productSnap.data.length) {
                 //checking last
+                AppSharedPrefs.saveTotalPayableAmt(
+                    total.toStringAsFixed(2)); //saving payable amt to local
                 return GestureDetector(
                   onTap: () {
                     Provider.of<FragmentNotifier>(context, listen: false)

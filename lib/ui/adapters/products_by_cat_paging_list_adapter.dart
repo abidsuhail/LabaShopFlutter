@@ -95,6 +95,7 @@ class _ProductsByCatPagingListAdapterState
             products: allProducts,
             pos: index,
             isCart: false,
+            triggerOnUpdateQtyCallback: () {},
           ),
         ),
       );

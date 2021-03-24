@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,7 +9,9 @@ class AppSharedPrefs {
   static const String AUTH_TOKEN = 'authtoken';
   static const String CART_JSON = 'cart_json';
   static const String USER_JSON = 'user_json_encoded';
+  static const String TOTAL_PAYABLE_AMOUNT = 'total';
   static const String SYNC_AUTH_TOKEN = 'synchonous_auth_token';
+  static const String SELECTED_ADDRESS = 'address';
   static String syncAuthToken;
   static Future<bool> initSynchronousAuthToken() async {
     if (syncAuthToken == null) {
@@ -29,6 +31,23 @@ class AppSharedPrefs {
 
   static void saveCartJSON(String cartJson) async {
     (await getInstance()).setString(CART_JSON, cartJson);
+  }
+
+  static void saveTotalPayableAmt(String total) async {
+    (await getInstance()).setString(TOTAL_PAYABLE_AMOUNT, total);
+  }
+
+  static void saveSelectAddress(String jsonAddress) async {
+    (await getInstance()).setString(SELECTED_ADDRESS, jsonAddress);
+  }
+
+  static Future<Address> getSelectedAddress() async {
+    return Address.fromJson(
+        jsonDecode((await getInstance()).getString(SELECTED_ADDRESS)));
+  }
+
+  static Future<String> getTotalPayableAmt() async {
+    return (await getInstance()).getString(TOTAL_PAYABLE_AMOUNT);
   }
 
   static Future<CartModel> getCartModel() async {

@@ -86,6 +86,7 @@ class _ProductsPagingListAdapterState extends State<ProductsPagingListAdapter>
             products: allProducts,
             pos: index,
             isCart: false,
+            triggerOnUpdateQtyCallback: () {},
           ),
         ),
       );

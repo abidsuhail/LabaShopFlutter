@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/ui/adapters/cart_list_adapter.dart';
-import 'package:labashop_flutter_app/viewmodels/cart_list_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:provider/provider.dart';
 

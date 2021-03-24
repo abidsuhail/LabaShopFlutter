@@ -35,4 +35,25 @@ class UserRepo extends Repository {
       listener.onError('Unknown Error');
     }
   }
+
+  Future<String> addNewAddress(
+      {ScreenCallback listener, Map<String, String> params}) async {
+    listener.showProgress();
+    String url = UrlProvider.addAddressUrl();
+    print(url);
+    ResponseStatus responseStatus =
+        await networkManager.post(url: url, params: params);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        return responseStatus.getMessage();
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
 }

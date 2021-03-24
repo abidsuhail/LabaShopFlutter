@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/menu/drawer_menu.dart';
-import 'package:labashop_flutter_app/viewmodels/cart_list_vm.dart';
+import 'package:labashop_flutter_app/ui/fragments/add_new_address_fragment.dart';
+import 'package:labashop_flutter_app/viewmodels/add_new_address_fragment_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/viewmodels/products_by_category_fragment_vm.dart';
@@ -43,6 +45,9 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
           ),
           ChangeNotifierProvider<SelectDeliveryOptionFragmentVm>(
             create: (context) => SelectDeliveryOptionFragmentVm(),
+          ),
+          ChangeNotifierProvider<AddNewAddressFragmentVm>(
+            create: (context) => AddNewAddressFragmentVm(),
           )
         ],
         child: Builder(
