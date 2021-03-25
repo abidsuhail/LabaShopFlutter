@@ -4,6 +4,7 @@ import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/banner.dart';
 import 'package:labashop_flutter_app/model/category.dart';
+import 'package:labashop_flutter_app/model/order_details.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/networking/networkconstants.dart';
 import 'package:labashop_flutter_app/networking/repository.dart';
@@ -159,6 +160,29 @@ class ProductsRepo extends Repository {
         List<Product> product =
             responseParser.getProductList(responseStatus.getData()).products;
         return product;
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
+
+  Future<List<OrderDetails>> createOrder(
+      {ScreenCallback listener, Map<String, String> params}) async {
+    listener.showProgress();
+    String url = UrlProvider.createOrderUrl();
+    print(url);
+    ResponseStatus responseStatus =
+        await networkManager.post(url: url, params: params);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        List<OrderDetails> orderDetailsList =
+            responseParser.getOrderDetailsList(responseStatus.getData());
+        return orderDetailsList;
       } else {
         //error = 1
         listener.onError(responseStatus.getMessage());

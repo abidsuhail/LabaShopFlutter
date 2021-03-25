@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:device_info/device_info.dart';
 import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
@@ -48,6 +49,13 @@ class AppSharedPrefs {
 
   static Future<String> getTotalPayableAmt() async {
     return (await getInstance()).getString(TOTAL_PAYABLE_AMOUNT);
+  }
+
+  static Future<String> getSessionId() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    String sessionId = androidInfo.androidId;
+    return sessionId;
   }
 
   static Future<CartModel> getCartModel() async {

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/banner.dart';
 import 'package:labashop_flutter_app/model/category.dart';
+import 'package:labashop_flutter_app/model/order_details.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
@@ -56,5 +57,9 @@ class ResponseParser {
 
   List<Address> getAddress(String data) {
     return AddressList.fromJson(jsonDecode(data)).address;
+  }
+
+  List<OrderDetails> getOrderDetailsList(String data) {
+    return OrderDetailsList.fromJson(jsonDecode(data)).orderDetails;
   }
 }

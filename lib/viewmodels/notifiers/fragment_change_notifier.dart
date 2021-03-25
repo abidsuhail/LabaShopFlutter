@@ -4,6 +4,7 @@ import 'package:labashop_flutter_app/model/category.dart' as LabaCat;
 import 'package:labashop_flutter_app/ui/fragments/add_new_address_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/cart_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/order_details_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/payment_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
@@ -41,6 +42,9 @@ class FragmentNotifier extends ChangeNotifier {
         break;
       case PaymentFragment.ID:
         selectedFragment = PaymentFragment();
+        break;
+      case OrderDetailsFragment.ID:
+        selectedFragment = OrderDetailsFragment(object);
         break;
     }
     notifyListeners();

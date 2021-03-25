@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/colors/colors.dart';
+import 'package:labashop_flutter_app/model/order_details.dart' as OrderDetails;
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 
@@ -34,32 +35,50 @@ class ProductSize extends StatelessWidget {
   const ProductSize({
     Key key,
     @required this.product,
+    @required this.orderDetails,
   }) : super(key: key);
 
   final Product product;
+  final OrderDetails.OrderDetails orderDetails;
 
   @override
   Widget build(BuildContext context) {
-    return Visibility(
-      visible: product.price.isNotEmpty
-          ? (product.price.length == 1 && product.price[0].size != '')
-          : false,
-      child: Text(
-        '${product.price.isNotEmpty ? product.price[0].size : 'N/A'} ${product.price.isNotEmpty ? product.price[0].unit : 'N/A'}',
-        textAlign: TextAlign.start,
-        style: TextStyle(color: Colors.grey),
-      ),
-    );
+    String size;
+    if (product != null) {
+      size =
+          '${product.price.isNotEmpty ? product.price[0].size : 'N/A'} ${product.price.isNotEmpty ? product.price[0].unit : 'N/A'}';
+    }
+    if (orderDetails != null) {
+      size =
+          '${orderDetails.price.isNotEmpty ? orderDetails.price[0].size : 'N/A'} ${orderDetails.price.isNotEmpty ? orderDetails.price[0].unit : 'N/A'}';
+    }
+    return (product != null)
+        ? Visibility(
+            visible: product.price.isNotEmpty
+                ? (product.price.length == 1 && product.price[0].size != '')
+                : false,
+            child: Text(
+              size,
+              textAlign: TextAlign.start,
+              style: TextStyle(color: Colors.grey),
+            ),
+          )
+        : Text(
+            size,
+            textAlign: TextAlign.start,
+            style: TextStyle(color: Colors.grey),
+          );
   }
 }
 
 class ProductTitle extends StatelessWidget {
   const ProductTitle({
-    Key key,
     @required this.product,
-  }) : super(key: key);
+    @required this.productTitle,
+  });
 
   final Product product;
+  final String productTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +88,8 @@ class ProductTitle extends StatelessWidget {
         constraints: new BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width - 84),
         child: Text(
-          UIHelper.getHtmlUnscapeString(product.productName),
+          UIHelper.getHtmlUnscapeString(
+              product == null ? productTitle : product.productName),
           softWrap: false,
           textAlign: TextAlign.start,
           overflow: TextOverflow.ellipsis,
