@@ -1,36 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/colors/colors.dart';
+import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/order_model.dart';
-import 'package:labashop_flutter_app/widgets/login_btn.dart';
-import 'package:labashop_flutter_app/widgets/product_widgets.dart';
+import 'package:labashop_flutter_app/utils/uihelper.dart';
+import 'package:labashop_flutter_app/viewmodels/my_orders_list_fragment_vm.dart';
 
-class MyOrderListItem extends StatelessWidget {
+class MyOrderListItem extends StatefulWidget {
   final OrderModel orderModel;
-  MyOrderListItem({this.orderModel});
+  final MyOrdersListFragmentVm vm;
+
+  MyOrderListItem({this.orderModel, this.vm});
+
+  @override
+  _MyOrderListItemState createState() => _MyOrderListItemState();
+}
+
+class _MyOrderListItemState extends State<MyOrderListItem>
+    implements ScreenCallback {
   @override
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(top: 10),
         padding: EdgeInsets.all(10),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
           Text(
-            'Order Number : ${orderModel.orderNumber}',
+            'Order Number : ${widget.orderModel.orderNumber}',
             style: TextStyle(fontSize: 15, color: AppColors.colorPrimaryObj),
             textAlign: TextAlign.start,
           ),
           SizedBox(
             height: 5,
           ),
-          Text(
-            orderModel.payableAmount,
-            style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Rs.${widget.orderModel.payableAmount}',
+                style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.start,
+              ),
+              Text(
+                '${widget.orderModel.orderStatus.toUpperCase() == 'PENDING' ? 'Processing' : widget.orderModel.orderStatus}',
+                style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
+                textAlign: TextAlign.start,
+              ),
+            ],
           ),
           SizedBox(
             height: 5,
           ),
           Text(
-            orderModel.paymentMode,
+            widget.orderModel.paymentMode,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
             textAlign: TextAlign.start,
           ),
@@ -38,7 +59,7 @@ class MyOrderListItem extends StatelessWidget {
             height: 5,
           ),
           Text(
-            orderModel.postedOn,
+            widget.orderModel.postedOn,
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
             textAlign: TextAlign.start,
           ),
@@ -46,7 +67,7 @@ class MyOrderListItem extends StatelessWidget {
             height: 5,
           ),
           Text(
-            '${orderModel.itemCount.toString()} items',
+            '${widget.orderModel.itemCount.toString()} items',
             style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
             textAlign: TextAlign.start,
           ),
@@ -55,21 +76,84 @@ class MyOrderListItem extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              //TODO cancel order
+              //cancelling order
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    content: Text('Are you sure want to cancel this order?'),
+                    actions: [
+                      GestureDetector(
+                          onTap: () {
+                            //do nothing
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                'DISMISS',
+                                style:
+                                    TextStyle(color: AppColors.colorPrimaryObj),
+                              ))),
+                      GestureDetector(
+                          onTap: () {
+                            widget.vm
+                                .cancelOrder(
+                                    listener: this,
+                                    orderId: widget.orderModel.orderId)
+                                .then((value) {
+                              UIHelper.showShortToast(value);
+                              setState(() {
+                                //FOR REFRESHING
+                              });
+                            });
+                          },
+                          child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text('CANCEL ORDER',
+                                  style: TextStyle(
+                                      color: AppColors.colorPrimaryObj))))
+                    ],
+                  );
+                },
+              );
             },
-            child: Container(
-                child: Container(
-              color: Color(AppColors.colorPrimary),
-              padding: EdgeInsets.all(6),
-              child: Text(
-                'CANCEL ORDER',
-                style: TextStyle(
-                  backgroundColor: Color(AppColors.colorPrimary),
-                  color: Colors.white,
+            child: Wrap(
+              children: [
+                Visibility(
+                  visible:
+                      widget.orderModel.orderStatus.toUpperCase() == 'PENDING',
+                  child: Container(
+                      child: Container(
+                    color: Color(AppColors.colorPrimary),
+                    padding: EdgeInsets.all(6),
+                    child: Text(
+                      'CANCEL ORDER',
+                      style: TextStyle(
+                        backgroundColor: Color(AppColors.colorPrimary),
+                        color: Colors.white,
+                      ),
+                    ),
+                  )),
                 ),
-              ),
-            )),
+              ],
+            ),
           )
         ]));
+  }
+
+  @override
+  void hideProgress() {
+    // TODO: implement hideProgress
+  }
+
+  @override
+  void onError(String message) {
+    // TODO: implement onError
+  }
+
+  @override
+  void showProgress() {
+    // TODO: implement showProgress
   }
 }

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:labashop_flutter_app/listener/screen_callback.dart';
-import 'package:labashop_flutter_app/model/order_model.dart';
 import 'package:labashop_flutter_app/ui/adapters/my_orders_list_adapter.dart';
-import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/my_orders_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
-import 'package:labashop_flutter_app/widgets/list_items/my_order_list_item.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
@@ -15,11 +11,12 @@ class MyOrdersListFragment extends StatefulWidget {
   static const ID = 'MyOrdersListFragment';
 
   @override
-  _CartListFragmentState createState() => _CartListFragmentState();
+  _MyOrdersListFragmentState createState() => _MyOrdersListFragmentState();
 }
 
-class _CartListFragmentState extends State<MyOrdersListFragment> {
+class _MyOrdersListFragmentState extends State<MyOrdersListFragment> {
   MyOrdersListFragmentVm vm;
+  bool progress = false;
   @override
   void initState() {
     vm = Provider.of<MyOrdersListFragmentVm>(context, listen: false);
@@ -34,21 +31,24 @@ class _CartListFragmentState extends State<MyOrdersListFragment> {
             .setFargment(HomeContentFragment.ID);
         return false;
       },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(5),
-            child: Text(
-              'My Orders',
-              style: TextStyle(
-                fontSize: 20,
+      child: ModalProgressHUD(
+        inAsyncCall: progress,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(5),
+              child: Text(
+                'My Orders',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+                textAlign: TextAlign.start,
               ),
-              textAlign: TextAlign.start,
             ),
-          ),
-          MyOrdersListAdapter(vm: vm),
-        ],
+            MyOrdersListAdapter(vm: vm),
+          ],
+        ),
       ),
     );
   }

@@ -214,4 +214,47 @@ class ProductsRepo extends Repository {
       listener.onError('Unknown Error');
     }
   }
+
+  Future<List<OrderDetails>> getOrderDetails(
+      {ScreenCallback listener, int orderId}) async {
+    listener.showProgress();
+    String url = UrlProvider.getOrderDetailsUrl(orderId.toString());
+    print(url);
+    ResponseStatus responseStatus = await networkManager.get(url: url);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        List<OrderDetails> orderDetailsList =
+            responseParser.getOrderDetailsList(responseStatus.getData());
+        return orderDetailsList;
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
+
+  Future<String> cancelOrder(
+      {ScreenCallback listener, Map<String, String> params}) async {
+    listener.showProgress();
+    String url = UrlProvider.getCancelOrderUrl();
+    print(url);
+    ResponseStatus responseStatus =
+        await networkManager.post(url: url, params: params);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        return responseStatus.getMessage();
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
 }

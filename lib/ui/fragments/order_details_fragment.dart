@@ -4,12 +4,15 @@ import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/order_details.dart';
 import 'package:labashop_flutter_app/ui/adapters/order_details_list_adapter.dart';
+import 'package:labashop_flutter_app/ui/fragments/my_orders_list_fragment.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/widgets/list_items/order_details_list_item.dart';
 import 'package:labashop_flutter_app/widgets/list_items/product_list_item.dart';
 import 'package:labashop_flutter_app/widgets/payment_buttons.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailsFragment extends StatefulWidget {
   static const ID = 'OrderDetailsFragment';
@@ -40,10 +43,8 @@ class _OrderDetailsFragmentState extends State<OrderDetailsFragment>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        /*   Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(SelectDeliveryOptionFragment.ID); */
-
-        //TODO GOTO MY ORDERS,on back pressed
+        Provider.of<FragmentNotifier>(context, listen: false)
+            .setFargment(MyOrdersListFragment.ID);
         return false;
       },
       child: ModalProgressHUD(

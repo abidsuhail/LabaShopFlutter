@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:labashop_flutter_app/colors/colors.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/product.dart';
+import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragment.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
@@ -40,9 +42,31 @@ class _CartListAdapterState extends State<CartListAdapter>
       initialData: [],
       builder: (context, productSnap) {
         if (!productSnap.hasData || productSnap.data.isEmpty) {
-          //print('project snapshot data is: ${projectSnap.data}');
-          //TODO CART LIST SHOWING PROGRESS WHEN NO DATA:FIX IT
-          return Expanded(child: Center(child: CircularProgressIndicator()));
+          return Container(
+            margin: EdgeInsets.only(top: 10),
+            alignment: Alignment.center,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Your Cart is Empty',
+                      style: TextStyle(color: Colors.grey, fontSize: 16)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // ignore: deprecated_member_use
+                  FlatButton(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                      color: AppColors.colorPrimaryObj,
+                      onPressed: () {
+                        Provider.of<FragmentNotifier>(context, listen: false)
+                            .setFargment(HomeContentFragment.ID);
+                      },
+                      child: Text('Continue Shopping',
+                          style: TextStyle(fontSize: 20, color: Colors.white)))
+                ]),
+          );
         }
         return Expanded(
           child: ListView.separated(
