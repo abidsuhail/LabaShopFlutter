@@ -5,6 +5,7 @@ import 'package:labashop_flutter_app/ui/fragments/add_new_address_fragment.dart'
 import 'package:labashop_flutter_app/viewmodels/add_new_address_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
+import 'package:labashop_flutter_app/viewmodels/my_orders_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/viewmodels/payment_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/products_by_category_fragment_vm.dart';
@@ -52,6 +53,9 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
           ),
           ChangeNotifierProvider<PaymentFragmentVm>(
             create: (context) => PaymentFragmentVm(),
+          ),
+          ChangeNotifierProvider<MyOrdersListFragmentVm>(
+            create: (context) => MyOrdersListFragmentVm(),
           )
         ],
         child: Builder(

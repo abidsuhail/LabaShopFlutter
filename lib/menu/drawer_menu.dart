@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/my_orders_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
-import 'package:labashop_flutter_app/ui/screens/home_screen.dart';
 import 'package:labashop_flutter_app/ui/screens/login_screen.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
@@ -34,7 +34,11 @@ class DrawerMenu extends StatelessWidget {
             title: Text("Shop By Category"),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Provider.of<FragmentNotifier>(context, listen: false)
+                  .setFargment(MyOrdersListFragment.ID);
+              Navigator.pop(context);
+            },
             title: Text("Your Orders"),
           ),
           ListTile(

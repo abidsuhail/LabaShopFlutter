@@ -3,6 +3,7 @@ import 'package:labashop_flutter_app/colors/colors.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/order_details.dart';
+import 'package:labashop_flutter_app/ui/adapters/order_details_list_adapter.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/widgets/list_items/order_details_list_item.dart';
@@ -90,21 +91,7 @@ class _OrderDetailsFragmentState extends State<OrderDetailsFragment>
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.w300),
                 textAlign: TextAlign.start,
               ),
-              ListView.separated(
-                shrinkWrap: true,
-                itemCount: orderDetailsList.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider(
-                    height: 2,
-                    color: Colors.grey,
-                  );
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  return OrderDetailsListItem(
-                    orderDetails: orderDetailsList[index],
-                  );
-                },
-              ),
+              OrderDetailsListAdapter(orderDetailsList: orderDetailsList),
               /* FutureBuilder(
                 future: AppSharedPrefs.getTotalPayableAmt(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
