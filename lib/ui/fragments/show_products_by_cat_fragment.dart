@@ -19,8 +19,14 @@ class ShowProductsByCatFragment extends StatefulWidget {
 
 class _ShowProductsByCatFragmentState extends State<ShowProductsByCatFragment>
     implements ScreenCallback {
+  int subCatId;
+  ProductsByCatPagingListAdapter adapter;
   @override
   Widget build(BuildContext context) {
+    if (adapter == null) {
+      adapter = ProductsByCatPagingListAdapter(
+          category: widget.category, subCatId: subCatId);
+    }
     return WillPopScope(
       onWillPop: () async {
         Provider.of<FragmentNotifier>(context, listen: false)
@@ -45,20 +51,28 @@ class _ShowProductsByCatFragmentState extends State<ShowProductsByCatFragment>
               itemCount: widget.category.subCat.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
-                return Card(
-                    child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Center(
-                    child: Text(UIHelper.getHtmlUnscapeString(
-                        widget.category.subCat[index].subCategoryName)),
-                  ),
-                ));
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: () {
+                    setState(() {
+                      subCatId = widget.category.subCat[index].subCategoryId;
+                      adapter.subCatId = subCatId;
+                      adapter.pagingController.refresh();
+                    });
+                  },
+                  child: Card(
+                      child: Container(
+                    padding: EdgeInsets.all(10),
+                    child: Center(
+                      child: Text(UIHelper.getHtmlUnscapeString(
+                          widget.category.subCat[index].subCategoryName)),
+                    ),
+                  )),
+                );
               },
             ),
           ),
-          ProductsByCatPagingListAdapter(
-            category: widget.category,
-          ),
+          adapter,
         ],
       ),
     );

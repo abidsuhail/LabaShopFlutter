@@ -46,7 +46,13 @@ class _MyOrdersListFragmentState extends State<MyOrdersListFragment> {
                 textAlign: TextAlign.start,
               ),
             ),
-            MyOrdersListAdapter(vm: vm),
+            MyOrdersListAdapter(
+                vm: vm,
+                callback: (value) {
+                  setState(() {
+                    progress = value;
+                  });
+                }),
           ],
         ),
       ),

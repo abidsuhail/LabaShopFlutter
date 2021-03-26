@@ -9,9 +9,10 @@ import 'package:labashop_flutter_app/widgets/list_items/my_order_list_item.dart'
 import 'package:provider/provider.dart';
 
 class MyOrdersListAdapter extends StatefulWidget {
-  const MyOrdersListAdapter({@required this.vm});
+  const MyOrdersListAdapter({@required this.vm, @required this.callback});
 
   final MyOrdersListFragmentVm vm;
+  final Function callback;
   @override
   _MyOrdersListAdapterState createState() => _MyOrdersListAdapterState();
 }
@@ -41,11 +42,14 @@ class _MyOrdersListAdapterState extends State<MyOrdersListAdapter>
                 onTap: () {
                   //opening order details fragment
                   //UIHelper.showShortToast('clicked');
+                  //widget.callback(true);
+                  //TODO not refreshing:fix it
                   widget.vm
                       .getOrderDetails(
                           listener: this,
                           orderId: orderModelList[index].orderId)
                       .then((value) {
+                    //widget.callback(false);
                     Provider.of<FragmentNotifier>(context, listen: false)
                         .setFargment(OrderDetailsFragment.ID, object: value);
                   });
@@ -67,9 +71,9 @@ class _MyOrdersListAdapterState extends State<MyOrdersListAdapter>
 
   @override
   void hideProgress() {
-    setState(() {
+    /* setState(() {
       progress = false;
-    });
+    }); */
   }
 
   @override
@@ -79,8 +83,8 @@ class _MyOrdersListAdapterState extends State<MyOrdersListAdapter>
 
   @override
   void showProgress() {
-    setState(() {
+/*     setState(() {
       progress = true;
-    });
+    }); */
   }
 }

@@ -49,12 +49,13 @@ class _ProductListItemState extends State<ProductListItem>
   void initState() {
     super.initState();
     product = widget.product;
-    product.size = product.price[0].size;
-    selecteddropDownPrice =
-        product.price[0]; //default size on add to cart click
+
     products = widget.products;
     qty = product.qty;
     if (product.price.isNotEmpty) {
+      product.size = product.price[0].size;
+      selecteddropDownPrice =
+          product.price[0]; //default size on add to cart click
       if (widget.isCart) {
         updatedCost =
             (double.parse(product.price[0].cost) * qty).toStringAsFixed(2);

@@ -13,7 +13,13 @@ import 'package:provider/provider.dart';
 
 class ProductsByCatPagingListAdapter extends StatefulWidget {
   final Category category;
-  ProductsByCatPagingListAdapter({@required this.category});
+  int subCatId, categoryId;
+  final PagingController<int, Product> pagingController =
+      PagingController(firstPageKey: 1, invisibleItemsThreshold: 1);
+  ProductsByCatPagingListAdapter(
+      {@required this.category,
+      @required this.categoryId,
+      @required this.subCatId});
   @override
   _ProductsByCatPagingListAdapterState createState() =>
       _ProductsByCatPagingListAdapterState();
@@ -24,8 +30,7 @@ class _ProductsByCatPagingListAdapterState
   static const _pageSize = 6;
   static const int _progress_delay = 1000;
   List<Product> allProducts = [];
-  final PagingController<int, Product> _pagingController =
-      PagingController(firstPageKey: 1, invisibleItemsThreshold: 1);
+
   ShowProductsByCatFragmentVm vm;
   bool firstTime = true;
   CartModel cartModel;
@@ -40,42 +45,48 @@ class _ProductsByCatPagingListAdapterState
   void initState() {
     super.initState();
     vm = Provider.of<ShowProductsByCatFragmentVm>(context, listen: false);
-    _pagingController.addPageRequestListener((pageKey) {
+    widget.pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
   }
 
   Future<void> _fetchPage(int pageKey) async {
     try {
-      products = await vm.getProductsByCat(
-        catId: widget.category.categoryId.toString(),
-        subCatId: widget.category.subCat[0].subCategoryId.toString(),
-        pageSize: _pageSize.toString(),
-        pageNo: pageKey.toString(),
-        listener: this,
-      );
+      if (widget.category != null) {
+        products = await vm.getProductsByCat(
+          catId: widget.category.categoryId.toString(),
+          subCatId: widget.subCatId == null
+              ? widget.category.subCat[0].subCategoryId.toString()
+              : widget.subCatId.toString(),
+          pageSize: _pageSize.toString(),
+          pageNo: pageKey.toString(),
+          listener: this,
+        );
+      } else {
+        products = await vm.getProductsByCat(
+          catId: widget.categoryId.toString(),
+          subCatId: widget.subCatId.toString(),
+          pageSize: _pageSize.toString(),
+          pageNo: pageKey.toString(),
+          listener: this,
+        );
+      }
       allProducts.addAll(products);
-/* 
-      if (products.length > 0 && firstTime) {
-        firstTime = false;
-        Provider.of<HomeScreenVm>(context, listen: false)
-            .setCartCount(products[0].itemCount.toString());
-      } */
       final isLastPage = (products != null)
           ? (products.length < _pageSize || products.length == 0)
           : true; //check for null
       if (isLastPage) {
         Future.delayed(const Duration(milliseconds: _progress_delay), () {
-          _pagingController.appendLastPage(products);
+          widget.pagingController.appendLastPage(products);
         });
       } else {
         final nextPageKey = pageKey + 1;
         Future.delayed(const Duration(milliseconds: _progress_delay), () {
-          _pagingController.appendPage(products, nextPageKey);
+          widget.pagingController.appendPage(products, nextPageKey);
         });
       }
     } catch (error) {
-      _pagingController.error = error;
+      widget.pagingController.error = error;
     }
   }
 
@@ -84,9 +95,8 @@ class _ProductsByCatPagingListAdapterState
       // Don't worry about displaying progress or error indicators on screen; the
       // package takes care of that. If you want to customize them, use the
       // [PagedChildBuilderDelegate] properties.
-
       PagedListView<int, Product>(
-        pagingController: _pagingController,
+        pagingController: widget.pagingController,
         shrinkWrap: true,
         physics: ScrollPhysics(),
         builderDelegate: PagedChildBuilderDelegate<Product>(
@@ -102,8 +112,8 @@ class _ProductsByCatPagingListAdapterState
 
   @override
   void dispose() {
-    if (_pagingController != null) {
-      _pagingController.dispose();
+    if (widget.pagingController != null) {
+      widget.pagingController.dispose();
       firstTime = true;
     }
     super.dispose();

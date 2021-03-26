@@ -2,12 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:labashop_flutter_app/model/category.dart' as LabaCat;
 import 'package:labashop_flutter_app/model/order_details.dart';
+import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/ui/fragments/add_new_address_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/cart_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/my_orders_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/order_details_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/payment_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/product_details_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_products_by_cat_fragment.dart';
@@ -54,6 +56,13 @@ class FragmentNotifier extends ChangeNotifier {
         break;
       case MyOrdersListFragment.ID:
         selectedFragment = MyOrdersListFragment();
+        break;
+      case ProductDetailsFragment.ID:
+        if (object != null && object is Product) {
+          selectedFragment = ProductDetailsFragment(product: object);
+        } else {
+          UIHelper.showShortToast('Invalid order details!!');
+        }
         break;
     }
     notifyListeners();
