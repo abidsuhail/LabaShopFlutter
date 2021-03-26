@@ -188,6 +188,14 @@ class _ProductListItemState extends State<ProductListItem>
     addToCart(product, qty, context, single, widget.pos);
   }
 
+  void onPlusClicked(Product product, BuildContext context, bool single) {
+    setState(() {
+      qty = qty + 1;
+      updateCostLabel(qty);
+    });
+    addToCart(product, qty, context, single, widget.pos);
+  }
+
   void updateCostLabel(int newQty) {
     if (product.price.isNotEmpty && widget.isCart) {
       updatedCost =
@@ -199,14 +207,6 @@ class _ProductListItemState extends State<ProductListItem>
 
   @override
   void onError(String message) {}
-
-  void onPlusClicked(Product product, BuildContext context, bool single) {
-    setState(() {
-      qty = qty + 1;
-      updateCostLabel(qty);
-    });
-    addToCart(product, qty, context, single, widget.pos);
-  }
 
   @override
   void showProgress() {}

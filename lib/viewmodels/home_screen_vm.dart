@@ -15,10 +15,9 @@ import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'base/view_model.dart';
 
 class HomeScreenVm extends ChangeNotifier with ViewModel {
-  CartModel cartModel;
-
   ProductsRepo productsRepo = ProductsRepo.getInstance();
   static HomeScreenVm _mInstance;
+  CartModel cartModel;
   String cartCount = '0';
   List<Product> products = [];
   static HomeScreenVm getInstance() {
@@ -110,27 +109,7 @@ class HomeScreenVm extends ChangeNotifier with ViewModel {
         }
       }
     }
-    /* for (int i = 0; i < products.length; i++) {
-      Product p = products[i];
-      print('product qty -------> ${p.qty}');
-      if (p != null) if (p.qty > 0) {
-        print('inside loop : $sid $pid $qtyA $cost $sizeStr ${p.qty}');
-        try {
-          sid = sid + sessionId + ',';
-          pid = pid + p.productId.toString() + ',';
-          qtyA = qtyA + p.qty.toString() + ',';
-          sizeStr = sizeStr + p.size + ',';
-          cost = cost +
-              double.parse(p.cost.replaceAll('SAR', '').replaceAll(' ', ''))
-                  .toString() +
-              ',';
-          itemCount++; //cart count
-        } catch (e) {
-          UIHelper.showShortToast(e.toString());
-          print('exception caught : $e');
-        }
-      }
-    } */
+
     setCartCount(itemCount.toString());
     print('pid id $pid');
     if (sid.length > 0) sid = sid.substring(0, sid.length - 1);
