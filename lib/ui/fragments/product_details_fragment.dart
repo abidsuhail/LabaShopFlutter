@@ -45,6 +45,7 @@ class _ProductDetailsFragmentState extends State<ProductDetailsFragment>
         categoryId: product.categoryId,
         subCatId: product.subCategoryId,
         category: null,
+        isProductDetailsScreen: true,
       );
     }
     return WillPopScope(

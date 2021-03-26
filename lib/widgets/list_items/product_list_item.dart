@@ -21,12 +21,14 @@ class ProductListItem extends StatefulWidget {
     @required this.pos,
     @required this.isCart,
     @required this.triggerOnUpdateQtyCallback,
+    @required this.isProductDetailsScreen,
   });
 
   final Product product;
   final List<Product> products;
   final int pos;
   final bool isCart;
+  final bool isProductDetailsScreen;
   final Function triggerOnUpdateQtyCallback;
 
   @override
@@ -48,9 +50,8 @@ class _ProductListItemState extends State<ProductListItem>
   @override
   void initState() {
     super.initState();
-    product = widget.product;
-
     products = widget.products;
+    product = widget.product;
     qty = product.qty;
     if (product.price.isNotEmpty) {
       product.size = product.price[0].size;
@@ -117,26 +118,35 @@ class _ProductListItemState extends State<ProductListItem>
                     children: [
                       //Product price
                       textWidget,
-                      ProductQtyButtonCounter(
-                        visibility: qtyCounterVisibility || product.qty > 0,
-                        count: qty.toString(),
-                        onMinusPressed: () =>
-                            onMinusClicked(product, context, true),
-                        onPlusPressed: () =>
-                            onPlusClicked(product, context, true),
-                      ),
-                      AddToCartButton(
-                        visibility: addToCartVisibility && product.qty == 0,
-                        onPressed: () {
-                          setState(() {
-                            addToCartVisibility = false;
-                            qtyCounterVisibility = true;
-                            qty = qty + 1;
-                            updateCostLabel(qty);
-                          });
-                          addToCart(product, qty, context, true, widget.pos);
-                        },
-                      )
+                      (widget.isProductDetailsScreen == null ||
+                              !widget.isProductDetailsScreen)
+                          ? ProductQtyButtonCounter(
+                              visibility:
+                                  (qtyCounterVisibility || product.qty > 0),
+                              count: qty.toString(),
+                              onMinusPressed: () =>
+                                  onMinusClicked(product, context, true),
+                              onPlusPressed: () =>
+                                  onPlusClicked(product, context, true),
+                            )
+                          : SizedBox(),
+                      (widget.isProductDetailsScreen == null ||
+                              !widget.isProductDetailsScreen)
+                          ? AddToCartButton(
+                              visibility:
+                                  (addToCartVisibility && product.qty == 0),
+                              onPressed: () {
+                                setState(() {
+                                  addToCartVisibility = false;
+                                  qtyCounterVisibility = true;
+                                  qty = qty + 1;
+                                  updateCostLabel(qty);
+                                });
+                                addToCart(
+                                    product, qty, context, true, widget.pos);
+                              },
+                            )
+                          : SizedBox()
                     ],
                   ),
                 ),

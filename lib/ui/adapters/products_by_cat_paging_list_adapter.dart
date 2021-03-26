@@ -4,9 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/product.dart';
-import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
-import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/products_by_category_fragment_vm.dart';
 import 'package:labashop_flutter_app/widgets/list_items/product_list_item.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +12,14 @@ import 'package:provider/provider.dart';
 class ProductsByCatPagingListAdapter extends StatefulWidget {
   final Category category;
   int subCatId, categoryId;
+  bool isProductDetailsScreen;
   final PagingController<int, Product> pagingController =
       PagingController(firstPageKey: 1, invisibleItemsThreshold: 1);
   ProductsByCatPagingListAdapter(
       {@required this.category,
       @required this.categoryId,
-      @required this.subCatId});
+      @required this.subCatId,
+      @required this.isProductDetailsScreen});
   @override
   _ProductsByCatPagingListAdapterState createState() =>
       _ProductsByCatPagingListAdapterState();
@@ -105,6 +105,7 @@ class _ProductsByCatPagingListAdapterState
             products: allProducts,
             pos: index,
             isCart: false,
+            isProductDetailsScreen: widget.isProductDetailsScreen,
             triggerOnUpdateQtyCallback: () {},
           ),
         ),
