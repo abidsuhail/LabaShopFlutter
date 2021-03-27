@@ -4,7 +4,9 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/product.dart';
+import 'package:labashop_flutter_app/ui/fragments/product_details_fragment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/viewmodels/products_by_category_fragment_vm.dart';
 import 'package:labashop_flutter_app/widgets/list_items/product_list_item.dart';
 import 'package:provider/provider.dart';
@@ -100,13 +102,21 @@ class _ProductsByCatPagingListAdapterState
         shrinkWrap: true,
         physics: ScrollPhysics(),
         builderDelegate: PagedChildBuilderDelegate<Product>(
-          itemBuilder: (context, item, index) => ProductListItem(
-            product: item,
-            products: allProducts,
-            pos: index,
-            isCart: false,
-            isProductDetailsScreen: widget.isProductDetailsScreen,
-            triggerOnUpdateQtyCallback: () {},
+          itemBuilder: (context, item, index) => GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              Provider.of<FragmentNotifier>(context, listen: false).setFargment(
+                  ProductDetailsFragment.ID,
+                  object: allProducts[index]);
+            },
+            child: ProductListItem(
+              product: item,
+              products: allProducts,
+              pos: index,
+              isCart: false,
+              isProductDetailsScreen: widget.isProductDetailsScreen,
+              triggerOnUpdateQtyCallback: () {},
+            ),
           ),
         ),
       );

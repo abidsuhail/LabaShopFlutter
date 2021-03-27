@@ -8,46 +8,47 @@ class OrderDetailsListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
-      child: Container(
+        height: 150,
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.only(top: 15),
-        child: ListTile(
-          leading: CachedNetworkImage(
+        child: Row(children: [
+          CachedNetworkImage(
             height: 120,
             width: 120,
-            fit: BoxFit.contain,
+            fit: BoxFit.cover,
             imageUrl: "${orderDetails.productImg[0]}",
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),
-          title: Text(orderDetails.productName),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                  '${orderDetails.price.isNotEmpty ? orderDetails.price[0].size : 'N/A'} ${orderDetails.price.isNotEmpty ? orderDetails.price[0].unit : 'N/A'}'),
-              SizedBox(
-                height: 8,
+          Expanded(
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(orderDetails.productName),
+                  Text(
+                      '${orderDetails.price.isNotEmpty ? orderDetails.price[0].size : 'N/A'} ${orderDetails.price.isNotEmpty ? orderDetails.price[0].unit : 'N/A'}'),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                      'Rs.${orderDetails.price.isNotEmpty ? orderDetails.price[0].cost : 'N/A'}',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          color: Colors.black)),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text('Quantity : ${orderDetails.qty}',
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontStyle: FontStyle.italic))
+                ],
               ),
-              Text(
-                  'Rs.${orderDetails.price.isNotEmpty ? orderDetails.price[0].cost : 'N/A'}',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                      color: Colors.black)),
-              SizedBox(
-                height: 8,
-              ),
-              Text('Quantity : ${orderDetails.qty}',
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                      fontStyle: FontStyle.italic))
-            ],
+            ),
           ),
-          isThreeLine: true,
-        ),
-      ),
-    );
+        ]));
   }
 }

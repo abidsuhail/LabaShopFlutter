@@ -14,11 +14,14 @@ import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragmen
 import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_products_by_cat_fragment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
+import 'package:stack/stack.dart' as MyStack;
 
 class FragmentNotifier extends ChangeNotifier {
   Widget selectedFragment;
+  MyStack.Stack<Widget> fragmentStack = MyStack.Stack();
   FragmentNotifier() {
     selectedFragment = HomeContentFragment();
+    fragmentStack.push(selectedFragment);
   }
   void setFargment(String fragmentId, {Object object}) {
     switch (fragmentId) {
@@ -65,6 +68,8 @@ class FragmentNotifier extends ChangeNotifier {
         }
         break;
     }
+    fragmentStack.push(selectedFragment);
+
     notifyListeners();
   }
 }
