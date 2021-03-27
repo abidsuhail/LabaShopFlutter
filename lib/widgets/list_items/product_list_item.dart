@@ -78,92 +78,101 @@ class _ProductListItemState extends State<ProductListItem>
             //TODO FOR CART LIST,get property cart product size
             fontWeight: FontWeight.bold));
 
-    return Container(
-      height: 140,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            child: CachedNetworkImage(
-              height: 120,
-              width: 120,
-              imageUrl: "${product.productImg[0]}",
-              /*        placeholder: (context, url) => Padding(
-                  padding: EdgeInsets.all(60),
-                  child: CircularProgressIndicator()),*/
-              errorWidget: (context, url, error) => Icon(Icons.error),
-            ),
+    return Column(
+      children: [
+        Container(
+          height: 140,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                child: CachedNetworkImage(
+                  height: 120,
+                  width: 120,
+                  imageUrl: "${product.productImg[0]}",
+                  /*        placeholder: (context, url) => Padding(
+                      padding: EdgeInsets.all(60),
+                      child: CircularProgressIndicator()),*/
+                  errorWidget: (context, url, error) => Icon(Icons.error),
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ProductTitle(product: product),
+                    ProductSize(product: product),
+                    ProductMultiplePriceDropDown(
+                      product: product,
+                      dropDownValue: selecteddropDownPrice,
+                      onSizeSelectCallback: (updatedDropDownPrice) {
+                        setState(() {
+                          selecteddropDownPrice = updatedDropDownPrice;
+                        });
+                      },
+                    ),
+                    //ProductAddToCartRow
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          //Product price
+                          textWidget,
+                          (widget.isProductDetailsScreen == null ||
+                                  !widget.isProductDetailsScreen)
+                              ? ProductQtyButtonCounter(
+                                  visibility:
+                                      (qtyCounterVisibility || product.qty > 0),
+                                  count: qty.toString(),
+                                  onMinusPressed: () =>
+                                      onMinusClicked(product, context, true),
+                                  onPlusPressed: () =>
+                                      onPlusClicked(product, context, true),
+                                )
+                              : SizedBox(),
+                          (widget.isProductDetailsScreen == null ||
+                                  !widget.isProductDetailsScreen)
+                              ? AddToCartButton(
+                                  visibility:
+                                      (addToCartVisibility && product.qty == 0),
+                                  onPressed: () {
+                                    setState(() {
+                                      addToCartVisibility = false;
+                                      qtyCounterVisibility = true;
+                                      qty = qty + 1;
+                                      updateCostLabel(qty);
+                                    });
+                                    addToCart(product, qty, context, true,
+                                        widget.pos);
+                                  },
+                                )
+                              : SizedBox()
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ProductTitle(product: product),
-                ProductSize(product: product),
-                ProductMultiplePriceDropDown(
-                  product: product,
-                  dropDownValue: selecteddropDownPrice,
-                  onSizeSelectCallback: (updatedDropDownPrice) {
-                    setState(() {
-                      selecteddropDownPrice = updatedDropDownPrice;
-                    });
-                  },
-                ),
-                //ProductAddToCartRow
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //Product price
-                      textWidget,
-                      (widget.isProductDetailsScreen == null ||
-                              !widget.isProductDetailsScreen)
-                          ? ProductQtyButtonCounter(
-                              visibility:
-                                  (qtyCounterVisibility || product.qty > 0),
-                              count: qty.toString(),
-                              onMinusPressed: () =>
-                                  onMinusClicked(product, context, true),
-                              onPlusPressed: () =>
-                                  onPlusClicked(product, context, true),
-                            )
-                          : SizedBox(),
-                      (widget.isProductDetailsScreen == null ||
-                              !widget.isProductDetailsScreen)
-                          ? AddToCartButton(
-                              visibility:
-                                  (addToCartVisibility && product.qty == 0),
-                              onPressed: () {
-                                setState(() {
-                                  addToCartVisibility = false;
-                                  qtyCounterVisibility = true;
-                                  qty = qty + 1;
-                                  updateCostLabel(qty);
-                                });
-                                addToCart(
-                                    product, qty, context, true, widget.pos);
-                              },
-                            )
-                          : SizedBox()
-                    ],
-                  ),
-                ),
-                // Divider(height: 1)
-
-                Visibility(
-                  visible: widget != null ? !widget.isCart : false,
-                  child: Container(
-                      color: Colors.black,
-                      height: 1,
-                      child: SizedBox(width: double.infinity)),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+        ),
+        /* Visibility(
+          visible: widget != null ? !widget.isCart : false,
+          child: Container(
+              color: Colors.black,
+              height: 1,
+              child: SizedBox(width: double.infinity)),
+        ), */
+        Visibility(
+          visible: widget != null ? !widget.isCart : false,
+          child: Divider(
+            height: 2,
+            color: Colors.grey,
+          ),
+        )
+      ],
     );
   }
 
