@@ -6,6 +6,7 @@ import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/my_orders_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:labashop_flutter_app/widgets/list_items/my_order_list_item.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:provider/provider.dart';
 
 class MyOrdersListAdapter extends StatefulWidget {
@@ -27,6 +28,11 @@ class _MyOrdersListAdapterState extends State<MyOrdersListAdapter>
       future: widget.vm.getMyOrdersList(listener: this),
       initialData: [],
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         if (snapshot.hasData) {
           List<OrderModel> orderModelList = snapshot.data;
           return ListView.separated(
@@ -77,14 +83,13 @@ class _MyOrdersListAdapterState extends State<MyOrdersListAdapter>
   }
 
   @override
-  void onError(String message) {
-    UIHelper.showShortToast(message);
-  }
-
-  @override
   void showProgress() {
 /*     setState(() {
       progress = true;
     }); */
+  }
+  @override
+  void onError(String message) {
+    UIHelper.showShortToast(message);
   }
 }
