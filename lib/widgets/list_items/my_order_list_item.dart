@@ -8,8 +8,9 @@ import 'package:labashop_flutter_app/viewmodels/my_orders_list_fragment_vm.dart'
 class MyOrderListItem extends StatefulWidget {
   final OrderModel orderModel;
   final MyOrdersListFragmentVm vm;
+  final Function refreshCallback;
 
-  MyOrderListItem({this.orderModel, this.vm});
+  MyOrderListItem({this.orderModel, this.vm, this.refreshCallback});
 
   @override
   _MyOrderListItemState createState() => _MyOrderListItemState();
@@ -17,6 +18,7 @@ class MyOrderListItem extends StatefulWidget {
 
 class _MyOrderListItemState extends State<MyOrderListItem>
     implements ScreenCallback {
+  bool progress = false;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -97,6 +99,8 @@ class _MyOrderListItemState extends State<MyOrderListItem>
                               ))),
                       GestureDetector(
                           onTap: () {
+                            //cancel order
+                            Navigator.pop(context);
                             widget.vm
                                 .cancelOrder(
                                     listener: this,
@@ -105,6 +109,7 @@ class _MyOrderListItemState extends State<MyOrderListItem>
                               UIHelper.showShortToast(value);
                               setState(() {
                                 //FOR REFRESHING
+                                widget.refreshCallback(true);
                               });
                             });
                           },
@@ -144,16 +149,18 @@ class _MyOrderListItemState extends State<MyOrderListItem>
 
   @override
   void hideProgress() {
-    // TODO: implement hideProgress
+    setState(() {
+      progress = false;
+    });
   }
 
   @override
-  void onError(String message) {
-    // TODO: implement onError
-  }
+  void onError(String message) {}
 
   @override
   void showProgress() {
-    // TODO: implement showProgress
+    setState(() {
+      progress = true;
+    });
   }
 }

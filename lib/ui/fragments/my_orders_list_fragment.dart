@@ -16,7 +16,6 @@ class MyOrdersListFragment extends StatefulWidget {
 
 class _MyOrdersListFragmentState extends State<MyOrdersListFragment> {
   MyOrdersListFragmentVm vm;
-  bool progress = false;
   @override
   void initState() {
     vm = Provider.of<MyOrdersListFragmentVm>(context, listen: false);
@@ -31,30 +30,25 @@ class _MyOrdersListFragmentState extends State<MyOrdersListFragment> {
             .setFargment(HomeContentFragment.ID);
         return false;
       },
-      child: ModalProgressHUD(
-        inAsyncCall: progress,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: EdgeInsets.all(5),
-              child: Text(
-                'My Orders',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-                textAlign: TextAlign.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              'My Orders',
+              style: TextStyle(
+                fontSize: 20,
               ),
+              textAlign: TextAlign.start,
             ),
-            MyOrdersListAdapter(
-                vm: vm,
-                callback: (value) {
-                  setState(() {
-                    progress = value;
-                  });
-                }),
-          ],
-        ),
+          ),
+          MyOrdersListAdapter(
+              vm: vm,
+              callback: (value) {
+                setState(() {});
+              }),
+        ],
       ),
     );
   }
