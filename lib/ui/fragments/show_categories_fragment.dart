@@ -23,8 +23,10 @@ class _ShowCategoriesFragmentState extends State<ShowCategoriesFragment>
     vm = Provider.of<ShowCategoriesFragmentVm>(context);
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(HomeContentFragment.ID);
+        /*      Provider.of<FragmentNotifier>(context, listen: false)
+            .setFargment(HomeContentFragment.ID); */
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
+
         return false;
       },
       child: FutureBuilder<List<Category>>(

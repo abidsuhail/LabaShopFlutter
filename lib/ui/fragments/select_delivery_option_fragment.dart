@@ -31,8 +31,10 @@ class _SelectDeliveryOptionFragmentState
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(CartListFragment.ID);
+        /*   Provider.of<FragmentNotifier>(context, listen: false)
+            .setFargment(CartListFragment.ID); */
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
+
         return false;
       },
       child: ListView(children: [

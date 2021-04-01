@@ -29,8 +29,10 @@ class _ShowProductsByCatFragmentState extends State<ShowProductsByCatFragment>
     }
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(HomeContentFragment.ID);
+        /*  Provider.of<FragmentNotifier>(context, listen: false)
+            .setFargment(HomeContentFragment.ID); */
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
+
         return false;
       },
       child: ListView(

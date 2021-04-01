@@ -26,8 +26,10 @@ class _MyOrdersListFragmentState extends State<MyOrdersListFragment> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(HomeContentFragment.ID);
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
+
+        /* Provider.of<FragmentNotifier>(context, listen: false)
+            .setFargment(HomeContentFragment.ID); */
         return false;
       },
       child: Column(

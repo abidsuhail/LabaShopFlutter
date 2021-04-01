@@ -43,8 +43,10 @@ class _OrderDetailsFragmentState extends State<OrderDetailsFragment>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(MyOrdersListFragment.ID);
+        /*      Provider.of<FragmentNotifier>(context, listen: false)
+            .setFargment(MyOrdersListFragment.ID); */
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
+
         return false;
       },
       child: ModalProgressHUD(

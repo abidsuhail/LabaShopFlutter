@@ -23,8 +23,7 @@ class _CartListFragmentState extends State<CartListFragment>
     vm = Provider.of<CartListFragmentVm>(context);
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(HomeContentFragment.ID);
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
         return false;
       },
       child: Column(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/menu/drawer_menu.dart';
 import 'package:labashop_flutter_app/ui/fragments/add_new_address_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
 import 'package:labashop_flutter_app/viewmodels/add_new_address_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
@@ -27,6 +28,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
+  List<Widget> _fragments = [HomeContentFragment()];
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

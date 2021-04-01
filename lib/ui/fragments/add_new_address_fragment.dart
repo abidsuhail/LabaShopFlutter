@@ -37,8 +37,10 @@ class _ShowProductsByCatFragmentState extends State<AddNewAddressFragment>
       inAsyncCall: progress,
       child: WillPopScope(
         onWillPop: () async {
-          Provider.of<FragmentNotifier>(context, listen: false)
-              .setFargment(SelectDeliveryOptionFragment.ID);
+          /* Provider.of<FragmentNotifier>(context, listen: false)
+              .setFargment(SelectDeliveryOptionFragment.ID); */
+          Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
+
           return false;
         },
         child: ListView(

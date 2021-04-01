@@ -18,7 +18,7 @@ import 'package:stack/stack.dart' as MyStack;
 
 class FragmentNotifier extends ChangeNotifier {
   Widget selectedFragment;
-  MyStack.Stack<Widget> fragmentStack = MyStack.Stack();
+  static MyStack.Stack<Widget> fragmentStack = MyStack.Stack();
   FragmentNotifier() {
     selectedFragment = HomeContentFragment();
     fragmentStack.push(selectedFragment);
@@ -69,7 +69,13 @@ class FragmentNotifier extends ChangeNotifier {
         break;
     }
     fragmentStack.push(selectedFragment);
+    notifyListeners();
+  }
 
+  List<Widget> _fragments = [HomeContentFragment()];
+  void navigatedBack() {
+    fragmentStack.pop();
+    selectedFragment = fragmentStack.top();
     notifyListeners();
   }
 }

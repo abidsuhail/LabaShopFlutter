@@ -50,8 +50,10 @@ class _ProductDetailsFragmentState extends State<ProductDetailsFragment>
     }
     return WillPopScope(
       onWillPop: () async {
-        Provider.of<FragmentNotifier>(context, listen: false)
-            .setFargment(HomeContentFragment.ID);
+        /*    Provider.of<FragmentNotifier>(context, listen: false)
+            .setFargment(HomeContentFragment.ID); */
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
+
         return false;
       },
       child: Container(
