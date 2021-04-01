@@ -136,7 +136,7 @@ class _ProductListItemState extends State<ProductListItem>
                                         widget.pos);
                                   },
                                 )
-                              : SizedBox()
+                              : SizedBox(height: 0),
                         ],
                       ),
                     ),
@@ -160,7 +160,9 @@ class _ProductListItemState extends State<ProductListItem>
                                     onPlusPressed: () =>
                                         onPlusClicked(product, context, true),
                                   )
-                                : SizedBox(),
+                                : SizedBox(
+                                    height: 0,
+                                  ),
                           ],
                         ),
                       ),

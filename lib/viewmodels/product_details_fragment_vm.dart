@@ -16,7 +16,7 @@ class ProductDetailsFragmentVm extends ChangeNotifier with ViewModel {
   ProductsRepo productsRepo = ProductsRepo.getInstance();
   static ProductDetailsFragmentVm _mInstance;
   CartModel cartModel;
-  String cartCount = '0';
+  //String cartCount = '0';
   List<Product> products = [];
   static ProductDetailsFragmentVm getInstance() {
     if (_mInstance == null) {
@@ -114,6 +114,6 @@ class ProductDetailsFragmentVm extends ChangeNotifier with ViewModel {
   }
 
   setCartCount(String count, BuildContext context) {
-    Provider.of<HomeScreenVm>(context, listen: false).setCartCount(cartCount);
+    Provider.of<HomeScreenVm>(context, listen: false).setCartCount(count);
   }
 }
