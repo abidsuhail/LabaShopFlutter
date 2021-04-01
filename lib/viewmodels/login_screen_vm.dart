@@ -22,6 +22,6 @@ class LoginScreenVm extends ChangeNotifier with ViewModel {
       Function callback,
       ScreenCallback listener}) async {
     return await authRepo.authenticateUser(
-        username: username, password: password);
+        username: username, password: password, listener: listener);
   }
 }

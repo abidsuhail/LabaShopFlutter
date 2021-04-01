@@ -68,20 +68,14 @@ class _ProductListItemState extends State<ProductListItem>
     }
   }
 
-  Text textWidget;
+  Text priceTextWidget;
 
   @override
   Widget build(BuildContext context) {
-    textWidget = Text('Rs.${product.price.isNotEmpty ? updatedCost : 'N/A'}',
-        style: TextStyle(
-            //TODO change N/A to number later
-            //TODO FOR CART LIST,get property cart product size
-            fontWeight: FontWeight.bold));
-
     return Column(
       children: [
         Container(
-          height: 140,
+          height: 150,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -119,19 +113,13 @@ class _ProductListItemState extends State<ProductListItem>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           //Product price
-                          textWidget,
-                          (widget.isProductDetailsScreen == null ||
-                                  !widget.isProductDetailsScreen)
-                              ? ProductQtyButtonCounter(
-                                  visibility:
-                                      (qtyCounterVisibility || product.qty > 0),
-                                  count: qty.toString(),
-                                  onMinusPressed: () =>
-                                      onMinusClicked(product, context, true),
-                                  onPlusPressed: () =>
-                                      onPlusClicked(product, context, true),
-                                )
-                              : SizedBox(),
+                          Text(
+                              'Rs.${product.price.isNotEmpty ? updatedCost : 'N/A'}',
+                              style: TextStyle(
+                                  //TODO change N/A to number later
+                                  //TODO FOR CART LIST,get property cart product size
+                                  fontWeight: FontWeight.bold)),
+
                           (widget.isProductDetailsScreen == null ||
                                   !widget.isProductDetailsScreen)
                               ? AddToCartButton(
@@ -152,6 +140,31 @@ class _ProductListItemState extends State<ProductListItem>
                         ],
                       ),
                     ),
+                    Visibility(
+                      visible: (qtyCounterVisibility || product.qty > 0),
+                      child: Expanded(
+                        child: Row(
+                          children: [
+                            Text(
+                              'Quantity',
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                            (widget.isProductDetailsScreen == null ||
+                                    !widget.isProductDetailsScreen)
+                                ? ProductQtyButtonCounter(
+                                    visibility: (qtyCounterVisibility ||
+                                        product.qty > 0),
+                                    count: qty.toString(),
+                                    onMinusPressed: () =>
+                                        onMinusClicked(product, context, true),
+                                    onPlusPressed: () =>
+                                        onPlusClicked(product, context, true),
+                                  )
+                                : SizedBox(),
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
               )
