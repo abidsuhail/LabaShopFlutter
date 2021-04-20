@@ -3,8 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:labashop_flutter_app/model/category.dart' as LabaCat;
 import 'package:labashop_flutter_app/model/order_details.dart';
 import 'package:labashop_flutter_app/model/product.dart';
+import 'package:labashop_flutter_app/ui/fragments/about_us_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/add_new_address_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/cart_list_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/contact_us_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/my_orders_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/order_details_fragment.dart';
@@ -76,6 +78,12 @@ class FragmentNotifier extends ChangeNotifier {
         break;
       case WishListFragment.ID:
         selectedFragment = WishListFragment();
+        break;
+      case ContactUsFragment.ID:
+        selectedFragment = ContactUsFragment();
+        break;
+      case AboutUsFragment.ID:
+        selectedFragment = AboutUsFragment();
         break;
     }
     fragmentStack.push(selectedFragment);
