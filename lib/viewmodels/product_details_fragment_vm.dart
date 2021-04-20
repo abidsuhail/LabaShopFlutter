@@ -36,6 +36,14 @@ class ProductDetailsFragmentVm extends ChangeNotifier with ViewModel {
         listener: listener);
   }
 
+  Future<String> addToWishList(String productId,
+      {@required ScreenCallback listener}) async {
+    Map<String, String> params = Map();
+    params['authtoken'] = await AppSharedPrefs.getAuthToken();
+    params['product'] = productId;
+    return await productsRepo.addToWishList(params: params, listener: listener);
+  }
+
   Future<String> addToCart(Product product, String single,
       {@required ScreenCallback listener, BuildContext context}) async {
     String size = product.price[0].size;

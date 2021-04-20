@@ -155,7 +155,14 @@ class _ProductDetailsFragmentState extends State<ProductDetailsFragment>
                   child: FlatButton(
                       color: Colors.grey,
                       padding: EdgeInsets.symmetric(vertical: 15),
-                      onPressed: () {},
+                      onPressed: () {
+                        vm
+                            .addToWishList(product.productId.toString(),
+                                listener: this)
+                            .then((value) {
+                          UIHelper.showShortToast(value);
+                        });
+                      },
                       child: Text(
                         'ADD TO WISHLIST',
                         style: TextStyle(color: Colors.white),

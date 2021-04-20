@@ -257,4 +257,51 @@ class ProductsRepo extends Repository {
       listener.onError('Unknown Error');
     }
   }
+
+  Future<List<Product>> getWishList({ScreenCallback listener}) async {
+    listener.showProgress();
+
+    String url = UrlProvider.getWishListUrl();
+    print(url);
+    ResponseStatus responseStatus = await networkManager.get(url: url);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        List<Product> products =
+            responseParser.getProductList(responseStatus.getData()).products;
+        /*    CartModel cartModel = responseParser.getCart(responseStatus.getData());
+        AppSharedPrefs.saveCartJSON(jsonEncode(cartModel)); */
+        return products;
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+        return null;
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+      return null;
+    }
+  }
+
+  Future<String> addToWishList(
+      {ScreenCallback listener, Map<String, String> params}) async {
+    listener.showProgress();
+    String url = UrlProvider.getAddToWishListUrl();
+    print(url);
+    ResponseStatus responseStatus =
+        await networkManager.post(url: url, params: params);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        return responseStatus.getMessage();
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
 }

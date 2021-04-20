@@ -1,6 +1,7 @@
 import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
+import 'package:labashop_flutter_app/viewmodels/wishlist_fragment_vm.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:labashop_flutter_app/viewmodels/add_new_address_fragment_vm.dart';
@@ -47,6 +48,9 @@ class AppProviders {
     ),
     ChangeNotifierProvider<YourAccountFragmentVm>(
       create: (context) => YourAccountFragmentVm(),
-    )
+    ),
+    ChangeNotifierProvider<WishListFragmentVm>(
+      create: (context) => WishListFragmentVm(),
+    ),
   ];
 }

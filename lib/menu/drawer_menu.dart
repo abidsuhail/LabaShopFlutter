@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/my_orders_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/wishlist_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/your_account_fragment.dart';
 import 'package:labashop_flutter_app/ui/screens/login_screen.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
+import 'package:labashop_flutter_app/viewmodels/wishlist_fragment_vm.dart';
 import 'package:labashop_flutter_app/widgets/nav_header.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +54,11 @@ class DrawerMenu extends StatelessWidget {
             height: 0,
           ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Provider.of<FragmentNotifier>(context, listen: false)
+                  .setFargment(WishListFragment.ID);
+              Navigator.pop(context);
+            },
             title: Text("Wishlist"),
           ),
           Divider(

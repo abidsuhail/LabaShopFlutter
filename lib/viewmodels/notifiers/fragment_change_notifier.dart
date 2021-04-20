@@ -13,6 +13,7 @@ import 'package:labashop_flutter_app/ui/fragments/product_details_fragment.dart'
 import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_products_by_cat_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/wishlist_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/your_account_fragment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:stack/stack.dart' as MyStack;
@@ -72,6 +73,9 @@ class FragmentNotifier extends ChangeNotifier {
         break;
       case YourAccountFragment.ID:
         selectedFragment = YourAccountFragment();
+        break;
+      case WishListFragment.ID:
+        selectedFragment = WishListFragment();
         break;
     }
     fragmentStack.push(selectedFragment);

@@ -22,12 +22,13 @@ class ProductListItem extends StatefulWidget {
     @required this.isCart,
     @required this.triggerOnUpdateQtyCallback,
     @required this.isProductDetailsScreen,
+    this.isWishList,
   });
 
   final Product product;
   final List<Product> products;
   final int pos;
-  final bool isCart;
+  final bool isCart, isWishList;
   final bool isProductDetailsScreen;
   final Function triggerOnUpdateQtyCallback;
 
@@ -132,12 +133,18 @@ class _ProductListItemState extends State<ProductListItem>
                                   visibility:
                                       (addToCartVisibility && product.qty == 0),
                                   onPressed: () {
-                                    setState(() {
-                                      addToCartVisibility = false;
-                                      qtyCounterVisibility = true;
+                                    if (widget.isWishList == null ||
+                                        !widget.isWishList) {
+                                      setState(() {
+                                        addToCartVisibility = false;
+                                        qtyCounterVisibility = true;
+                                        qty = qty + 1;
+                                        updateCostLabel(qty);
+                                      });
+                                    } else {
+                                      //is wish list
                                       qty = qty + 1;
-                                      updateCostLabel(qty);
-                                    });
+                                    }
                                     addToCart(product, qty, context, true,
                                         widget.pos);
                                   },
@@ -205,6 +212,9 @@ class _ProductListItemState extends State<ProductListItem>
             products, pos,
             listener: this);
     UIHelper.showShortToast(msg);
+    if (widget.isWishList != null && widget.isWishList) {
+      widget.triggerOnUpdateQtyCallback();
+    }
   }
 
   void onMinusClicked(Product product, BuildContext context, bool single) {
