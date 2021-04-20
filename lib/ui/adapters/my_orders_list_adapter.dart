@@ -34,6 +34,13 @@ class _MyOrdersListAdapterState extends State<MyOrdersListAdapter>
         }
         if (snapshot.hasData) {
           List<OrderModel> orderModelList = snapshot.data;
+          if (orderModelList.isEmpty) {
+            return Container(
+              child: Center(
+                child: Text('No Orders!!'),
+              ),
+            );
+          }
           return Expanded(
             child: ListView.separated(
               separatorBuilder: (context, index) => Divider(
@@ -49,7 +56,7 @@ class _MyOrdersListAdapterState extends State<MyOrdersListAdapter>
                     //opening order details fragment
                     //UIHelper.showShortToast('clicked');
                     //widget.callback(true);
-                    //TODO not refreshing:fix it
+
                     widget.vm
                         .getOrderDetails(
                             listener: this,

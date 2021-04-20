@@ -9,12 +9,12 @@ class User {
 
   User(
       {int userId,
-        String username,
-        int userRole,
-        String name,
-        String email,
-        String phone,
-        String authtoken}) {
+      String username,
+      int userRole,
+      String name,
+      String email,
+      String phone,
+      String authtoken}) {
     this._userId = userId;
     this._username = username;
     this._userRole = userRole;
@@ -62,13 +62,11 @@ class User {
   }
 }
 
-class UserList
-{
+class UserList {
   final List<User> users;
   UserList({this.users});
   factory UserList.fromJson(List<dynamic> parsedJson) {
-
-    List<User> users = parsedJson.map((i)=>User.fromJson(i)).toList();
+    List<User> users = parsedJson.map((i) => User.fromJson(i)).toList();
     return new UserList(
       users: users,
     );

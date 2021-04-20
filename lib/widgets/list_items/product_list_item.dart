@@ -96,8 +96,14 @@ class _ProductListItemState extends State<ProductListItem>
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ProductTitle(product: product),
-                    ProductSize(product: product),
+                    ProductTitle(
+                      product: product,
+                      productTitle: null,
+                    ),
+                    ProductSize(
+                      product: product,
+                      orderDetails: null,
+                    ),
                     ProductMultiplePriceDropDown(
                       product: product,
                       dropDownValue: selecteddropDownPrice,

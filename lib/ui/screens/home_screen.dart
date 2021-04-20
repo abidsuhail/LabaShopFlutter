@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/menu/drawer_menu.dart';
-import 'package:labashop_flutter_app/ui/fragments/add_new_address_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
-import 'package:labashop_flutter_app/viewmodels/add_new_address_fragment_vm.dart';
-import 'package:labashop_flutter_app/viewmodels/cart_list_fragment_vm.dart';
+import 'package:labashop_flutter_app/utils/app_providers.dart';
 import 'package:labashop_flutter_app/viewmodels/home_screen_vm.dart';
-import 'package:labashop_flutter_app/viewmodels/my_orders_list_fragment_vm.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
-import 'package:labashop_flutter_app/viewmodels/payment_fragment_vm.dart';
-import 'package:labashop_flutter_app/viewmodels/product_details_fragment_vm.dart';
-import 'package:labashop_flutter_app/viewmodels/products_by_category_fragment_vm.dart';
-import 'package:labashop_flutter_app/viewmodels/select_delivery_option_fragment_vm.dart';
-import 'package:labashop_flutter_app/viewmodels/show_categories_fragment_vm.dart';
 import 'package:labashop_flutter_app/widgets/cart_badge.dart';
 import 'package:labashop_flutter_app/widgets/laba_appbars.dart';
 import 'package:provider/provider.dart';
@@ -33,38 +25,7 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-        providers: [
-          ChangeNotifierProvider<HomeScreenVm>(
-            create: (context) => HomeScreenVm(),
-          ),
-          ChangeNotifierProvider<CartListFragmentVm>(
-            create: (context) => CartListFragmentVm(),
-          ),
-          ChangeNotifierProvider<FragmentNotifier>(
-            create: (context) => FragmentNotifier(),
-          ),
-          ChangeNotifierProvider<ShowProductsByCatFragmentVm>(
-            create: (context) => ShowProductsByCatFragmentVm(),
-          ),
-          ChangeNotifierProvider<ShowCategoriesFragmentVm>(
-            create: (context) => ShowCategoriesFragmentVm(),
-          ),
-          ChangeNotifierProvider<SelectDeliveryOptionFragmentVm>(
-            create: (context) => SelectDeliveryOptionFragmentVm(),
-          ),
-          ChangeNotifierProvider<AddNewAddressFragmentVm>(
-            create: (context) => AddNewAddressFragmentVm(),
-          ),
-          ChangeNotifierProvider<PaymentFragmentVm>(
-            create: (context) => PaymentFragmentVm(),
-          ),
-          ChangeNotifierProvider<MyOrdersListFragmentVm>(
-            create: (context) => MyOrdersListFragmentVm(),
-          ),
-          ChangeNotifierProvider<ProductDetailsFragmentVm>(
-            create: (context) => ProductDetailsFragmentVm(),
-          )
-        ],
+        providers: AppProviders.providers,
         child: Builder(
             builder: (context) => Scaffold(
                   drawer: Drawer(

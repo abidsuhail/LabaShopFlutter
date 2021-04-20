@@ -30,7 +30,7 @@ class BannersImageSlider extends StatelessWidget {
                     height: 100,
                     imageUrl: e.bannerImg,
                     fit: BoxFit.fill,
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    /*  errorWidget: (context, url, error) => Icon(Icons.waiting), */
                   );
                 },
               );

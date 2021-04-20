@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/ui/fragments/home_content_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/my_orders_list_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/show_categories_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/your_account_fragment.dart';
 import 'package:labashop_flutter_app/ui/screens/login_screen.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
@@ -25,6 +26,9 @@ class DrawerMenu extends StatelessWidget {
             },
             title: Text("Home"),
           ),
+          Divider(
+            height: 0,
+          ),
           ListTile(
             onTap: () {
               Provider.of<FragmentNotifier>(context, listen: false)
@@ -32,6 +36,9 @@ class DrawerMenu extends StatelessWidget {
               Navigator.pop(context);
             },
             title: Text("Shop By Category"),
+          ),
+          Divider(
+            height: 0,
           ),
           ListTile(
             onTap: () {
@@ -41,21 +48,40 @@ class DrawerMenu extends StatelessWidget {
             },
             title: Text("Your Orders"),
           ),
+          Divider(
+            height: 0,
+          ),
           ListTile(
             onTap: () {},
             title: Text("Wishlist"),
           ),
+          Divider(
+            height: 0,
+          ),
           ListTile(
-            onTap: () {},
+            onTap: () {
+              Provider.of<FragmentNotifier>(context, listen: false)
+                  .setFargment(YourAccountFragment.ID);
+              Navigator.pop(context);
+            },
             title: Text("Your Account"),
+          ),
+          Divider(
+            height: 0,
           ),
           ListTile(
             onTap: () {},
             title: Text("Contact Us"),
           ),
+          Divider(
+            height: 0,
+          ),
           ListTile(
             onTap: () {},
             title: Text("About Us"),
+          ),
+          Divider(
+            height: 0,
           ),
           ListTile(
             onTap: () async {
