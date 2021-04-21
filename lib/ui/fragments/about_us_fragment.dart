@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:labashop_flutter_app/colors/colors.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
+import 'package:labashop_flutter_app/ui/fragments/payment_online_fragment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
 import 'package:provider/provider.dart';
@@ -18,25 +18,35 @@ class _AboutUsFragmentState extends State<AboutUsFragment>
     super.initState();
   }
 
+  Function callback;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        print('back pressed');
         /*   Provider.of<FragmentNotifier>(context, listen: false)
             .setFargment(CartListFragment.ID); */
-        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
 
+        Provider.of<FragmentNotifier>(context, listen: false).navigatedBack();
         return false;
       },
       child: ListView(children: [
-        Container(
-          padding: EdgeInsets.all(10),
-          child: Text(
-            UIHelper.getHtmlUnscapeString('About Us'),
-            style: TextStyle(
-              fontSize: 25,
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PaymentOnlineFragment()));
+          },
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              UIHelper.getHtmlUnscapeString('About Us'),
+              style: TextStyle(
+                fontSize: 25,
+              ),
+              textAlign: TextAlign.start,
             ),
-            textAlign: TextAlign.start,
           ),
         ),
         Container(

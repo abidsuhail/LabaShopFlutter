@@ -49,8 +49,12 @@ class _HomeScreenState extends State<HomeScreen> implements ScreenCallback {
                       elevation: 0,
                       toolbarHeight: 65,
                     ),
-                    body:
-                        Provider.of<FragmentNotifier>(context).selectedFragment,
+                    body: GestureDetector(
+                        onTap: () {
+                          FocusScope.of(context).requestFocus(new FocusNode());
+                        },
+                        child: Provider.of<FragmentNotifier>(context)
+                            .selectedFragment),
                   ),
                 )));
   }
