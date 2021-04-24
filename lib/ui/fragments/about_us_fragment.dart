@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/ui/fragments/payment_online_fragment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
@@ -13,6 +16,7 @@ class AboutUsFragment extends StatefulWidget {
 
 class _AboutUsFragmentState extends State<AboutUsFragment>
     implements ScreenCallback {
+  String selectedUrl = '';
   @override
   void initState() {
     super.initState();
