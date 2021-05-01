@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:labashop_flutter_app/model/payment_request.dart';
 import 'package:labashop_flutter_app/utils/payment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -18,6 +19,8 @@ class PaymentOnlineFragment extends StatefulWidget {
 class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
   FlutterWebviewPlugin flutterWebviewPlugin;
   String selectedUrl = '';
+  WebView wb;
+  bool isPageLoadFinished = false;
   @override
   void initState() {
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
@@ -26,6 +29,7 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
     super.initState();
   }
 
+  int progress = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,11 +38,18 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
       ),
       body: wb == null
           ? Container(child: Center(child: CircularProgressIndicator()))
-          : wb,
+          : Container(
+              child: Column(
+              children: [
+                LinearProgressIndicator(
+                  value: progress != 100 ? null : progress.toDouble(),
+                ),
+                Expanded(child: wb),
+              ],
+            )),
     );
   }
 
-  WebView wb;
   Future createRequest() async {
     // ignore: unused_local_variable
 
@@ -49,39 +60,85 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
       "email": 'abid1294005@gmail.com',
       "phone": '+917007469297',
       "allow_repeated_payments": "true",
-      "send_email": "false",
-      "send_sms": "false",
+      "send_email": "true",
+      "send_sms": "true",
       "redirect_url": "http://www.google.com/",
       "webhook": "http://www.google.com/"
     };
     var resp = await http.post(
         Uri.encodeFull("https://test.instamojo.com/api/1.1/payment-requests/"),
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/x-www-form-urlencoded",
-          "X-Api-Key": "test_b5142df51424c67e02c92f6c366",
-          "X-Auth-Token": 'test_21194bb80fc294b1127c174b82a',
-          "Access-Control-Allow-Headers":
-              "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
-          "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
-          "Access-Control-Allow-Origin": "*"
-        },
+        headers: getPaymentHeader(),
         body: body);
 
     if (json.decode(resp.body)['success'] == true) {
+      PaymentRequest request =
+          PaymentRequest.fromJson(jsonDecode(resp.body)["payment_request"]);
+      print('order id ${request.id}');
       setState(() {
         selectedUrl =
             jsonDecode(resp.body)["payment_request"]['longurl'].toString() +
                 "?embed=form";
+
         wb = WebView(
           initialUrl: selectedUrl,
+          onPageStarted: (url) {
+            print('onPageStarted : $url');
+            if (url.contains('https://www.google.com/')) {
+              Uri uri = Uri.parse(url);
+              String paymentRequestId = uri.queryParameters['payment_id'];
+              _checkPaymentStatus(paymentRequestId);
+            }
+          },
           javascriptMode: JavascriptMode.unrestricted,
           onProgress: (val) {},
-          onPageFinished: (finish) {},
+          onPageFinished: (finish) {
+            setState(() {
+              print('isPageLoadFinished $isPageLoadFinished');
+              progress = 100;
+              isPageLoadFinished = true;
+            });
+          },
         );
+        setState(() {
+          isPageLoadFinished = false;
+        });
       });
     } else {
       UIHelper.showShortToast(json.decode(resp.body)['message'].toString());
+    }
+  }
+
+  Map<String, String> getPaymentHeader() {
+    return {
+      "Accept": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Api-Key": "test_b5142df51424c67e02c92f6c366",
+      "X-Auth-Token": 'test_21194bb80fc294b1127c174b82a',
+      "Access-Control-Allow-Headers":
+          "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
+      "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
+      "Access-Control-Allow-Origin": "*"
+    };
+  }
+
+  void _checkPaymentStatus(String paymentRequestId) async {
+    var res = await http.get(
+      Uri.encodeFull(
+          'https://test.instamojo.com/api/1.1/payments/$paymentRequestId'),
+      headers: getPaymentHeader(),
+    );
+    var realResponse = jsonDecode(res.body);
+    print(res.body);
+    if (realResponse['success'] == true) {
+      if (realResponse["payment"]['status'] == 'Credit') {
+        //payment is successful.
+        UIHelper.showShortToast('PAYMENT SUCCESS');
+      } else {
+        //payment failed or pending.
+      }
+    } else {
+      print("PAYMENT STATUS FAILED");
+      UIHelper.showShortToast('PAYMENT FAILED!!!');
     }
   }
 }
