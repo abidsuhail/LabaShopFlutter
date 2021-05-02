@@ -3,11 +3,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
-import 'package:labashop_flutter_app/model/payment_request.dart';
+import 'package:labashop_flutter_app/listener/screen_callback.dart';
+import 'package:labashop_flutter_app/model/address.dart';
+import 'package:labashop_flutter_app/model/order_details.dart';
+import 'package:labashop_flutter_app/model/payment_request_model.dart';
+import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/utils/payment.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
+import 'package:labashop_flutter_app/viewmodels/notifiers/fragment_change_notifier.dart';
+import 'package:labashop_flutter_app/viewmodels/payment_online_fragment_vm.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:http/http.dart' as http;
+
+import 'order_details_fragment.dart';
 
 class PaymentOnlineFragment extends StatefulWidget {
   static const ID = 'PaymentOnlineFragment';
@@ -16,13 +25,16 @@ class PaymentOnlineFragment extends StatefulWidget {
   _PaymentOnlineFragmentState createState() => _PaymentOnlineFragmentState();
 }
 
-class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
+class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment>
+    implements ScreenCallback {
   FlutterWebviewPlugin flutterWebviewPlugin;
   String selectedUrl = '';
   WebView wb;
   bool isPageLoadFinished = false;
+  PaymentOnlineFragmentVm vm;
   @override
   void initState() {
+    vm = PaymentOnlineFragmentVm.getInstance();
     if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
     // flutterWebviewPlugin = new FlutterWebviewPlugin();
     createRequest();
@@ -54,9 +66,9 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
     // ignore: unused_local_variable
 
     Map<String, String> body = {
-      "amount": "100",
-      "purpose": "Advertising",
-      "buyer_name": 'abc',
+      "amount": await AppSharedPrefs.getTotalPayableAmt(),
+      "purpose": "LabaShopping",
+      "buyer_name": 'Abid',
       "email": 'abid1294005@gmail.com',
       "phone": '+917007469297',
       "allow_repeated_payments": "true",
@@ -71,9 +83,10 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
         body: body);
 
     if (json.decode(resp.body)['success'] == true) {
-      PaymentRequest request =
-          PaymentRequest.fromJson(jsonDecode(resp.body)["payment_request"]);
-      print('order id ${request.id}');
+      PaymentRequestModel request = PaymentRequestModel.fromJson(
+          jsonDecode(resp.body)["payment_request"]);
+
+      print('transaction id ${request.id}');
       setState(() {
         selectedUrl =
             jsonDecode(resp.body)["payment_request"]['longurl'].toString() +
@@ -86,7 +99,8 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
             if (url.contains('https://www.google.com/')) {
               Uri uri = Uri.parse(url);
               String paymentRequestId = uri.queryParameters['payment_id'];
-              _checkPaymentStatus(paymentRequestId);
+              String transactionId = request.id;
+              _checkPaymentStatus(paymentRequestId, transactionId);
             }
           },
           javascriptMode: JavascriptMode.unrestricted,
@@ -121,7 +135,39 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
     };
   }
 
-  void _checkPaymentStatus(String paymentRequestId) async {
+  void payNow(String paymentRequestId, String transactionId, String status) {
+    AppSharedPrefs.getSelectedAddress().then((Address address) {
+      AppSharedPrefs.getTotalPayableAmt().then((String payableAmt) {
+        vm.getOrderId(payableAmt, this).then((orderId) async {
+          if (orderId != null) {
+            vm
+                .createOrder(
+                    listener: this,
+                    addressId: address.addressId.toString(),
+                    payableAmount: payableAmt,
+                    paymentMode: 'Instamojo',
+                    sessionId: await AppSharedPrefs.getAuthToken(),
+                    orderNumber: orderId,
+                    transactionID: transactionId, //payment req id
+                    paymentID: paymentRequestId, //payment_id
+                    paymentStatus: status)
+                .then((List<OrderDetails> orderDetailsList) {
+              UIHelper.showShortToast('Order Placed');
+              Provider.of<FragmentNotifier>(context, listen: false).setFargment(
+                  OrderDetailsFragment.ID,
+                  object: orderDetailsList);
+              Navigator.pop(context);
+            });
+          } else {
+            UIHelper.showShortToast('order id is null');
+          }
+        });
+      });
+    });
+  }
+
+  void _checkPaymentStatus(
+      String paymentRequestId, String transactionId) async {
     var res = await http.get(
       Uri.encodeFull(
           'https://test.instamojo.com/api/1.1/payments/$paymentRequestId'),
@@ -132,7 +178,10 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
     if (realResponse['success'] == true) {
       if (realResponse["payment"]['status'] == 'Credit') {
         //payment is successful.
+        String status = realResponse["payment"]['status'];
+        payNow(paymentRequestId, transactionId, status);
         UIHelper.showShortToast('PAYMENT SUCCESS');
+        //Navigator.pop(context);
       } else {
         //payment failed or pending.
       }
@@ -140,5 +189,20 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment> {
       print("PAYMENT STATUS FAILED");
       UIHelper.showShortToast('PAYMENT FAILED!!!');
     }
+  }
+
+  @override
+  void hideProgress() {
+    // TODO: implement hideProgress
+  }
+
+  @override
+  void onError(String message) {
+    // TODO: implement onError
+  }
+
+  @override
+  void showProgress() {
+    // TODO: implement showProgress
   }
 }

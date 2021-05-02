@@ -67,4 +67,8 @@ class ResponseParser {
   List<OrderModel> getMyOrdersList(String data) {
     return OrderModelList.fromJson(jsonDecode(data)).orderModels;
   }
+
+  String getOrderId(String data) {
+    return jsonDecode(data)['order_id'];
+  }
 }

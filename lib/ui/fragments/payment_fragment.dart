@@ -4,6 +4,7 @@ import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/address.dart';
 import 'package:labashop_flutter_app/model/order_details.dart';
 import 'package:labashop_flutter_app/ui/fragments/order_details_fragment.dart';
+import 'package:labashop_flutter_app/ui/fragments/payment_online_fragment.dart';
 import 'package:labashop_flutter_app/ui/fragments/select_delivery_option_fragment.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 import 'package:labashop_flutter_app/utils/uihelper.dart';
@@ -115,6 +116,10 @@ class _PaymentFragmentState extends State<PaymentFragment>
                 txt: 'Pay Now',
                 onPressed: () {
                   //online pay
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentOnlineFragment()));
                 },
               )
             ],
@@ -123,6 +128,34 @@ class _PaymentFragmentState extends State<PaymentFragment>
       ),
     );
   }
+
+  /* void payNow() {
+    AppSharedPrefs.getSelectedAddress().then((Address address) {
+      AppSharedPrefs.getTotalPayableAmt().then((String payableAmt) {
+        vm.getOrderId(payableAmt, this).then((orderId) async {
+          if (orderId != null) {
+            vm
+                .createOrder(
+                    listener: this,
+                    addressId: address.addressId.toString(),
+                    payableAmount: payableAmt,
+                    paymentMode: 'Instamojo',
+                    sessionId: await AppSharedPrefs.getAuthToken(),
+                    orderNumber: orderId,
+                    transactionID: '', //payment req id
+                    paymentID: '', //payment_id
+                    paymentStatus: '')
+                .then((List<OrderDetails> orderDetailsList) {
+              UIHelper.showShortToast('Order Placed');
+              Provider.of<FragmentNotifier>(context, listen: false).setFargment(
+                  OrderDetailsFragment.ID,
+                  object: orderDetailsList);
+            });
+          }
+        });
+      });
+    });
+  } */
 
   void payByCash() {
     AppSharedPrefs.getSelectedAddress().then((Address address) {

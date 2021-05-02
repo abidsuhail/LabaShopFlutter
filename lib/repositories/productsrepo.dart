@@ -304,4 +304,24 @@ class ProductsRepo extends Repository {
       listener.onError('Unknown Error');
     }
   }
+
+  Future<String> getOrderId(String amount,
+      {ScreenCallback listener, Map<String, String> params}) async {
+    listener.showProgress();
+    String url = UrlProvider.orderIdUrl(amount);
+    print(url);
+    ResponseStatus responseStatus = await networkManager.get(url: url);
+    listener.hideProgress();
+    if (responseStatus != null) {
+      if (responseStatus.getError() == NetworkConstants.OK) {
+        return responseParser.getOrderId(responseStatus.getData());
+      } else {
+        //error = 1
+        listener.onError(responseStatus.getMessage());
+      }
+    } else {
+      //unknown error
+      listener.onError('Unknown Error');
+    }
+  }
 }

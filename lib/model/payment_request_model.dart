@@ -1,4 +1,4 @@
-class PaymentRequest {
+class PaymentRequestModel {
   String id;
   String phone;
   String email;
@@ -18,7 +18,7 @@ class PaymentRequest {
   String modifiedAt;
   bool allowRepeatedPayments;
 
-  PaymentRequest(
+  PaymentRequestModel(
       {this.id,
       this.phone,
       this.email,
@@ -38,7 +38,7 @@ class PaymentRequest {
       this.modifiedAt,
       this.allowRepeatedPayments});
 
-  PaymentRequest.fromJson(Map<String, dynamic> json) {
+  PaymentRequestModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     phone = json['phone'];
     email = json['email'];
