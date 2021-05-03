@@ -5,6 +5,7 @@ import 'package:labashop_flutter_app/model/banner.dart';
 import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/order_details.dart';
 import 'package:labashop_flutter_app/model/order_model.dart';
+import 'package:labashop_flutter_app/model/payment_request_model.dart';
 import 'package:labashop_flutter_app/model/product.dart';
 import 'package:labashop_flutter_app/model/user.dart';
 import 'package:labashop_flutter_app/networking/responsestatus.dart';
@@ -66,6 +67,10 @@ class ResponseParser {
 
   List<OrderModel> getMyOrdersList(String data) {
     return OrderModelList.fromJson(jsonDecode(data)).orderModels;
+  }
+
+  PaymentRequestModel getInstamojoPaymentReqModel(String body) {
+    return PaymentRequestModel.fromJson(jsonDecode(body)["payment_request"]);
   }
 
   String getOrderId(String data) {

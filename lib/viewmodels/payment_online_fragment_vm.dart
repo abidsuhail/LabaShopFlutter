@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/order_details.dart';
+import 'package:labashop_flutter_app/model/payment_request_model.dart';
+import 'package:labashop_flutter_app/repositories/instamojo_payment_repo.dart';
 import 'package:labashop_flutter_app/repositories/productsrepo.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 
@@ -8,6 +10,8 @@ import 'base/view_model.dart';
 
 class PaymentOnlineFragmentVm extends ChangeNotifier with ViewModel {
   ProductsRepo productsRepo = ProductsRepo.getInstance();
+  InstamojoPaymentRepo instamojoPaymentRepo =
+      InstamojoPaymentRepo.getInstance();
   static PaymentOnlineFragmentVm _mInstance;
   static PaymentOnlineFragmentVm getInstance() {
     if (_mInstance == null) {
@@ -19,6 +23,24 @@ class PaymentOnlineFragmentVm extends ChangeNotifier with ViewModel {
   Future<String> getOrderId(String amount, ScreenCallback listener) async {
     return await productsRepo.getOrderId(amount,
         listener: listener, params: null);
+  }
+
+  Future<PaymentRequestModel> initInstamojoPaymentReq(
+      {@required ScreenCallback listener}) async {
+    Map<String, String> params = {
+      "amount": await AppSharedPrefs.getTotalPayableAmt(),
+      "purpose": "LabaShopping",
+      "buyer_name": 'Abid',
+      "email": 'abid1294005@gmail.com',
+      "phone": '+917007469297',
+      "allow_repeated_payments": "true",
+      "send_email": "true",
+      "send_sms": "true",
+      "redirect_url": "http://www.google.com/",
+      "webhook": "http://www.google.com/"
+    };
+    return instamojoPaymentRepo.initInstamojoPaymentRequest(
+        listener: listener, params: params);
   }
 
   Future<List<OrderDetails>> createOrder(

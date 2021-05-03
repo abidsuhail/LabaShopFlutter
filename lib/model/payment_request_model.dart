@@ -16,6 +16,8 @@ class PaymentRequestModel {
   String webhook;
   String createdAt;
   String modifiedAt;
+  String message = '';
+  int error = 0;
   bool allowRepeatedPayments;
 
   PaymentRequestModel(
@@ -79,6 +81,7 @@ class PaymentRequestModel {
     data['created_at'] = this.createdAt;
     data['modified_at'] = this.modifiedAt;
     data['allow_repeated_payments'] = this.allowRepeatedPayments;
+
     return data;
   }
 }

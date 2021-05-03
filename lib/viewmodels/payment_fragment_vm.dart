@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
 import 'package:labashop_flutter_app/model/order_details.dart';
+import 'package:labashop_flutter_app/model/payment_request_model.dart';
+import 'package:labashop_flutter_app/repositories/instamojo_payment_repo.dart';
 import 'package:labashop_flutter_app/repositories/productsrepo.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
 
@@ -8,6 +10,9 @@ import 'base/view_model.dart';
 
 class PaymentFragmentVm extends ChangeNotifier with ViewModel {
   ProductsRepo productsRepo = ProductsRepo.getInstance();
+  InstamojoPaymentRepo instamojoPaymentRepo =
+      InstamojoPaymentRepo.getInstance();
+
   static PaymentFragmentVm _mInstance;
   static PaymentFragmentVm getInstance() {
     if (_mInstance == null) {

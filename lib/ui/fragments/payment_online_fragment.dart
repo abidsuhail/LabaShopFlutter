@@ -64,62 +64,42 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment>
 
   Future createRequest() async {
     // ignore: unused_local_variable
-
-    Map<String, String> body = {
-      "amount": await AppSharedPrefs.getTotalPayableAmt(),
-      "purpose": "LabaShopping",
-      "buyer_name": 'Abid',
-      "email": 'abid1294005@gmail.com',
-      "phone": '+917007469297',
-      "allow_repeated_payments": "true",
-      "send_email": "true",
-      "send_sms": "true",
-      "redirect_url": "http://www.google.com/",
-      "webhook": "http://www.google.com/"
-    };
-    var resp = await http.post(
-        Uri.encodeFull("https://test.instamojo.com/api/1.1/payment-requests/"),
-        headers: getPaymentHeader(),
-        body: body);
-
-    if (json.decode(resp.body)['success'] == true) {
-      PaymentRequestModel request = PaymentRequestModel.fromJson(
-          jsonDecode(resp.body)["payment_request"]);
-
-      print('transaction id ${request.id}');
-      setState(() {
-        selectedUrl =
-            jsonDecode(resp.body)["payment_request"]['longurl'].toString() +
-                "?embed=form";
-
-        wb = WebView(
-          initialUrl: selectedUrl,
-          onPageStarted: (url) {
-            print('onPageStarted : $url');
-            if (url.contains('https://www.google.com/')) {
-              Uri uri = Uri.parse(url);
-              String paymentRequestId = uri.queryParameters['payment_id'];
-              String transactionId = request.id;
-              _checkPaymentStatus(paymentRequestId, transactionId);
-            }
-          },
-          javascriptMode: JavascriptMode.unrestricted,
-          onProgress: (val) {},
-          onPageFinished: (finish) {
-            setState(() {
-              print('isPageLoadFinished $isPageLoadFinished');
-              progress = 100;
-              isPageLoadFinished = true;
-            });
-          },
-        );
+    vm
+        .initInstamojoPaymentReq(listener: this)
+        .then((PaymentRequestModel paymentRequestModel) {
+      if (paymentRequestModel.id != null) {
+        print('transaction id ${paymentRequestModel.id}');
         setState(() {
-          isPageLoadFinished = false;
+          selectedUrl = paymentRequestModel.longurl.toString() + "?embed=form";
+          wb = WebView(
+            initialUrl: selectedUrl,
+            onPageStarted: (url) {
+              print('onPageStarted : $url');
+              if (url.contains('https://www.google.com/')) {
+                Uri uri = Uri.parse(url);
+                String paymentRequestId = uri.queryParameters['payment_id'];
+                String transactionId = paymentRequestModel.id;
+                _checkPaymentStatus(paymentRequestId, transactionId);
+              }
+            },
+            javascriptMode: JavascriptMode.unrestricted,
+            onProgress: (val) {},
+            onPageFinished: (finish) {
+              setState(() {
+                print('isPageLoadFinished $isPageLoadFinished');
+                progress = 100;
+                isPageLoadFinished = true;
+              });
+            },
+          );
+          setState(() {
+            isPageLoadFinished = false;
+          });
         });
-      });
-    } else {
-      UIHelper.showShortToast(json.decode(resp.body)['message'].toString());
-    }
+      } else {
+        UIHelper.showShortToast('paymentRequestModel is null');
+      }
+    });
   }
 
   Map<String, String> getPaymentHeader() {
@@ -192,26 +172,26 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment>
 
   @override
   void hideProgress() {
-    if (isDialogShowing) {
+    /* if (isDialogShowing) {
       Navigator.pop(context);
       isDialogShowing = false;
-    }
+    } */
   }
 
   @override
   void onError(String message) {
-    if (isDialogShowing) {
+    /*  if (isDialogShowing) {
       Navigator.pop(context);
       isDialogShowing = false;
-    }
+    } */
     UIHelper.showShortToast(message);
   }
 
   @override
   void showProgress() {
-    if (!isDialogShowing) {
+    /* if (!isDialogShowing) {
       showLoaderDialog(context);
-    }
+    } */
   }
 
   bool isDialogShowing = false;

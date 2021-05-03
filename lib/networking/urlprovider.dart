@@ -261,4 +261,7 @@ class UrlProvider {
   }
 
   static String getCountry() => 'IND';
+
+  static String getInitInstamojoReqUrl() =>
+      'https://test.instamojo.com/api/1.1/payment-requests/';
 }
