@@ -37,10 +37,10 @@ class _AboutUsFragmentState extends State<AboutUsFragment>
       child: ListView(children: [
         GestureDetector(
           onTap: () {
-            Navigator.push(
+            /*  Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => PaymentOnlineFragment()));
+                    builder: (context) => PaymentOnlineFragment())); */
           },
           child: Container(
             padding: EdgeInsets.all(10),

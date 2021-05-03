@@ -135,7 +135,8 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment>
     };
   }
 
-  void payNow(String paymentRequestId, String transactionId, String status) {
+  void placeOrder(
+      String paymentRequestId, String transactionId, String status) {
     AppSharedPrefs.getSelectedAddress().then((Address address) {
       AppSharedPrefs.getTotalPayableAmt().then((String payableAmt) {
         vm.getOrderId(payableAmt, this).then((orderId) async {
@@ -169,8 +170,7 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment>
   void _checkPaymentStatus(
       String paymentRequestId, String transactionId) async {
     var res = await http.get(
-      Uri.encodeFull(
-          'https://test.instamojo.com/api/1.1/payments/$paymentRequestId'),
+      'https://test.instamojo.com/api/1.1/payments/$paymentRequestId',
       headers: getPaymentHeader(),
     );
     var realResponse = jsonDecode(res.body);
@@ -178,10 +178,9 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment>
     if (realResponse['success'] == true) {
       if (realResponse["payment"]['status'] == 'Credit') {
         //payment is successful.
-        String status = realResponse["payment"]['status'];
-        payNow(paymentRequestId, transactionId, status);
         UIHelper.showShortToast('PAYMENT SUCCESS');
-        //Navigator.pop(context);
+        String status = realResponse["payment"]['status'];
+        placeOrder(paymentRequestId, transactionId, status);
       } else {
         //payment failed or pending.
       }
@@ -193,16 +192,47 @@ class _PaymentOnlineFragmentState extends State<PaymentOnlineFragment>
 
   @override
   void hideProgress() {
-    // TODO: implement hideProgress
+    if (isDialogShowing) {
+      Navigator.pop(context);
+      isDialogShowing = false;
+    }
   }
 
   @override
   void onError(String message) {
-    // TODO: implement onError
+    if (isDialogShowing) {
+      Navigator.pop(context);
+      isDialogShowing = false;
+    }
+    UIHelper.showShortToast(message);
   }
 
   @override
   void showProgress() {
-    // TODO: implement showProgress
+    if (!isDialogShowing) {
+      showLoaderDialog(context);
+    }
+  }
+
+  bool isDialogShowing = false;
+  showLoaderDialog(BuildContext context) {
+    isDialogShowing = true;
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(
+              margin: EdgeInsets.only(left: 7),
+              child: Text("Placing Order,please wait..")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

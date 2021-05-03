@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:labashop_flutter_app/listener/screen_callback.dart';
-import 'package:labashop_flutter_app/model/category.dart';
 import 'package:labashop_flutter_app/model/order_details.dart';
 import 'package:labashop_flutter_app/repositories/productsrepo.dart';
 import 'package:labashop_flutter_app/utils/app_shared_prefs.dart';
